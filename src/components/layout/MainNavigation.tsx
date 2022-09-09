@@ -5,19 +5,18 @@ import { AuthContext } from "../../store/auth-context";
 export const MainNavigation = () => {
   const authCtx = useContext(AuthContext);
 
+  const logoutHandler = () => {
+    authCtx.login(authCtx.token);
+  };
+
   return (
     <header className={classes.header}>
       <nav>
         <ul>
           <li>
-            {authCtx.isLoggedIn && (
-              <button onClick={authCtx.logout}>Logout</button>
-            )}
-            {!authCtx.isLoggedIn && (
-              <button onClick={authCtx.login}>Login</button>
-            )}
+            {authCtx.isLoggedIn && <button onClick={authCtx.logout}>Logout</button>}
+            {!authCtx.isLoggedIn && <button onClick={logoutHandler}>Login</button>}
           </li>
-          {/* add login button - check login state */}
         </ul>
       </nav>
     </header>

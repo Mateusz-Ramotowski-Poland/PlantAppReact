@@ -1,22 +1,28 @@
 import React, { useState } from "react";
+import { tokenInterface } from "../interafces";
+
+type authProps = {
+  children: React.ReactNode;
+};
 
 export const AuthContext = React.createContext({
-  token: "",
+  token: { username: "", password: "" },
   isLoggedIn: false,
-  login: () => {},
+  login: (token: tokenInterface) => {},
   logout: () => {},
 });
 
-export const AuthContextProvider = (props: any) => {
+export const AuthContextProvider = (props: authProps) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [token, setToken] = useState("");
+  const [token, setToken] = useState({ username: "", password: "" });
 
   const logoutHandler = () => {
     setIsLoggedIn(false);
   };
 
-  const loginHandler = () => {
+  const loginHandler = (token: tokenInterface) => {
     setIsLoggedIn(true);
+    localStorage.setItem("token", JSON.stringify(token));
   };
 
   const contextValue = {
@@ -26,9 +32,5 @@ export const AuthContextProvider = (props: any) => {
     logout: logoutHandler,
   };
 
-  return (
-    <AuthContext.Provider value={contextValue}>
-      {props.children}
-    </AuthContext.Provider>
-  );
+  return <AuthContext.Provider value={contextValue}>{props.children}</AuthContext.Provider>;
 };

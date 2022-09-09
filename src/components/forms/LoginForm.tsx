@@ -1,9 +1,11 @@
 import React, { useState, useRef, useContext } from "react";
+import { useNavigate } from "react-router-dom";
 
 import classes from "./loginForm.module.css";
 import { AuthContext } from "../../store/auth-context";
 
 export const LoginForm = () => {
+  const navigate = useNavigate();
   const authCtx = useContext(AuthContext);
 
   const emailInputRef = useRef<HTMLInputElement>(null);
@@ -16,8 +18,7 @@ export const LoginForm = () => {
     const enteredPassword = passwordInputRef?.current?.value;
 
     console.log(enteredEmail, enteredPassword);
-    // wyślij fetch do api stefana
-    // zmień stan po poprawnym zalogowaniu
+
     fetch("http://localhost:8000/accounts/jwt/create", {
       method: "POST",
       body: JSON.stringify({
@@ -45,7 +46,8 @@ export const LoginForm = () => {
       })
       .then((data) => {
         console.log(data);
-        authCtx.login();
+        authCtx.login(data);
+        navigate("/logged");
       })
       .catch((err) => {
         alert(err.message);
@@ -62,12 +64,7 @@ export const LoginForm = () => {
         </div>
         <div className={classes.control}>
           <label htmlFor="password">Your Password</label>
-          <input
-            type="password"
-            id="password"
-            required
-            ref={passwordInputRef}
-          />
+          <input type="password" id="password" required ref={passwordInputRef} />
         </div>
         <div className={classes.actions}>
           <button type="submit">Login</button>

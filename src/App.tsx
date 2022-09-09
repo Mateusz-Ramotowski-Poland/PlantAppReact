@@ -1,13 +1,16 @@
 import "./App.css";
-import { LoginForm } from "./components/forms/LoginForm";
-import { MainNavigation } from "./components/layout/MainNavigation";
+import { Routes, Route } from "react-router-dom";
+import { StartPage } from "./pages/StartPage";
+import { NotFound } from "./pages/NotFound";
+import { AfterLoginPage } from "./pages/AfterLoginPage";
 
 function App() {
   return (
-    <div>
-      <MainNavigation />
-      <LoginForm />
-    </div>
+    <Routes>
+      <Route path="/" element={<StartPage />} />
+      <Route path="/logged" element={<AfterLoginPage />} />
+      <Route path="*" element={<NotFound />} />
+    </Routes>
   );
 }
 
