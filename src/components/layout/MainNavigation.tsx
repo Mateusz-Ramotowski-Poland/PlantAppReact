@@ -1,12 +1,12 @@
 import classes from "./MainNavigation.module.css";
-import { useContext } from "react";
 import { AuthContext } from "../../store/auth-context";
+import { useContext } from "react";
 
 export const MainNavigation = () => {
   const authCtx = useContext(AuthContext);
 
   const logoutHandler = () => {
-    authCtx.login(authCtx.token);
+    authCtx.logout();
   };
 
   return (
@@ -14,8 +14,12 @@ export const MainNavigation = () => {
       <nav>
         <ul>
           <li>
-            {authCtx.isLoggedIn && <button onClick={authCtx.logout}>Logout</button>}
-            {!authCtx.isLoggedIn && <button onClick={logoutHandler}>Login</button>}
+            <h2>Plant App</h2>
+          </li>
+          <li>
+            <button type="button" onClick={logoutHandler}>
+              Logout
+            </button>
           </li>
         </ul>
       </nav>

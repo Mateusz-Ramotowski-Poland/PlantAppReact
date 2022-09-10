@@ -3,12 +3,18 @@ import { Routes, Route } from "react-router-dom";
 import { StartPage } from "./pages/StartPage";
 import { NotFound } from "./pages/NotFound";
 import { AfterLoginPage } from "./pages/AfterLoginPage";
+import { useContext } from "react";
+import { AuthContext } from "./store/auth-context";
 
 function App() {
+  const authCtx = useContext(AuthContext);
+
   return (
     <Routes>
       <Route path="/" element={<StartPage />} />
-      <Route path="/logged" element={<AfterLoginPage />} />
+      {authCtx.isLoggedIn && (
+        <Route path="/logged" element={<AfterLoginPage />} />
+      )}
       <Route path="*" element={<NotFound />} />
     </Routes>
   );

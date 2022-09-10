@@ -1,4 +1,9 @@
 export interface tokenInterface {
-username: string;
-password: string
+  access: string;
+  refresh: string;
+}
+
+export interface credentialsInterface {
+  username: string;
+  password: string;
 }

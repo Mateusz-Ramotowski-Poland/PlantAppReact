@@ -1,11 +1,11 @@
 import React, { useState, useRef, useContext } from "react";
-import { useNavigate } from "react-router-dom";
 
 import classes from "./loginForm.module.css";
 import { AuthContext } from "../../store/auth-context";
+import { tokenInterface } from "../../interafces";
+import { fetchData } from "../../functions";
 
 export const LoginForm = () => {
-  const navigate = useNavigate();
   const authCtx = useContext(AuthContext);
 
   const emailInputRef = useRef<HTMLInputElement>(null);
@@ -14,40 +14,16 @@ export const LoginForm = () => {
   const submitHandler = (event: React.FormEvent) => {
     event.preventDefault();
 
-    const enteredEmail = emailInputRef?.current?.value;
-    const enteredPassword = passwordInputRef?.current?.value;
+    const enteredEmail = emailInputRef?.current?.value as string;
+    const enteredPassword = passwordInputRef?.current?.value as string;
 
-    console.log(enteredEmail, enteredPassword);
-
-    fetch("http://localhost:8000/accounts/jwt/create", {
-      method: "POST",
-      body: JSON.stringify({
-        username: enteredEmail,
-        password: enteredPassword,
-      }),
-      headers: {
-        "Content-Type": "application/json",
-      },
+    fetchData("/accounts/jwt/create", {
+      username: enteredEmail,
+      password: enteredPassword,
     })
-      .then((res) => {
-        console.log(res);
-        if (res.ok) {
-          return res.json();
-        } else {
-          return res.json().then((data) => {
-            let errorMessage = "Authentication failed!";
-            if (data?.error?.message) {
-              errorMessage = data.error.message;
-            }
-
-            throw new Error(errorMessage);
-          });
-        }
-      })
-      .then((data) => {
+      .then((data: tokenInterface) => {
         console.log(data);
         authCtx.login(data);
-        navigate("/logged");
       })
       .catch((err) => {
         alert(err.message);
@@ -64,7 +40,12 @@ export const LoginForm = () => {
         </div>
         <div className={classes.control}>
           <label htmlFor="password">Your Password</label>
-          <input type="password" id="password" required ref={passwordInputRef} />
+          <input
+            type="password"
+            id="password"
+            required
+            ref={passwordInputRef}
+          />
         </div>
         <div className={classes.actions}>
           <button type="submit">Login</button>
