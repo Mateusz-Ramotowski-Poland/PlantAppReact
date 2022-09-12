@@ -1,11 +1,7 @@
 import { credentialsInterface } from "./interafces";
 
-export function fetchData(
-  path: string,
-  body: credentialsInterface
-): Promise<any> {
+export function fetchDataPost<T>(path: string, body: T): Promise<any> {
   const url = `${process.env.REACT_APP_DOMAIN as string}${path}`;
-  console.log(url);
   return fetch(url, {
     method: "POST",
     body: JSON.stringify(body),
@@ -15,6 +11,7 @@ export function fetchData(
   }).then((res) => {
     const data = res.json();
     if (res.ok) {
+      console.log("ok");
       return data;
     } else {
       return data.then((data) => {

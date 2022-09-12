@@ -3,7 +3,7 @@ import React, { useState, useRef, useContext } from "react";
 import classes from "./loginForm.module.css";
 import { AuthContext } from "../../store/auth-context";
 import { tokenInterface } from "../../interafces";
-import { fetchData } from "../../functions";
+import { fetchDataPost } from "../../functions";
 
 export const LoginForm = () => {
   const authCtx = useContext(AuthContext);
@@ -17,7 +17,7 @@ export const LoginForm = () => {
     const enteredEmail = emailInputRef?.current?.value as string;
     const enteredPassword = passwordInputRef?.current?.value as string;
 
-    fetchData("/accounts/jwt/create", {
+    fetchDataPost("/accounts/jwt/create", {
       username: enteredEmail,
       password: enteredPassword,
     })
