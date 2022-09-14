@@ -1,6 +1,6 @@
 import classes from "./MainNavigation.module.css";
-import { AuthContext } from "../../store/auth-context";
 import { useContext } from "react";
+import { AuthContext } from "../../store/authContext";
 
 export const MainNavigation = () => {
   const authCtx = useContext(AuthContext);

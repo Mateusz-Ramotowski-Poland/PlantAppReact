@@ -4,7 +4,7 @@ import { StartPage } from "./pages/StartPage";
 import { NotFound } from "./pages/NotFound";
 import { AfterLoginPage } from "./pages/AfterLoginPage";
 import { useContext } from "react";
-import { AuthContext } from "./store/auth-context";
+import { AuthContext } from "./store/authContext";
 
 function App() {
   const authCtx = useContext(AuthContext);

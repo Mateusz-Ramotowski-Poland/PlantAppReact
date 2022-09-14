@@ -37,6 +37,23 @@ describe("login tests", () => {
     );
   });
 
+  test("check if login function was called", () => {
+    const username = "admin";
+    const password = "pass";
+
+    render(<LoginForm />);
+
+    userEvent.type(screen.getByTestId("username"), username);
+    userEvent.type(screen.getByTestId("password"), password);
+    userEvent.click(screen.getByRole("button"));
+
+    expect(fetchDataPost as jest.Mock).toHaveBeenNthCalledWith(
+      1,
+      "/accounts/jwt/create",
+      { username, password }
+    );
+  });
+
   test("login with wrong credentials", async () => {
     (fetchDataPost as jest.Mock).mockImplementation(() => {
       return Promise.reject(new Error("wrong credentials"));
