@@ -1,12 +1,15 @@
-import React, { useState, useRef, useContext } from "react";
+import React, { useRef, useState } from "react";
 
 import classes from "./loginForm.module.css";
-import { AuthContext } from "../../store/auth-context";
 import { tokenInterface } from "../../interafces";
 import { fetchDataPost } from "../../functions";
+import { useLogin } from "../../hooks/useLogin";
+
+import { WrongCredentials } from "./WrongCredentials";
 
 export const LoginForm = () => {
-  const authCtx = useContext(AuthContext);
+  const [isLoginError, setIsLoginError] = useState(false);
+  const login = useLogin();
 
   const emailInputRef = useRef<HTMLInputElement>(null);
   const passwordInputRef = useRef<HTMLInputElement>(null);
@@ -23,10 +26,11 @@ export const LoginForm = () => {
     })
       .then((data: tokenInterface) => {
         console.log(data);
-        authCtx.login(data);
+        setIsLoginError(false);
+        login(data);
       })
       .catch((err) => {
-        alert(err.message);
+        setIsLoginError(true);
       });
   };
 
@@ -35,18 +39,27 @@ export const LoginForm = () => {
       <h1>Login</h1>
       <form onSubmit={submitHandler}>
         <div className={classes.control}>
-          <label htmlFor="name">Your Username</label>
-          <input type="text" id="name" required ref={emailInputRef} />
+          <label>
+            Your Username
+            <input
+              data-testid="username"
+              type="text"
+              required
+              ref={emailInputRef}
+            />
+          </label>
         </div>
         <div className={classes.control}>
           <label htmlFor="password">Your Password</label>
           <input
+            data-testid="password"
             type="password"
             id="password"
             required
             ref={passwordInputRef}
           />
         </div>
+        {isLoginError && <WrongCredentials />}
         <div className={classes.actions}>
           <button type="submit">Login</button>
         </div>

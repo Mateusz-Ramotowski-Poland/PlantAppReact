@@ -30,17 +30,7 @@ const checkIfLoggedIn = () => {
     console.log(err);
     return Promise.resolve(false);
   }
-
-  // try catch
 };
-
-/* const retrieveStoredToken = () => {
-  const token: string | null = localStorage.getItem("token");
-  if (token) {
-    return JSON.parse(token);
-  }
-  return token;
-}; */
 
 export const AuthContextProvider = (props: authProps) => {
   const navigate = useNavigate();
