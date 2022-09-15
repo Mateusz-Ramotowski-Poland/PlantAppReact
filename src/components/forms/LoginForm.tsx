@@ -5,10 +5,12 @@ import { tokenInterface } from "../../interafces";
 import { fetchDataPost } from "../../functions";
 import { useLogin } from "../../hooks/useLogin";
 
-import { WrongCredentials } from "./WrongCredentials";
+import { WrongLoginCredentials } from "./WrongLoginCredentials";
+import { WrongCreateCredentials } from "./WrongCreateCredentials";
 
 export const LoginForm = () => {
   const [isLoginError, setIsLoginError] = useState(false);
+  const [isCreateError, setIsCreateError] = useState(false);
   const [isCreateAccountForm, setIsCreateAccountForm] = useState(false);
   const login = useLogin();
 
@@ -19,16 +21,24 @@ export const LoginForm = () => {
 
   const toggleShowCreateFormHandler = () => {
     setIsCreateAccountForm((prev) => !prev);
+    setIsCreateError(false);
+    setIsLoginError(false);
+  };
+
+  const passwordChangeHandler = () => {
+    const enteredPassword = passwordInputRef?.current?.value;
+    const enteredConfirmPassword = confirmPasswordInputRef?.current?.value;
+    enteredPassword === enteredConfirmPassword
+      ? setIsCreateError(false)
+      : setIsCreateError(true);
   };
 
   const submitHandler = (event: React.FormEvent) => {
     event.preventDefault();
-
-    const enteredPassword = passwordInputRef?.current?.value as string;
-    const enteredConfirmPassword = confirmPasswordInputRef?.current
-      ?.value as string;
-    const enteredUsername = usernameInputRef?.current?.value as string;
-    const enteredEmail = emailInputRef?.current?.value as string;
+    const enteredPassword = passwordInputRef?.current?.value;
+    const enteredConfirmPassword = confirmPasswordInputRef?.current?.value;
+    const enteredUsername = usernameInputRef?.current?.value;
+    const enteredEmail = emailInputRef?.current?.value;
 
     if (!isCreateAccountForm) {
       fetchDataPost("/accounts/jwt/create", {
@@ -43,7 +53,9 @@ export const LoginForm = () => {
           setIsLoginError(true);
         });
     } else {
-      console.log("Request for create account");
+      if (enteredPassword === enteredConfirmPassword) {
+        console.log("request for create new account");
+      }
     }
   };
 
@@ -68,6 +80,7 @@ export const LoginForm = () => {
           <label>
             Your Password
             <input
+              onChange={passwordChangeHandler}
               data-testid="password"
               type="password"
               required
@@ -80,6 +93,7 @@ export const LoginForm = () => {
             <label>
               Confirm Password
               <input
+                onChange={passwordChangeHandler}
                 data-testid="confirm-password"
                 type="password"
                 required
@@ -101,7 +115,8 @@ export const LoginForm = () => {
             </label>
           </div>
         )}
-        {isLoginError && <WrongCredentials />}
+        {isLoginError && !isCreateAccountForm && <WrongLoginCredentials />}
+        {isCreateError && isCreateAccountForm && <WrongCreateCredentials />}
         <div className={classes.actions}>
           <button type="submit">{loginOrCreate}</button>
         </div>
