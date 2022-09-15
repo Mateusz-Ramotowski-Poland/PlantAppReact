@@ -46,6 +46,7 @@ export const AuthContextProvider = (props: authProps) => {
   const logoutHandler = useCallback(() => {
     setIsLoggedIn(false);
     localStorage.removeItem("token");
+
     navigate("/");
   }, []);
 

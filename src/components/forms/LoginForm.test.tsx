@@ -1,16 +1,21 @@
 // in final version suse before all
 
-import { render, screen } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { LoginForm } from "./LoginForm";
 import { fetchDataPost } from "../../functions";
+import { BrowserRouter } from "react-router-dom";
+import { useLogin } from "../../hooks/useLogin";
+import { AuthContextProvider } from "../../store/authContext";
 
 jest.mock("../../functions", () => ({
   fetchDataPost: jest.fn(),
 }));
 
+const mockedUseLogin = jest.fn();
+
 jest.mock("../../hooks/useLogin", () => ({
-  useLogin: () => jest.fn(),
+  useLogin: () => mockedUseLogin,
 }));
 
 describe("login tests", () => {
@@ -24,7 +29,7 @@ describe("login tests", () => {
     const username = "admin";
     const password = "pass";
 
-    render(<LoginForm />);
+    const { debug } = render(<LoginForm />);
 
     userEvent.type(screen.getByTestId("username"), username);
     userEvent.type(screen.getByTestId("password"), password);
@@ -69,5 +74,18 @@ describe("login tests", () => {
     );
 
     expect(alertElement).toBeInTheDocument();
+  });
+
+  test("login function was called", async () => {
+    render(<LoginForm />);
+
+    userEvent.type(screen.getByTestId("username"), "1");
+    userEvent.type(screen.getByTestId("password"), "1");
+    userEvent.click(screen.getByRole("button", { name: "Login" }));
+
+    expect(fetchDataPost as jest.Mock).toHaveBeenCalled();
+    await waitFor(() => {
+      expect(mockedUseLogin).toHaveBeenCalled();
+    });
   });
 });

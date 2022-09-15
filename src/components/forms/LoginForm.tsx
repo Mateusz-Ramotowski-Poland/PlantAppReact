@@ -27,6 +27,7 @@ export const LoginForm = () => {
       .then((data: tokenInterface) => {
         console.log(data);
         setIsLoginError(false);
+        console.log("hellothere!", login);
         login(data);
       })
       .catch((err) => {
