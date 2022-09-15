@@ -17,8 +17,6 @@ const Consumenr = (props: any) => {
     ctx.login(props.a);
   };
 
-  console.log(ctx);
-
   return (
     <>
       {ctx.isLoggedIn ? "auth" : "not auth"}
@@ -42,9 +40,6 @@ test("NameProvider composes full name from first, last", async () => {
       </AuthContextProvider>
     </BrowserRouter>
   );
-
-  // console.log(login);
-  // login({ access: "1" });
 
   fireEvent.click(screen.getByRole("button", { name: "login" }));
 

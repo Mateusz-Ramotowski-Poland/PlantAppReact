@@ -25,9 +25,7 @@ export const LoginForm = () => {
       password: enteredPassword,
     })
       .then((data: tokenInterface) => {
-        console.log(data);
         setIsLoginError(false);
-        console.log("hellothere!", login);
         login(data);
       })
       .catch((err) => {

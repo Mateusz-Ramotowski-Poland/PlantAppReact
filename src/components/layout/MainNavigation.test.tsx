@@ -19,8 +19,6 @@ test("test logout button", () => {
   );
 
   userEvent.click(screen.getByRole("button", { name: "Logout" }));
-  console.log("mockedUsedNavigate", mockedUsedNavigate.mock.calls);
-  // console.log("useNavigate", (useNavigate as jest.Mock).mock.calls);
   expect(mockedUsedNavigate).toHaveBeenCalledWith("/");
 
   mockedUsedNavigate.mockClear();

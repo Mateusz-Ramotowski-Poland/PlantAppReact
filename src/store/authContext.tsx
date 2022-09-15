@@ -27,7 +27,6 @@ const checkIfLoggedIn = () => {
     }
     return Promise.resolve(false);
   } catch (err: any) {
-    console.log(err);
     return Promise.resolve(false);
   }
 };

@@ -11,7 +11,6 @@ export function fetchDataPost<T>(path: string, body: T): Promise<any> {
   }).then((res) => {
     const data = res.json();
     if (res.ok) {
-      console.log("ok");
       return data;
     } else {
       return data.then((data) => {
