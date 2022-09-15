@@ -1,27 +1,22 @@
-import React from "react";
-import logo from "./logo.svg";
 import "./App.css";
-import { Hello } from "./components/Hello";
+import { Routes, Route } from "react-router-dom";
+import { StartPage } from "./pages/StartPage";
+import { NotFound } from "./pages/NotFound";
+import { AfterLoginPage } from "./pages/AfterLoginPage";
+import { useContext } from "react";
+import { AuthContext } from "./store/authContext";
 
 function App() {
+  const authCtx = useContext(AuthContext);
+
   return (
-    <div className="App">
-      <Hello />
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Routes>
+      <Route path="/" element={<StartPage />} />
+      {authCtx.isLoggedIn && (
+        <Route path="/logged" element={<AfterLoginPage />} />
+      )}
+      <Route path="*" element={<NotFound />} />
+    </Routes>
   );
 }
 
