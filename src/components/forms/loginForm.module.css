@@ -71,3 +71,8 @@
   background-color: transparent;
   color: #ae82cc;
 }
+
+.pointner:hover {
+  cursor: pointer;
+  color: rgb(0, 255, 13);
+}
