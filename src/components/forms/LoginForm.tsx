@@ -12,7 +12,7 @@ export const LoginForm = () => {
   const [isLoginError, setIsLoginError] = useState(false);
   const [isCreateError, setIsCreateError] = useState(false);
   const [isCreateAccountForm, setIsCreateAccountForm] = useState(false);
-  const [isShowMessage, setIsShowMessage] = useState(false);
+  const [isShowNewAccountMessage, setisShowNewAccountMessage] = useState(false);
   const login = useLogin();
 
   const usernameInputRef = useRef<HTMLInputElement>(null);
@@ -27,19 +27,17 @@ export const LoginForm = () => {
   };
 
   const passwordChangeHandler = () => {
-    const enteredPassword = passwordInputRef?.current?.value;
-    const enteredConfirmPassword = confirmPasswordInputRef?.current?.value;
-    enteredPassword === enteredConfirmPassword
-      ? setIsCreateError(false)
-      : setIsCreateError(true);
+    const password = passwordInputRef?.current?.value;
+    const confirmPassword = confirmPasswordInputRef?.current?.value;
+    setIsCreateError(password !== confirmPassword);
   };
 
   const submitHandler = (event: React.FormEvent) => {
     event.preventDefault();
-    const enteredPassword = passwordInputRef?.current?.value;
-    const enteredConfirmPassword = confirmPasswordInputRef?.current?.value;
-    const enteredUsername = usernameInputRef?.current?.value;
-    const enteredEmail = emailInputRef?.current?.value;
+    const password = passwordInputRef?.current?.value;
+    const confirmPassword = confirmPasswordInputRef?.current?.value;
+    const username = usernameInputRef?.current?.value;
+    const email = emailInputRef?.current?.value;
 
     const path = isCreateAccountForm
       ? "/accounts/users/"
@@ -47,35 +45,33 @@ export const LoginForm = () => {
 
     const body = isCreateAccountForm
       ? {
-          username: enteredUsername,
-          password: enteredPassword,
-          email: enteredEmail,
+          username: username,
+          password: password,
+          email: email,
         }
-      : { username: enteredUsername, password: enteredPassword };
+      : { username: username, password: password };
 
     if (!isCreateAccountForm) {
+      setIsLoginError(false);
       fetchDataPost(path, body)
         .then((data: tokenInterface) => {
-          setIsLoginError(false);
           login(data);
         })
         .catch((err) => {
           setIsLoginError(true);
-          console.log(err);
         });
     } else {
-      if (enteredPassword === enteredConfirmPassword) {
+      if (password === confirmPassword) {
         fetchDataPost(path, body)
           .then(() => {
-            setIsShowMessage(true);
+            setisShowNewAccountMessage(true);
             const timerId = setTimeout(() => {
-              setIsShowMessage(false);
+              setisShowNewAccountMessage(false);
               clearTimeout(timerId);
             }, 5000);
           })
           .catch((err) => {
-            setIsShowMessage(false);
-            console.log(err);
+            setisShowNewAccountMessage(false);
           });
       }
     }
@@ -145,7 +141,7 @@ export const LoginForm = () => {
         <p className={classes.pointner} onClick={toggleShowCreateFormHandler}>
           {isCreateAccountForm ? "Login to your account" : "Create account"}
         </p>
-        {isShowMessage && (
+        {isShowNewAccountMessage && (
           <p className={classes.newUser}>New account was created!</p>
         )}
       </form>
