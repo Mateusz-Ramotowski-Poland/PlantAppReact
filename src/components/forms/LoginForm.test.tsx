@@ -87,14 +87,15 @@ describe("login tests", () => {
 });
 
 describe("create account test", () => {
+  const username = "admin";
+  const password = "password";
+  const email = "mateusz.ramotowski@profil-software.com";
+  const differentPassword = "differentPassword";
+
   beforeEach(() => {
     (fetchDataPost as jest.Mock).mockImplementation(() => {
       return Promise.resolve({ access: "dummyData", refresh: "dummyData" });
     });
-
-    const username = "admin";
-    const password = "password";
-    const email = "mateusz.ramotowski@profil-software.com";
 
     render(<LoginForm />);
     userEvent.click(screen.getByText("Create account"));
@@ -106,10 +107,6 @@ describe("create account test", () => {
   });
 
   test("create account request with credentials from inputs", () => {
-    const username = "admin";
-    const password = "password";
-    const email = "mateusz.ramotowski@profil-software.com";
-
     userEvent.click(screen.getByRole("button", { name: "Create account" }));
 
     expect(fetchDataPost as jest.Mock).toHaveBeenNthCalledWith(
@@ -118,30 +115,21 @@ describe("create account test", () => {
       { username: username, password: password, email: email }
     );
   });
-  test("see error when password and confirm-password differs", () => {
-    const differentPassword = "differentPassword";
-
+  test("When password and confirm-password differs: see arror and can not send request", () => {
     userEvent.type(screen.getByTestId("confirm-password"), differentPassword);
     userEvent.click(screen.getByRole("button", { name: "Create account" }));
 
     expect(
       screen.getByText("Password and confirm password don't match")
     ).toBeInTheDocument();
-  });
-  test("can not sent request when password and conirm password differs", () => {
-    const differentPassword = "differentPassword";
-
-    userEvent.type(screen.getByTestId("confirm-password"), differentPassword);
-    userEvent.click(screen.getByRole("button", { name: "Create account" }));
-
     expect(fetchDataPost as jest.Mock).not.toHaveBeenCalled();
   });
 
   test("show message after create new account", async () => {
     userEvent.click(screen.getByRole("button", { name: "Create account" }));
 
-    await waitFor(() => {
-      expect(screen.getByText("New account was created!")).toBeInTheDocument();
-    });
+    expect(
+      await screen.findByText("New account was created!")
+    ).toBeInTheDocument();
   });
 });
