@@ -87,3 +87,48 @@ describe("login tests", () => {
     });
   });
 });
+
+describe("create account test", () => {
+  beforeEach(() => {
+    (fetchDataPost as jest.Mock).mockImplementation(() => {
+      return Promise.resolve({ access: "dummyData", refresh: "dummyData" });
+    });
+  });
+
+  test("create account request with credentials from inputs", () => {
+    const username = "admin";
+    const password = "pass";
+    const email = "mateusz.ramotowski@profil-software.com";
+
+    render(<LoginForm />);
+    userEvent.click(screen.getByText("Create account"));
+
+    userEvent.type(screen.getByTestId("username"), username);
+    userEvent.type(screen.getByTestId("password"), password);
+    userEvent.type(screen.getByTestId("confirm-password"), password);
+    userEvent.type(screen.getByTestId("email"), email);
+    userEvent.click(screen.getByRole("button", { name: "Create account" }));
+
+    expect(fetchDataPost as jest.Mock).toHaveBeenNthCalledWith(
+      1,
+      "/accounts/users/",
+      { username: username, password: password, email: email }
+    );
+  });
+  test("see error when password and confirm-password differs", () => {
+    const password = "pass";
+
+    render(<LoginForm />);
+    userEvent.click(screen.getByText("Create account"));
+
+    userEvent.type(screen.getByTestId("password"), password);
+    userEvent.type(
+      screen.getByTestId("confirm-password"),
+      password + "something"
+    );
+
+    expect(
+      screen.getByText("Password and confirm password don't match")
+    ).toBeInTheDocument();
+  });
+});

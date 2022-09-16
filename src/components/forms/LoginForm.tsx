@@ -40,21 +40,32 @@ export const LoginForm = () => {
     const enteredUsername = usernameInputRef?.current?.value;
     const enteredEmail = emailInputRef?.current?.value;
 
+    const path = isCreateAccountForm
+      ? "/accounts/users/"
+      : "/accounts/jwt/create";
+
+    const body = isCreateAccountForm
+      ? {
+          username: enteredUsername,
+          password: enteredPassword,
+          email: enteredEmail,
+        }
+      : { username: enteredUsername, password: enteredPassword };
+
     if (!isCreateAccountForm) {
-      fetchDataPost("/accounts/jwt/create", {
-        username: enteredEmail,
-        password: enteredPassword,
-      })
+      fetchDataPost(path, body)
         .then((data: tokenInterface) => {
           setIsLoginError(false);
           login(data);
         })
         .catch((err) => {
           setIsLoginError(true);
+          console.log(err);
         });
     } else {
       if (enteredPassword === enteredConfirmPassword) {
         console.log("request for create new account");
+        fetchDataPost(path, body).then().catch();
       }
     }
   };
@@ -120,16 +131,9 @@ export const LoginForm = () => {
         <div className={classes.actions}>
           <button type="submit">{loginOrCreate}</button>
         </div>
-        {!isCreateAccountForm && (
-          <p className={classes.pointner} onClick={toggleShowCreateFormHandler}>
-            Create account
-          </p>
-        )}
-        {isCreateAccountForm && (
-          <p className={classes.pointner} onClick={toggleShowCreateFormHandler}>
-            Login to your account
-          </p>
-        )}
+        <p className={classes.pointner} onClick={toggleShowCreateFormHandler}>
+          {isCreateAccountForm ? "Login to your account" : "Create account"}
+        </p>
       </form>
     </section>
   );
