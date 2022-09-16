@@ -2,9 +2,7 @@ import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { LoginForm } from "./LoginForm";
 import { fetchDataPost } from "../../functions";
-import { BrowserRouter } from "react-router-dom";
-import { useLogin } from "../../hooks/useLogin";
-import { AuthContextProvider } from "../../store/authContext";
+import { debug } from "console";
 
 jest.mock("../../functions", () => ({
   fetchDataPost: jest.fn(),
@@ -93,11 +91,9 @@ describe("create account test", () => {
     (fetchDataPost as jest.Mock).mockImplementation(() => {
       return Promise.resolve({ access: "dummyData", refresh: "dummyData" });
     });
-  });
 
-  test("create account request with credentials from inputs", () => {
     const username = "admin";
-    const password = "pass";
+    const password = "password";
     const email = "mateusz.ramotowski@profil-software.com";
 
     render(<LoginForm />);
@@ -107,6 +103,13 @@ describe("create account test", () => {
     userEvent.type(screen.getByTestId("password"), password);
     userEvent.type(screen.getByTestId("confirm-password"), password);
     userEvent.type(screen.getByTestId("email"), email);
+  });
+
+  test("create account request with credentials from inputs", () => {
+    const username = "admin";
+    const password = "password";
+    const email = "mateusz.ramotowski@profil-software.com";
+
     userEvent.click(screen.getByRole("button", { name: "Create account" }));
 
     expect(fetchDataPost as jest.Mock).toHaveBeenNthCalledWith(
@@ -116,19 +119,29 @@ describe("create account test", () => {
     );
   });
   test("see error when password and confirm-password differs", () => {
-    const password = "pass";
+    const differentPassword = "differentPassword";
 
-    render(<LoginForm />);
-    userEvent.click(screen.getByText("Create account"));
-
-    userEvent.type(screen.getByTestId("password"), password);
-    userEvent.type(
-      screen.getByTestId("confirm-password"),
-      password + "something"
-    );
+    userEvent.type(screen.getByTestId("confirm-password"), differentPassword);
+    userEvent.click(screen.getByRole("button", { name: "Create account" }));
 
     expect(
       screen.getByText("Password and confirm password don't match")
     ).toBeInTheDocument();
+  });
+  test("can not sent request when password and conirm password differs", () => {
+    const differentPassword = "differentPassword";
+
+    userEvent.type(screen.getByTestId("confirm-password"), differentPassword);
+    userEvent.click(screen.getByRole("button", { name: "Create account" }));
+
+    expect(fetchDataPost as jest.Mock).not.toHaveBeenCalled();
+  });
+
+  test("show message after create new account", async () => {
+    userEvent.click(screen.getByRole("button", { name: "Create account" }));
+
+    await waitFor(() => {
+      expect(screen.getByText("New account was created!")).toBeInTheDocument();
+    });
   });
 });

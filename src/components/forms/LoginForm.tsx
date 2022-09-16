@@ -12,6 +12,7 @@ export const LoginForm = () => {
   const [isLoginError, setIsLoginError] = useState(false);
   const [isCreateError, setIsCreateError] = useState(false);
   const [isCreateAccountForm, setIsCreateAccountForm] = useState(false);
+  const [isShowMessage, setIsShowMessage] = useState(false);
   const login = useLogin();
 
   const usernameInputRef = useRef<HTMLInputElement>(null);
@@ -64,8 +65,18 @@ export const LoginForm = () => {
         });
     } else {
       if (enteredPassword === enteredConfirmPassword) {
-        console.log("request for create new account");
-        fetchDataPost(path, body).then().catch();
+        fetchDataPost(path, body)
+          .then(() => {
+            setIsShowMessage(true);
+            const timerId = setTimeout(() => {
+              setIsShowMessage(false);
+              clearTimeout(timerId);
+            }, 5000);
+          })
+          .catch((err) => {
+            setIsShowMessage(false);
+            console.log(err);
+          });
       }
     }
   };
@@ -134,6 +145,9 @@ export const LoginForm = () => {
         <p className={classes.pointner} onClick={toggleShowCreateFormHandler}>
           {isCreateAccountForm ? "Login to your account" : "Create account"}
         </p>
+        {isShowMessage && (
+          <p className={classes.newUser}>New account was created!</p>
+        )}
       </form>
     </section>
   );

@@ -76,3 +76,9 @@
   cursor: pointer;
   color: rgb(0, 255, 13);
 }
+
+.newUser {
+  color: green;
+  font-weight: 900;
+  margin: 20px;
+}
