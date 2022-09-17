@@ -52,6 +52,7 @@
   border: 1px solid #9f5ccc;
   border-radius: 4px;
   padding: 0.5rem 2.5rem;
+  margin-bottom: 15px;
 }
 
 .actions button:hover {
@@ -76,9 +77,13 @@
   cursor: pointer;
   color: rgb(0, 255, 13);
 }
+.pointner {
+  text-decoration: none;
+  color: white;
+}
 
 .newUser {
   color: green;
   font-weight: 900;
-  margin: 20px;
+  padding: 20px;
 }

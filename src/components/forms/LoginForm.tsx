@@ -6,82 +6,34 @@ import { fetchDataPost } from "../../functions";
 import { useLogin } from "../../hooks/useLogin";
 
 import { WrongLoginCredentials } from "./WrongLoginCredentials";
-import { WrongCreateCredentials } from "./WrongCreateCredentials";
+import { Link } from "react-router-dom";
 
 export const LoginForm = () => {
   const [isLoginError, setIsLoginError] = useState(false);
-  const [isCreateError, setIsCreateError] = useState(false);
-  const [isCreateAccountForm, setIsCreateAccountForm] = useState(false);
-  const [isShowNewAccountMessage, setisShowNewAccountMessage] = useState(false);
   const login = useLogin();
-
   const usernameInputRef = useRef<HTMLInputElement>(null);
   const passwordInputRef = useRef<HTMLInputElement>(null);
-  const confirmPasswordInputRef = useRef<HTMLInputElement>(null);
-  const emailInputRef = useRef<HTMLInputElement>(null);
-
-  const toggleShowCreateFormHandler = () => {
-    setIsCreateAccountForm((prev) => !prev);
-    setIsCreateError(false);
-    setIsLoginError(false);
-  };
-
-  const passwordChangeHandler = () => {
-    const password = passwordInputRef?.current?.value;
-    const confirmPassword = confirmPasswordInputRef?.current?.value;
-    setIsCreateError(password !== confirmPassword);
-  };
 
   const submitHandler = (event: React.FormEvent) => {
     event.preventDefault();
     const password = passwordInputRef?.current?.value;
-    const confirmPassword = confirmPasswordInputRef?.current?.value;
     const username = usernameInputRef?.current?.value;
-    const email = emailInputRef?.current?.value;
+    const path = "/accounts/jwt/create";
+    const body = { username: username, password: password };
 
-    const path = isCreateAccountForm
-      ? "/accounts/users/"
-      : "/accounts/jwt/create";
-
-    const body = isCreateAccountForm
-      ? {
-          username: username,
-          password: password,
-          email: email,
-        }
-      : { username: username, password: password };
-
-    if (!isCreateAccountForm) {
-      setIsLoginError(false);
-      fetchDataPost(path, body)
-        .then((data: tokenInterface) => {
-          login(data);
-        })
-        .catch((err) => {
-          setIsLoginError(true);
-        });
-    } else {
-      if (password === confirmPassword) {
-        fetchDataPost(path, body)
-          .then(() => {
-            setisShowNewAccountMessage(true);
-            const timerId = setTimeout(() => {
-              setisShowNewAccountMessage(false);
-              clearTimeout(timerId);
-            }, 5000);
-          })
-          .catch((err) => {
-            setisShowNewAccountMessage(false);
-          });
-      }
-    }
+    setIsLoginError(false);
+    fetchDataPost(path, body)
+      .then((data: tokenInterface) => {
+        login(data);
+      })
+      .catch((err) => {
+        setIsLoginError(true);
+      });
   };
-
-  const loginOrCreate = isCreateAccountForm ? "Create account" : "Login";
 
   return (
     <section className={classes.auth}>
-      <h1>{loginOrCreate}</h1>
+      <h1>Login</h1>
       <form onSubmit={submitHandler}>
         <div className={classes.control}>
           <label>
@@ -98,7 +50,6 @@ export const LoginForm = () => {
           <label>
             Your Password
             <input
-              onChange={passwordChangeHandler}
               data-testid="password"
               type="password"
               required
@@ -106,44 +57,15 @@ export const LoginForm = () => {
             />
           </label>
         </div>
-        {isCreateAccountForm && (
-          <div className={classes.control}>
-            <label>
-              Confirm Password
-              <input
-                onChange={passwordChangeHandler}
-                data-testid="confirm-password"
-                type="password"
-                required
-                ref={confirmPasswordInputRef}
-              />
-            </label>
-          </div>
-        )}
-        {isCreateAccountForm && (
-          <div className={classes.control}>
-            <label>
-              Your email
-              <input
-                data-testid="email"
-                type="email"
-                required
-                ref={emailInputRef}
-              />
-            </label>
-          </div>
-        )}
-        {isLoginError && !isCreateAccountForm && <WrongLoginCredentials />}
-        {isCreateError && isCreateAccountForm && <WrongCreateCredentials />}
+
+        {isLoginError && <WrongLoginCredentials />}
+
         <div className={classes.actions}>
-          <button type="submit">{loginOrCreate}</button>
+          <button type="submit">Login</button>
         </div>
-        <p className={classes.pointner} onClick={toggleShowCreateFormHandler}>
-          {isCreateAccountForm ? "Login to your account" : "Create account"}
-        </p>
-        {isShowNewAccountMessage && (
-          <p className={classes.newUser}>New account was created!</p>
-        )}
+        <Link className={classes.pointner} to="/createAccount">
+          Create account
+        </Link>
       </form>
     </section>
   );
