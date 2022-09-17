@@ -1,13 +1,11 @@
 import React, { useRef, useState } from "react";
 import classes from "./loginForm.module.css";
 import { fetchDataPost } from "../../functions";
-import { WrongCreateCredentials } from "./WrongCreateCredentials";
 import { Link } from "react-router-dom";
 
 export const CreateAccountForm = () => {
-  const [isCreateError, setIsCreateError] = useState(false);
+  const [formError, setFormError] = useState("");
   const [isShowNewAccountMessage, setisShowNewAccountMessage] = useState(false);
-
   const usernameInputRef = useRef<HTMLInputElement>(null);
   const passwordInputRef = useRef<HTMLInputElement>(null);
   const confirmPasswordInputRef = useRef<HTMLInputElement>(null);
@@ -16,7 +14,9 @@ export const CreateAccountForm = () => {
   const passwordChangeHandler = () => {
     const password = passwordInputRef?.current?.value;
     const confirmPassword = confirmPasswordInputRef?.current?.value;
-    setIsCreateError(password !== confirmPassword);
+    password !== confirmPassword
+      ? setFormError("Password and confirm password don't match")
+      : setFormError("");
   };
 
   const submitHandler = (event: React.FormEvent) => {
@@ -25,14 +25,12 @@ export const CreateAccountForm = () => {
     const confirmPassword = confirmPasswordInputRef?.current?.value;
     const username = usernameInputRef?.current?.value;
     const email = emailInputRef?.current?.value;
-
     const path = "/accounts/users/";
     const body = {
       username: username,
       password: password,
       email: email,
     };
-
     if (password === confirmPassword) {
       fetchDataPost(path, body)
         .then(() => {
@@ -71,6 +69,7 @@ export const CreateAccountForm = () => {
               data-testid="password"
               type="password"
               required
+              minLength={8}
               ref={passwordInputRef}
             />
           </label>
@@ -82,7 +81,6 @@ export const CreateAccountForm = () => {
               onChange={passwordChangeHandler}
               data-testid="confirm-password"
               type="password"
-              required
               ref={confirmPasswordInputRef}
             />
           </label>
@@ -98,7 +96,7 @@ export const CreateAccountForm = () => {
             />
           </label>
         </div>
-        {isCreateError && <WrongCreateCredentials />}
+        {formError !== "" && <p className={classes.alert}>{formError}</p>}
         <div className={classes.actions}>
           <button type="submit">Create account</button>
         </div>

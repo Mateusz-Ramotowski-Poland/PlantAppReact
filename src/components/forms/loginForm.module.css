@@ -87,3 +87,8 @@
   font-weight: 900;
   padding: 20px;
 }
+
+.alert {
+  color: red;
+  margin: 15px;
+}

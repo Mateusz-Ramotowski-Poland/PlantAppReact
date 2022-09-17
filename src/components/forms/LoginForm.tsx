@@ -1,15 +1,12 @@
 import React, { useRef, useState } from "react";
-
 import classes from "./loginForm.module.css";
 import { tokenInterface } from "../../interafces";
 import { fetchDataPost } from "../../functions";
 import { useLogin } from "../../hooks/useLogin";
-
-import { WrongLoginCredentials } from "./WrongLoginCredentials";
 import { Link } from "react-router-dom";
 
 export const LoginForm = () => {
-  const [isLoginError, setIsLoginError] = useState(false);
+  const [loginError, setLoginError] = useState("");
   const login = useLogin();
   const usernameInputRef = useRef<HTMLInputElement>(null);
   const passwordInputRef = useRef<HTMLInputElement>(null);
@@ -20,14 +17,13 @@ export const LoginForm = () => {
     const username = usernameInputRef?.current?.value;
     const path = "/accounts/jwt/create";
     const body = { username: username, password: password };
-
-    setIsLoginError(false);
+    setLoginError("");
     fetchDataPost(path, body)
       .then((data: tokenInterface) => {
         login(data);
       })
       .catch((err) => {
-        setIsLoginError(true);
+        setLoginError("Wrong credentials for loggin");
       });
   };
 
@@ -57,9 +53,7 @@ export const LoginForm = () => {
             />
           </label>
         </div>
-
-        {isLoginError && <WrongLoginCredentials />}
-
+        {loginError !== "" && <p className={classes.alert}>{loginError}</p>}
         <div className={classes.actions}>
           <button type="submit">Login</button>
         </div>
