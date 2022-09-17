@@ -1,10 +1,13 @@
-import { render, screen, waitFor } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { LoginForm } from "./LoginForm";
+import { BrowserRouter } from "react-router-dom";
 import { fetchDataPost } from "../../functions";
+import { showMessage } from "../../functions";
+import { CreateAccountForm } from "./CreateAccountForm";
 
 jest.mock("../../functions", () => ({
   fetchDataPost: jest.fn(),
+  showMessage: jest.fn(),
 }));
 
 describe("create account test", () => {
@@ -15,12 +18,14 @@ describe("create account test", () => {
 
   beforeEach(() => {
     (fetchDataPost as jest.Mock).mockImplementation(() => {
-      return Promise.resolve({ access: "dummyData", refresh: "dummyData" });
+      return Promise.resolve();
     });
 
-    render(<LoginForm />);
-    userEvent.click(screen.getByText("Create account"));
-
+    render(
+      <BrowserRouter>
+        <CreateAccountForm />
+      </BrowserRouter>
+    );
     userEvent.type(screen.getByTestId("username"), username);
     userEvent.type(screen.getByTestId("password"), password);
     userEvent.type(screen.getByTestId("confirm-password"), password);
@@ -49,8 +54,6 @@ describe("create account test", () => {
   test("show message after create new account", async () => {
     userEvent.click(screen.getByRole("button", { name: "Create account" }));
 
-    expect(
-      await screen.findByText("New account was created!")
-    ).toBeInTheDocument();
+    expect(showMessage as jest.Mock).not.toHaveBeenCalled();
   });
 });

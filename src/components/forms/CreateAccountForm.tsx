@@ -22,9 +22,7 @@ export const CreateAccountForm = () => {
     password !== confirmPassword
       ? setPasswordMatchError("Password and confirm password don't match")
       : setPasswordMatchError("");
-  };
 
-  const blurHandler = () => {
     isContainOnlyNumbers(passwordInputRef?.current?.value as string)
       ? setOnlyDigitsError("Password can't contain only numbers")
       : setOnlyDigitsError("");
@@ -78,7 +76,6 @@ export const CreateAccountForm = () => {
             Your Password
             <input
               onChange={passwordChangeHandler}
-              onBlur={blurHandler}
               data-testid="password"
               type="password"
               required
