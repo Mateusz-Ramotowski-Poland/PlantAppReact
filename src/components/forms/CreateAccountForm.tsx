@@ -6,10 +6,11 @@ import { ToastContainer } from "react-toastify";
 import { showMessage, isContainOnlyNumbers } from "../../functions";
 
 export const CreateAccountForm = () => {
-  const [formError, setFormError] = useState({
-    passwordMatch: "",
-    onlyDigits: "",
-  });
+  const [passwordMatchError, setPasswordMatchError] = useState("");
+  const [onlyDigitsError, setOnlyDigitsError] = useState("");
+  const formError =
+    onlyDigitsError === "" && passwordMatchError === "" ? false : true;
+
   const usernameInputRef = useRef<HTMLInputElement>(null);
   const passwordInputRef = useRef<HTMLInputElement>(null);
   const confirmPasswordInputRef = useRef<HTMLInputElement>(null);
@@ -19,36 +20,14 @@ export const CreateAccountForm = () => {
     const password = passwordInputRef?.current?.value;
     const confirmPassword = confirmPasswordInputRef?.current?.value;
     password !== confirmPassword
-      ? setFormError((prev) => {
-          return {
-            passwordMatch: "Password and confirm password don't match",
-            onlyDigits: prev.onlyDigits,
-          };
-        })
-      : setFormError((prev) => {
-          return {
-            passwordMatch: "",
-            onlyDigits: prev.onlyDigits,
-          };
-        });
+      ? setPasswordMatchError("Password and confirm password don't match")
+      : setPasswordMatchError("");
   };
 
   const blurHandler = () => {
-    if (isContainOnlyNumbers(passwordInputRef?.current?.value as string)) {
-      setFormError((prev) => {
-        return {
-          passwordMatch: prev.passwordMatch,
-          onlyDigits: "Password can't contain only numbers",
-        };
-      });
-    } else {
-      setFormError((prev) => {
-        return {
-          passwordMatch: prev.passwordMatch,
-          onlyDigits: "",
-        };
-      });
-    }
+    isContainOnlyNumbers(passwordInputRef?.current?.value as string)
+      ? setOnlyDigitsError("Password can't contain only numbers")
+      : setOnlyDigitsError("");
   };
 
   const submitHandler = (event: React.FormEvent) => {
@@ -62,7 +41,7 @@ export const CreateAccountForm = () => {
       password: password,
       email: email,
     };
-    if (formError.passwordMatch === "" && formError.onlyDigits === "") {
+    if (!formError) {
       fetchDataPost(path, body)
         .then(() => {
           showMessage("New account was created!", "info");
@@ -70,11 +49,9 @@ export const CreateAccountForm = () => {
         .catch((err) => {
           for (const property in err.res) {
             for (const problem of err.res[property]) {
-              if (problem !== undefined) {
-                showMessage(`User not created: ${problem}`, "error");
-              } else {
-                showMessage(`User not created: ${err.errorMessage}`, "error");
-              }
+              problem !== undefined
+                ? showMessage(`User not created: ${problem}`, "error")
+                : showMessage(`User not created: ${err.errorMessage}`, "error");
             }
           }
         });
@@ -132,11 +109,11 @@ export const CreateAccountForm = () => {
             />
           </label>
         </div>
-        {formError.onlyDigits !== "" && (
-          <p className={classes.alert}>{formError.onlyDigits}</p>
+        {passwordMatchError !== "" && (
+          <p className={classes.alert}>{passwordMatchError}</p>
         )}
-        {formError.passwordMatch !== "" && (
-          <p className={classes.alert}>{formError.passwordMatch}</p>
+        {onlyDigitsError !== "" && (
+          <p className={classes.alert}>{onlyDigitsError}</p>
         )}
         <div className={classes.actions}>
           <button type="submit">Create account</button>
