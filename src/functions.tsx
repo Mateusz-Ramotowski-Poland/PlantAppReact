@@ -26,10 +26,13 @@ export function fetchDataPost<T>(path: string, body: T): Promise<any> {
       "Content-Type": "application/json",
     },
   }).then((res) => {
+    console.log(res);
     const data = res.json();
     if (res.ok) {
+      console.log("ok");
       return data;
     } else {
+      console.log("error");
       return data.then((data) => {
         let errorMessage = "Wrong form data!";
         if (data?.error?.message) {

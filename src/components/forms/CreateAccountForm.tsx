@@ -1,5 +1,6 @@
 import React, { useRef, useState } from "react";
-import classes from "./loginForm.module.css";
+import classes from "../UI/FormCard.module.css";
+import { FormCard } from "../UI/FormCard";
 import { fetchDataPost } from "../../functions";
 import { Link } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
@@ -57,69 +58,71 @@ export const CreateAccountForm = () => {
   };
 
   return (
-    <section className={classes.auth}>
-      <h1>Create account</h1>
-      <form onSubmit={submitHandler}>
-        <div className={classes.control}>
-          <label>
-            Your Username
-            <input
-              data-testid="username"
-              type="text"
-              required
-              ref={usernameInputRef}
-            />
-          </label>
-        </div>
-        <div className={classes.control}>
-          <label>
-            Your Password
-            <input
-              onChange={passwordChangeHandler}
-              data-testid="password"
-              type="password"
-              required
-              minLength={8}
-              ref={passwordInputRef}
-            />
-          </label>
-        </div>
-        <div className={classes.control}>
-          <label>
-            Confirm Password
-            <input
-              onChange={passwordChangeHandler}
-              data-testid="confirm-password"
-              type="password"
-              ref={confirmPasswordInputRef}
-            />
-          </label>
-        </div>
-        <div className={classes.control}>
-          <label>
-            Your email
-            <input
-              data-testid="email"
-              type="email"
-              required
-              ref={emailInputRef}
-            />
-          </label>
-        </div>
-        {passwordMatchError !== "" && (
-          <p className={classes.alert}>{passwordMatchError}</p>
-        )}
-        {onlyDigitsError !== "" && (
-          <p className={classes.alert}>{onlyDigitsError}</p>
-        )}
-        <div className={classes.actions}>
-          <button type="submit">Create account</button>
-        </div>
-        <Link to="/" className={classes.pointner}>
-          Login to Your account
-        </Link>
-        <ToastContainer />
-      </form>
-    </section>
+    <FormCard>
+      <section className={classes.auth}>
+        <h1>Create account</h1>
+        <form onSubmit={submitHandler}>
+          <div className={classes.control}>
+            <label>
+              Your Username
+              <input
+                data-testid="username"
+                type="text"
+                required
+                ref={usernameInputRef}
+              />
+            </label>
+          </div>
+          <div className={classes.control}>
+            <label>
+              Your Password
+              <input
+                onChange={passwordChangeHandler}
+                data-testid="password"
+                type="password"
+                required
+                minLength={8}
+                ref={passwordInputRef}
+              />
+            </label>
+          </div>
+          <div className={classes.control}>
+            <label>
+              Confirm Password
+              <input
+                onChange={passwordChangeHandler}
+                data-testid="confirm-password"
+                type="password"
+                ref={confirmPasswordInputRef}
+              />
+            </label>
+          </div>
+          <div className={classes.control}>
+            <label>
+              Your email
+              <input
+                data-testid="email"
+                type="email"
+                required
+                ref={emailInputRef}
+              />
+            </label>
+          </div>
+          {passwordMatchError !== "" && (
+            <p className={classes.alert}>{passwordMatchError}</p>
+          )}
+          {onlyDigitsError !== "" && (
+            <p className={classes.alert}>{onlyDigitsError}</p>
+          )}
+          <div className={classes.actions}>
+            <button type="submit">Create account</button>
+          </div>
+          <Link to="/" className={classes.pointner}>
+            Login to Your account
+          </Link>
+          <ToastContainer />
+        </form>
+      </section>
+    </FormCard>
   );
 };

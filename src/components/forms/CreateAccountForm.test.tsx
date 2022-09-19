@@ -1,6 +1,5 @@
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { debug } from "console";
 import { BrowserRouter } from "react-router-dom";
 import { fetchDataPost, showMessage } from "../../functions";
 import { CreateAccountForm } from "./CreateAccountForm";

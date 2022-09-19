@@ -1,12 +1,8 @@
 import { tokenInterface } from "../interafces";
 import { useNavigate } from "react-router-dom";
 import { fetchDataPost } from "../functions";
-
 import React, { useCallback, useEffect, useState } from "react";
-
-type authProps = {
-  children: React.ReactNode;
-};
+import { onlyChildrenProps } from "../types";
 
 export const AuthContext = React.createContext({
   isLoggedIn: false,
@@ -31,7 +27,7 @@ const checkIfLoggedIn = () => {
   }
 };
 
-export const AuthContextProvider = (props: authProps) => {
+export const AuthContextProvider = (props: onlyChildrenProps) => {
   const navigate = useNavigate();
 
   const [isLoggedIn, setIsLoggedIn] = useState(false);
