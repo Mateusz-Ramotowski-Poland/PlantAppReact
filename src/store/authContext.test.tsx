@@ -1,12 +1,11 @@
-import React, { useContext } from "react";
-import { findByText, fireEvent, render, screen } from "@testing-library/react";
+import { useContext } from "react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import { AuthContext, AuthContextProvider } from "./authContext";
-import { BrowserRouter, Router } from "react-router-dom";
-import { fetchDataPost } from "../functions";
-import { act } from "react-dom/test-utils";
+import { BrowserRouter } from "react-router-dom";
+import { fetchDataPost } from "../shared/index";
 
-jest.mock("../functions", () => ({
+jest.mock("../shared/index", () => ({
   fetchDataPost: jest.fn(),
 }));
 

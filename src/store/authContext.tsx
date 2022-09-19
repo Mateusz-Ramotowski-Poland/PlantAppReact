@@ -1,6 +1,6 @@
 import { tokenInterface } from "../interafces";
 import { useNavigate } from "react-router-dom";
-import { fetchDataPost } from "../functions";
+import { fetchDataPost } from "../shared";
 
 import React, { useCallback, useEffect, useState } from "react";
 

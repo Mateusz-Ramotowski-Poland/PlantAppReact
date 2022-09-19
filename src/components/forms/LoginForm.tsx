@@ -1,35 +1,29 @@
 import React, { useRef, useState } from "react";
-
-import classes from "./loginForm.module.css";
+import classes from "../../assets/FormCard.module.css";
 import { tokenInterface } from "../../interafces";
-import { fetchDataPost } from "../../functions";
+import { fetchDataPost } from "../../shared";
 import { useLogin } from "../../hooks/useLogin";
-
-import { WrongCredentials } from "./WrongCredentials";
+import { Link } from "react-router-dom";
 
 export const LoginForm = () => {
-  const [isLoginError, setIsLoginError] = useState(false);
+  const [loginError, setLoginError] = useState("");
   const login = useLogin();
-
-  const emailInputRef = useRef<HTMLInputElement>(null);
+  const usernameInputRef = useRef<HTMLInputElement>(null);
   const passwordInputRef = useRef<HTMLInputElement>(null);
 
   const submitHandler = (event: React.FormEvent) => {
     event.preventDefault();
-
-    const enteredEmail = emailInputRef?.current?.value as string;
-    const enteredPassword = passwordInputRef?.current?.value as string;
-
-    fetchDataPost("/accounts/jwt/create", {
-      username: enteredEmail,
-      password: enteredPassword,
-    })
+    const password = passwordInputRef?.current?.value;
+    const username = usernameInputRef?.current?.value;
+    const path = "/accounts/jwt/create";
+    const body = { username: username, password: password };
+    setLoginError("");
+    fetchDataPost(path, body)
       .then((data: tokenInterface) => {
-        setIsLoginError(false);
         login(data);
       })
       .catch((err) => {
-        setIsLoginError(true);
+        setLoginError("Wrong credentials for loggin");
       });
   };
 
@@ -44,24 +38,28 @@ export const LoginForm = () => {
               data-testid="username"
               type="text"
               required
-              ref={emailInputRef}
+              ref={usernameInputRef}
             />
           </label>
         </div>
         <div className={classes.control}>
-          <label htmlFor="password">Your Password</label>
-          <input
-            data-testid="password"
-            type="password"
-            id="password"
-            required
-            ref={passwordInputRef}
-          />
+          <label>
+            Your Password
+            <input
+              data-testid="password"
+              type="password"
+              required
+              ref={passwordInputRef}
+            />
+          </label>
         </div>
-        {isLoginError && <WrongCredentials />}
+        {loginError !== "" && <p className={classes.alert}>{loginError}</p>}
         <div className={classes.actions}>
           <button type="submit">Login</button>
         </div>
+        <Link className={classes.pointner} to="/createAccount">
+          Create account
+        </Link>
       </form>
     </section>
   );

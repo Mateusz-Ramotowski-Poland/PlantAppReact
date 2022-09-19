@@ -1,5 +1,3 @@
-import { credentialsInterface } from "./interafces";
-
 export function fetchDataPost<T>(path: string, body: T): Promise<any> {
   const url = `${process.env.REACT_APP_DOMAIN as string}${path}`;
   return fetch(url, {
@@ -14,12 +12,12 @@ export function fetchDataPost<T>(path: string, body: T): Promise<any> {
       return data;
     } else {
       return data.then((data) => {
-        let errorMessage = "Authentication failed!";
+        let errorMessage = "Wrong form data!";
         if (data?.error?.message) {
           errorMessage = data.error.message;
         }
 
-        throw new Error(errorMessage);
+        throw { errorMessage: errorMessage, res: data };
       });
     }
   });
