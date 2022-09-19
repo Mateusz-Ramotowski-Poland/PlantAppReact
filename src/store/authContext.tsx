@@ -3,7 +3,10 @@ import { useNavigate } from "react-router-dom";
 import { fetchDataPost } from "../shared";
 
 import React, { useCallback, useEffect, useState } from "react";
-import { onlyChildrenProps } from "../types";
+
+type authProps = {
+  children: React.ReactNode;
+};
 
 export const AuthContext = React.createContext({
   isLoggedIn: false,
@@ -28,7 +31,7 @@ const checkIfLoggedIn = () => {
   }
 };
 
-export const AuthContextProvider = (props: onlyChildrenProps) => {
+export const AuthContextProvider = (props: authProps) => {
   const navigate = useNavigate();
 
   const [isLoggedIn, setIsLoggedIn] = useState(false);
