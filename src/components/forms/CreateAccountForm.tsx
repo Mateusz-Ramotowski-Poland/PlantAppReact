@@ -1,23 +1,18 @@
 import React, { useRef, useState } from "react";
 import classes from "../../assets/FormCard.module.css";
-import { fetchDataPost, showMessage, isContainOnlyNumbers } from "../../shared";
+import {
+  fetchDataPost,
+  showMessage,
+  confirmValueValidation,
+  confirmOnlyNumbersValidation,
+} from "../../shared";
 import { Link } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
+import { FormErrorState } from "../../interafces";
 
-type FormErrorState = Record<PropertyKey, any> & {
-  passwordMissmatch?: boolean;
+const checkFormValidity = (formError: FormErrorState) => {
+  return Object.values(formError).every((val) => !val);
 };
-
-function crossPasswordValidation(
-  passwordValue: string,
-  confirmPasswordValue: string
-) {
-  return (errorState: FormErrorState) => ({
-    ...errorState,
-    passwordMissmatch: passwordValue !== confirmPasswordValue,
-    onlyDigits: isContainOnlyNumbers(passwordValue),
-  });
-}
 
 export const CreateAccountForm = () => {
   const [formError, setFormError] = useState<FormErrorState>({});
@@ -30,7 +25,8 @@ export const CreateAccountForm = () => {
     const password = passwordInputRef?.current?.value as string;
     const confirmPassword = confirmPasswordInputRef?.current?.value as string;
 
-    setFormError(crossPasswordValidation(password, confirmPassword));
+    setFormError(confirmValueValidation(password, confirmPassword));
+    setFormError(confirmOnlyNumbersValidation(password));
   };
 
   const submitHandler = (event: React.FormEvent) => {
@@ -45,7 +41,7 @@ export const CreateAccountForm = () => {
       email: email,
     };
 
-    if (!Object.values(formError).includes(true)) {
+    if (checkFormValidity(formError)) {
       fetchDataPost(path, body)
         .then(() => {
           showMessage("New account was created!", "info");

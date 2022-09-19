@@ -57,9 +57,6 @@ export const LoginForm = () => {
         <div className={classes.actions}>
           <button type="submit">Login</button>
         </div>
-        <Link className={classes.pointner} to="/retrievePassword">
-          Forgot password?
-        </Link>
         <Link className={classes.pointner} to="/createAccount">
           Create account
         </Link>

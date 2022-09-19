@@ -6,7 +6,6 @@ import { NotFound } from "./pages/NotFound";
 import { AfterLoginPage } from "./pages/AfterLoginPage";
 import { useContext } from "react";
 import { AuthContext } from "./store/authContext";
-import { RetrievePasswordPage } from "./pages/RetrievePasswordPage";
 
 function App() {
   const authCtx = useContext(AuthContext);
@@ -15,7 +14,6 @@ function App() {
     <Routes>
       <Route path="/" element={<StartPage />} />
       <Route path="/createAccount" element={<CreateAccountPage />} />
-      <Route path="/retrievePassword" element={<RetrievePasswordPage />} />
       {authCtx.isLoggedIn && (
         <Route path="/logged" element={<AfterLoginPage />} />
       )}
