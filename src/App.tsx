@@ -6,6 +6,8 @@ import { NotFound } from "./pages/NotFound";
 import { AfterLoginPage } from "./pages/AfterLoginPage";
 import { useContext } from "react";
 import { AuthContext } from "./store/authContext";
+import { RetrievePasswordFormPage } from "./pages/RetrievePasswordFormPage";
+import { PasswordResetPage } from "./pages/PasswordResetPage";
 
 function App() {
   const authCtx = useContext(AuthContext);
@@ -14,10 +16,15 @@ function App() {
     <Routes>
       <Route path="/" element={<StartPage />} />
       <Route path="/createAccount" element={<CreateAccountPage />} />
+      <Route path="/retrievePassword" element={<RetrievePasswordFormPage />} />
+      <Route
+        path="/reset-password/:uid/:token"
+        element={<PasswordResetPage />}
+      />
       {authCtx.isLoggedIn && (
         <Route path="/logged" element={<AfterLoginPage />} />
       )}
-      <Route path="*" element={<NotFound />} />
+      {<Route path="*" element={<NotFound />} />}
     </Routes>
   );
 }

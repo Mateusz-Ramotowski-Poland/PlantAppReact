@@ -1,4 +1,4 @@
-.auth {
+.form {
   margin: 3rem auto;
   width: 95%;
   max-width: 25rem;
@@ -10,7 +10,7 @@
   color: white;
 }
 
-.auth h1 {
+.form h1 {
   text-align: center;
   color: white;
 }
