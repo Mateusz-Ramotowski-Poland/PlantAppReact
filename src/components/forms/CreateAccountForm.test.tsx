@@ -1,14 +1,20 @@
-import { render, screen } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { debug } from "console";
 import { BrowserRouter } from "react-router-dom";
-import { fetchDataPost } from "../../functions";
-import { showMessage } from "../../functions";
+import { fetchDataPost, showMessage } from "../../functions";
 import { CreateAccountForm } from "./CreateAccountForm";
 
-jest.mock("../../functions", () => ({
-  fetchDataPost: jest.fn(),
-  showMessage: jest.fn(),
-}));
+jest.mock("../../functions", () => {
+  const originalModule = jest.requireActual("../../functions");
+
+  return {
+    __esModule: true,
+    ...originalModule,
+    fetchDataPost: jest.fn(),
+    showMessage: jest.fn(),
+  };
+});
 
 describe("create account test", () => {
   const username = "admin";
@@ -54,6 +60,12 @@ describe("create account test", () => {
   test("show message after create new account", async () => {
     userEvent.click(screen.getByRole("button", { name: "Create account" }));
 
-    expect(showMessage as jest.Mock).not.toHaveBeenCalled();
+    await waitFor(() => {
+      expect(showMessage as jest.Mock).toHaveBeenNthCalledWith(
+        1,
+        "New account was created!",
+        "info"
+      );
+    });
   });
 });
