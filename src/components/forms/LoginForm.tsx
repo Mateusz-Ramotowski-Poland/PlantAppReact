@@ -1,7 +1,7 @@
 import React, { useRef, useState } from "react";
 import classes from "../UI/FormCard.module.css";
 import { tokenInterface } from "../../interafces";
-import { fetchDataPost } from "../../functions";
+import { fetchDataPost } from "../../shared";
 import { useLogin } from "../../hooks/useLogin";
 import { Link } from "react-router-dom";
 import { FormCard } from "../UI/FormCard";

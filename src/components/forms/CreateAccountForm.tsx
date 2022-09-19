@@ -2,16 +2,27 @@ import React, { useRef, useState } from "react";
 import classes from "../UI/FormCard.module.css";
 import { FormCard } from "../UI/FormCard";
 import { fetchDataPost } from "../../functions";
+import classes from "./loginForm.module.css";
+import { fetchDataPost, showMessage, isContainOnlyNumbers } from "../../shared";
 import { Link } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
-import { showMessage, isContainOnlyNumbers } from "../../functions";
+
+type FormErrorState = Record<PropertyKey, any> & {
+  passwordMissmatch?: boolean;
+};
+
+function crossPasswordValidation(
+  passwordValue: string | undefined,
+  confirmPasswordValue: string | undefined
+) {
+  return (errorState: FormErrorState) => ({
+    ...errorState,
+    passwordMissmatch: passwordValue !== confirmPasswordValue,
+  });
+}
 
 export const CreateAccountForm = () => {
-  const [passwordMatchError, setPasswordMatchError] = useState("");
-  const [onlyDigitsError, setOnlyDigitsError] = useState("");
-  const formError =
-    onlyDigitsError === "" && passwordMatchError === "" ? false : true;
-
+  const [formError, setFormError] = useState<FormErrorState>({});
   const usernameInputRef = useRef<HTMLInputElement>(null);
   const passwordInputRef = useRef<HTMLInputElement>(null);
   const confirmPasswordInputRef = useRef<HTMLInputElement>(null);
@@ -20,9 +31,8 @@ export const CreateAccountForm = () => {
   const passwordChangeHandler = () => {
     const password = passwordInputRef?.current?.value;
     const confirmPassword = confirmPasswordInputRef?.current?.value;
-    password !== confirmPassword
-      ? setPasswordMatchError("Password and confirm password don't match")
-      : setPasswordMatchError("");
+
+    setFormError(crossPasswordValidation(password, confirmPassword));
 
     isContainOnlyNumbers(passwordInputRef?.current?.value as string)
       ? setOnlyDigitsError("Password can't contain only numbers")

@@ -1,8 +1,7 @@
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { LoginForm } from "./LoginForm";
-import { fetchDataPost } from "../../functions";
-import { BrowserRouter } from "react-router-dom";
+import { fetchDataPost } from "../../shared";
 
 jest.mock("../../functions", () => ({
   fetchDataPost: jest.fn(),
