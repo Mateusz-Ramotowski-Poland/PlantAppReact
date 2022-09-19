@@ -31,10 +31,6 @@ export const CreateAccountForm = () => {
     const confirmPassword = confirmPasswordInputRef?.current?.value as string;
 
     setFormError(crossPasswordValidation(password, confirmPassword));
-
-    // isContainOnlyNumbers(passwordInputRef?.current?.value as string)
-    //   ? setOnlyDigitsError("Password can't contain only numbers")
-    //   : setOnlyDigitsError("");
   };
 
   const submitHandler = (event: React.FormEvent) => {
@@ -48,7 +44,8 @@ export const CreateAccountForm = () => {
       password: password,
       email: email,
     };
-    if (!formError) {
+
+    if (!Object.values(formError).includes(true)) {
       fetchDataPost(path, body)
         .then(() => {
           showMessage("New account was created!", "info");

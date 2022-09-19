@@ -5,7 +5,7 @@ import { AuthContext, AuthContextProvider } from "./authContext";
 import { BrowserRouter } from "react-router-dom";
 import { fetchDataPost } from "../shared/index";
 
-jest.mock("../functions", () => ({
+jest.mock("../shared/index", () => ({
   fetchDataPost: jest.fn(),
 }));
 

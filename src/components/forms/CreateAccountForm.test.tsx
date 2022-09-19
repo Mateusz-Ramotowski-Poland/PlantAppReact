@@ -4,8 +4,8 @@ import { BrowserRouter } from "react-router-dom";
 import { CreateAccountForm } from "./CreateAccountForm";
 import { fetchDataPost, showMessage } from "../../shared";
 
-jest.mock("../../functions", () => {
-  const originalModule = jest.requireActual("../../functions");
+jest.mock("../../shared", () => {
+  const originalModule = jest.requireActual("../../shared");
 
   return {
     __esModule: true,
@@ -51,7 +51,7 @@ describe("create account test", () => {
     userEvent.click(screen.getByRole("button", { name: "Create account" }));
 
     expect(
-      screen.getByText("Password and confirm password don't match")
+      screen.getByText("Passwod and confirm passsword mismatch")
     ).toBeInTheDocument();
     expect(fetchDataPost as jest.Mock).not.toHaveBeenCalled();
   });

@@ -4,7 +4,7 @@ import { LoginForm } from "./LoginForm";
 import { fetchDataPost } from "../../shared";
 import { BrowserRouter } from "react-router-dom";
 
-jest.mock("../../functions", () => ({
+jest.mock("../../shared", () => ({
   fetchDataPost: jest.fn(),
 }));
 const mockedUseLogin = jest.fn();
