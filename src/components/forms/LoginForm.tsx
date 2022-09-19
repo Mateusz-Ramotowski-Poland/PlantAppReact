@@ -1,10 +1,9 @@
 import React, { useRef, useState } from "react";
-import classes from "../UI/FormCard.module.css";
+import classes from "../../assets/FormCard.module.css";
 import { tokenInterface } from "../../interafces";
 import { fetchDataPost } from "../../shared";
 import { useLogin } from "../../hooks/useLogin";
 import { Link } from "react-router-dom";
-import { FormCard } from "../UI/FormCard";
 
 export const LoginForm = () => {
   const [loginError, setLoginError] = useState("");
@@ -29,44 +28,42 @@ export const LoginForm = () => {
   };
 
   return (
-    <FormCard>
-      <section className={classes.auth}>
-        <h1>Login</h1>
-        <form onSubmit={submitHandler}>
-          <div className={classes.control}>
-            <label>
-              Your Username
-              <input
-                data-testid="username"
-                type="text"
-                required
-                ref={usernameInputRef}
-              />
-            </label>
-          </div>
-          <div className={classes.control}>
-            <label>
-              Your Password
-              <input
-                data-testid="password"
-                type="password"
-                required
-                ref={passwordInputRef}
-              />
-            </label>
-          </div>
-          {loginError !== "" && <p className={classes.alert}>{loginError}</p>}
-          <div className={classes.actions}>
-            <button type="submit">Login</button>
-          </div>
-          <Link className={classes.pointner} to="/retrievePassword">
-            Forgot password?
-          </Link>
-          <Link className={classes.pointner} to="/createAccount">
-            Create account
-          </Link>
-        </form>
-      </section>
-    </FormCard>
+    <section className={classes.auth}>
+      <h1>Login</h1>
+      <form onSubmit={submitHandler}>
+        <div className={classes.control}>
+          <label>
+            Your Username
+            <input
+              data-testid="username"
+              type="text"
+              required
+              ref={usernameInputRef}
+            />
+          </label>
+        </div>
+        <div className={classes.control}>
+          <label>
+            Your Password
+            <input
+              data-testid="password"
+              type="password"
+              required
+              ref={passwordInputRef}
+            />
+          </label>
+        </div>
+        {loginError !== "" && <p className={classes.alert}>{loginError}</p>}
+        <div className={classes.actions}>
+          <button type="submit">Login</button>
+        </div>
+        <Link className={classes.pointner} to="/retrievePassword">
+          Forgot password?
+        </Link>
+        <Link className={classes.pointner} to="/createAccount">
+          Create account
+        </Link>
+      </form>
+    </section>
   );
 };

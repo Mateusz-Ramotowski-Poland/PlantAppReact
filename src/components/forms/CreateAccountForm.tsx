@@ -1,8 +1,5 @@
 import React, { useRef, useState } from "react";
-import classes from "../UI/FormCard.module.css";
-import { FormCard } from "../UI/FormCard";
-import { fetchDataPost } from "../../functions";
-import classes from "./loginForm.module.css";
+import classes from "../../assets/FormCard.module.css";
 import { fetchDataPost, showMessage, isContainOnlyNumbers } from "../../shared";
 import { Link } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
@@ -12,12 +9,13 @@ type FormErrorState = Record<PropertyKey, any> & {
 };
 
 function crossPasswordValidation(
-  passwordValue: string | undefined,
-  confirmPasswordValue: string | undefined
+  passwordValue: string,
+  confirmPasswordValue: string
 ) {
   return (errorState: FormErrorState) => ({
     ...errorState,
     passwordMissmatch: passwordValue !== confirmPasswordValue,
+    onlyDigits: isContainOnlyNumbers(passwordValue),
   });
 }
 
@@ -29,14 +27,14 @@ export const CreateAccountForm = () => {
   const emailInputRef = useRef<HTMLInputElement>(null);
 
   const passwordChangeHandler = () => {
-    const password = passwordInputRef?.current?.value;
-    const confirmPassword = confirmPasswordInputRef?.current?.value;
+    const password = passwordInputRef?.current?.value as string;
+    const confirmPassword = confirmPasswordInputRef?.current?.value as string;
 
     setFormError(crossPasswordValidation(password, confirmPassword));
 
-    isContainOnlyNumbers(passwordInputRef?.current?.value as string)
-      ? setOnlyDigitsError("Password can't contain only numbers")
-      : setOnlyDigitsError("");
+    // isContainOnlyNumbers(passwordInputRef?.current?.value as string)
+    //   ? setOnlyDigitsError("Password can't contain only numbers")
+    //   : setOnlyDigitsError("");
   };
 
   const submitHandler = (event: React.FormEvent) => {
@@ -68,71 +66,71 @@ export const CreateAccountForm = () => {
   };
 
   return (
-    <FormCard>
-      <section className={classes.auth}>
-        <h1>Create account</h1>
-        <form onSubmit={submitHandler}>
-          <div className={classes.control}>
-            <label>
-              Your Username
-              <input
-                data-testid="username"
-                type="text"
-                required
-                ref={usernameInputRef}
-              />
-            </label>
-          </div>
-          <div className={classes.control}>
-            <label>
-              Your Password
-              <input
-                onChange={passwordChangeHandler}
-                data-testid="password"
-                type="password"
-                required
-                minLength={8}
-                ref={passwordInputRef}
-              />
-            </label>
-          </div>
-          <div className={classes.control}>
-            <label>
-              Confirm Password
-              <input
-                onChange={passwordChangeHandler}
-                data-testid="confirm-password"
-                type="password"
-                ref={confirmPasswordInputRef}
-              />
-            </label>
-          </div>
-          <div className={classes.control}>
-            <label>
-              Your email
-              <input
-                data-testid="email"
-                type="email"
-                required
-                ref={emailInputRef}
-              />
-            </label>
-          </div>
-          {passwordMatchError !== "" && (
-            <p className={classes.alert}>{passwordMatchError}</p>
-          )}
-          {onlyDigitsError !== "" && (
-            <p className={classes.alert}>{onlyDigitsError}</p>
-          )}
-          <div className={classes.actions}>
-            <button type="submit">Create account</button>
-          </div>
-          <Link to="/" className={classes.pointner}>
-            Login to Your account
-          </Link>
-          <ToastContainer />
-        </form>
-      </section>
-    </FormCard>
+    <section className={classes.auth}>
+      <h1>Create account</h1>
+      <form onSubmit={submitHandler}>
+        <div className={classes.control}>
+          <label>
+            Your Username
+            <input
+              data-testid="username"
+              type="text"
+              required
+              ref={usernameInputRef}
+            />
+          </label>
+        </div>
+        <div className={classes.control}>
+          <label>
+            Your Password
+            <input
+              onChange={passwordChangeHandler}
+              data-testid="password"
+              type="password"
+              required
+              minLength={8}
+              ref={passwordInputRef}
+            />
+          </label>
+        </div>
+        <div className={classes.control}>
+          <label>
+            Confirm Password
+            <input
+              onChange={passwordChangeHandler}
+              data-testid="confirm-password"
+              type="password"
+              ref={confirmPasswordInputRef}
+            />
+          </label>
+        </div>
+        <div className={classes.control}>
+          <label>
+            Your email
+            <input
+              data-testid="email"
+              type="email"
+              required
+              ref={emailInputRef}
+            />
+          </label>
+        </div>
+        {formError.passwordMissmatch && (
+          <p className={classes.alert}>
+            Passwod and confirm passsword mismatch
+          </p>
+        )}
+        {formError.onlyDigits && (
+          <p className={classes.alert}>Passwod can't contain only digits</p>
+        )}
+        <div className={classes.actions}>
+          <button type="submit">Create account</button>
+        </div>
+        <Link to="/" className={classes.pointner}>
+          Login to Your account
+        </Link>
+        <ToastContainer />
+      </form>
+    </section>
   );
 };

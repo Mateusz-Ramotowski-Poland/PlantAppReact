@@ -1,7 +1,6 @@
-import classes from "../components/UI/FormCard.module.css";
-import { FormCard } from "../components/UI/FormCard";
+import classes from "../assets/FormCard.module.css";
 import { useRef } from "react";
-import { fetchDataPost, showMessage } from "../functions";
+import { fetchDataPost } from "../shared/index";
 
 export const RetrievePasswordPage = () => {
   const emailInputRef = useRef<HTMLInputElement>(null);
@@ -33,27 +32,25 @@ export const RetrievePasswordPage = () => {
   };
 
   return (
-    <FormCard>
-      <section className={classes.auth}>
-        <h1>Do not you remember the password?</h1>
-        <p>Write email to your account</p>
-        <form onSubmit={submitHandler}>
-          <div className={classes.control}>
-            <label>
-              Your email
-              <input
-                data-testid="email"
-                type="email"
-                required
-                ref={emailInputRef}
-              />
-            </label>
-          </div>
-          <div className={classes.actions}>
-            <button type="submit">Go further</button>
-          </div>
-        </form>
-      </section>
-    </FormCard>
+    <section className={classes.auth}>
+      <h1>Do not you remember the password?</h1>
+      <p>Write email to your account</p>
+      <form onSubmit={submitHandler}>
+        <div className={classes.control}>
+          <label>
+            Your email
+            <input
+              data-testid="email"
+              type="email"
+              required
+              ref={emailInputRef}
+            />
+          </label>
+        </div>
+        <div className={classes.actions}>
+          <button type="submit">Go further</button>
+        </div>
+      </form>
+    </section>
   );
 };

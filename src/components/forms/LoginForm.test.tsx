@@ -2,6 +2,7 @@ import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { LoginForm } from "./LoginForm";
 import { fetchDataPost } from "../../shared";
+import { BrowserRouter } from "react-router-dom";
 
 jest.mock("../../functions", () => ({
   fetchDataPost: jest.fn(),

@@ -1,10 +1,8 @@
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { BrowserRouter } from "react-router-dom";
-import { fetchDataPost, showMessage } from "../../functions";
 import { CreateAccountForm } from "./CreateAccountForm";
-import { LoginForm } from "./LoginForm";
-import { fetchDataPost } from "../../shared";
+import { fetchDataPost, showMessage } from "../../shared";
 
 jest.mock("../../functions", () => {
   const originalModule = jest.requireActual("../../functions");
