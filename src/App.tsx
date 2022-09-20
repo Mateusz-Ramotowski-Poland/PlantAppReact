@@ -8,6 +8,7 @@ import { useContext } from "react";
 import { AuthContext } from "./store/authContext";
 import { RetrievePasswordFormPage } from "./pages/RetrievePasswordFormPage";
 import { PasswordResetPage } from "./pages/PasswordResetPage";
+import { ActivateAccountPage } from "./pages/ActivateAccountPage";
 
 function App() {
   const authCtx = useContext(AuthContext);
@@ -20,6 +21,10 @@ function App() {
       <Route
         path="/reset-password/:uid/:token"
         element={<PasswordResetPage />}
+      />
+      <Route
+        path="activate-account/:uid/:token"
+        element={<ActivateAccountPage />}
       />
       {authCtx.isLoggedIn && (
         <Route path="/logged" element={<AfterLoginPage />} />
