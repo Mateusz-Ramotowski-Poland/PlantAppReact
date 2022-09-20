@@ -41,7 +41,6 @@ export const CreateAccountForm = () => {
     if (checkFormValidity(formError)) {
       fetchDataPost(path, body)
         .then(() => {
-          console.log("no errors");
           showMessage("New account was created!", "info");
         })
         .catch((err) => {

@@ -10,8 +10,10 @@ import {
 } from "../shared";
 import { FormErrorState } from "../interafces";
 import { ToastContainer } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 export const PasswordResetPage = () => {
+  const navigate = useNavigate();
   const [formError, setFormError] = useState<FormErrorState>({});
   const { uid, token } = useParams();
   const passwordInputRef = useRef<HTMLInputElement>(null);
@@ -39,19 +41,15 @@ export const PasswordResetPage = () => {
     if (checkFormValidity(formError))
       fetchDataPost(path, body)
         .then(() => {
-          //I will always get error doing this request
+          navigate("/");
         })
         .catch((err) => {
-          if (err.message === "Unexpected end of JSON input") {
-            showMessage(`Password was changed`, "info");
-          }
-
-          for (const property in err.res) {
-            for (const problem of err.res[property]) {
+          for (const property in err.errMessages) {
+            for (const problem of err.errMessages[property]) {
               problem !== undefined
                 ? showMessage(`Password is not changed: ${problem}`, "error")
                 : showMessage(
-                    `Password is not changed: ${err.errorMessage}`,
+                    `Password is not changed: ${err.defaultMessage}`,
                     "error"
                   );
             }

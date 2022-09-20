@@ -1,6 +1,7 @@
 import classes from "../assets/FormCard.module.css";
 import { useRef } from "react";
-import { fetchDataPost } from "../shared";
+import { fetchDataPost, showMessage } from "../shared";
+import { ToastContainer } from "react-toastify";
 
 export const RetrievePasswordFormPage = () => {
   const emailInputRef = useRef<HTMLInputElement>(null);
@@ -13,22 +14,11 @@ export const RetrievePasswordFormPage = () => {
     const body = { email: email };
 
     fetchDataPost(path, body)
-      .then((data) => {
-        console.log(data);
-
-        /* showMessage("New account was created!", "info"); */
+      .then(() => {
+        showMessage("Check your email", "info");
       })
       .catch((err) => {
-        console.dir(err);
-        console.log(err);
-        console.log(err.errorMessage, err.data);
-        /*   for (const property in err.res) {
-          for (const problem of err.res[property]) {
-            problem !== undefined
-              ? showMessage(`User not created: ${problem}`, "error")
-              : showMessage(`User not created: ${err.errorMessage}`, "error");
-          }
-        } */
+        showMessage(err, "error");
       });
   };
 
@@ -51,6 +41,7 @@ export const RetrievePasswordFormPage = () => {
           <div className={classes.actions}>
             <button type="submit">Go further</button>
           </div>
+          <ToastContainer />
         </form>
       </section>
     </>
