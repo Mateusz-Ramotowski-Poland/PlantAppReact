@@ -9,6 +9,7 @@ import {
   checkFormValidity,
 } from "../shared";
 import { FormErrorState } from "../interafces";
+import { ToastContainer } from "react-toastify";
 
 export const PasswordResetPage = () => {
   const [formError, setFormError] = useState<FormErrorState>({});
@@ -37,11 +38,24 @@ export const PasswordResetPage = () => {
 
     if (checkFormValidity(formError))
       fetchDataPost(path, body)
-        .then((data) => {
-          showMessage(data, "info");
+        .then(() => {
+          //I will always get error doing this request
         })
         .catch((err) => {
-          showMessage(err, "error");
+          if (err.message === "Unexpected end of JSON input") {
+            showMessage(`Password was changed`, "info");
+          }
+
+          for (const property in err.res) {
+            for (const problem of err.res[property]) {
+              problem !== undefined
+                ? showMessage(`Password is not changed: ${problem}`, "error")
+                : showMessage(
+                    `Password is not changed: ${err.errorMessage}`,
+                    "error"
+                  );
+            }
+          }
         });
   };
 
@@ -57,6 +71,8 @@ export const PasswordResetPage = () => {
                 data-testid="password"
                 type="password"
                 required
+                minLength={8}
+                onChange={passwordChangeHandler}
                 ref={passwordInputRef}
               />
             </label>
@@ -65,16 +81,25 @@ export const PasswordResetPage = () => {
             <label>
               Confirm Password
               <input
-                onChange={passwordChangeHandler}
                 data-testid="confirm-password"
                 type="password"
+                onChange={passwordChangeHandler}
                 ref={confirmPasswordInputRef}
               />
             </label>
           </div>
+          {formError.passwordMissmatch && (
+            <p className={classes.alert}>
+              Passwod and confirm passsword mismatch
+            </p>
+          )}
+          {formError.onlyDigits && (
+            <p className={classes.alert}>Passwod can't contain only digits</p>
+          )}
           <div className={classes.actions}>
             <button type="submit">Change password</button>
           </div>
+          <ToastContainer />
         </form>
       </section>
     </>

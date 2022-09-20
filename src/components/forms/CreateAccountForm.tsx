@@ -41,9 +41,11 @@ export const CreateAccountForm = () => {
     if (checkFormValidity(formError)) {
       fetchDataPost(path, body)
         .then(() => {
+          console.log("no errors");
           showMessage("New account was created!", "info");
         })
         .catch((err) => {
+          console.dir(err);
           for (const property in err.res) {
             for (const problem of err.res[property]) {
               problem !== undefined

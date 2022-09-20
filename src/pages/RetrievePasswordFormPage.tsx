@@ -10,9 +10,7 @@ export const RetrievePasswordFormPage = () => {
 
     const email = emailInputRef?.current?.value;
     const path = "/accounts/users/reset_password/";
-    const body = {
-      email: email,
-    };
+    const body = { email: email };
 
     fetchDataPost(path, body)
       .then((data) => {
@@ -21,7 +19,9 @@ export const RetrievePasswordFormPage = () => {
         /* showMessage("New account was created!", "info"); */
       })
       .catch((err) => {
+        console.dir(err);
         console.log(err);
+        console.log(err.errorMessage, err.data);
         /*   for (const property in err.res) {
           for (const problem of err.res[property]) {
             problem !== undefined
