@@ -28,7 +28,7 @@ export const LoginForm = () => {
   };
 
   return (
-    <section className={classes.auth}>
+    <section className={classes.form}>
       <h1>Login</h1>
       <form onSubmit={submitHandler}>
         <div className={classes.control}>
@@ -59,6 +59,9 @@ export const LoginForm = () => {
         </div>
         <Link className={classes.pointner} to="/createAccount">
           Create account
+        </Link>
+        <Link className={classes.pointner} to="/retrievePassword">
+          Forgot password?
         </Link>
       </form>
     </section>

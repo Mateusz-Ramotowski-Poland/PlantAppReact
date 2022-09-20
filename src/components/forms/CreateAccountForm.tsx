@@ -5,14 +5,11 @@ import {
   showMessage,
   confirmValueValidation,
   confirmOnlyNumbersValidation,
+  checkFormValidity,
 } from "../../shared";
 import { Link } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import { FormErrorState } from "../../interafces";
-
-const checkFormValidity = (formError: FormErrorState) => {
-  return Object.values(formError).every((val) => !val);
-};
 
 export const CreateAccountForm = () => {
   const [formError, setFormError] = useState<FormErrorState>({});
@@ -47,6 +44,7 @@ export const CreateAccountForm = () => {
           showMessage("New account was created!", "info");
         })
         .catch((err) => {
+          console.dir(err);
           for (const property in err.res) {
             for (const problem of err.res[property]) {
               problem !== undefined
@@ -59,7 +57,7 @@ export const CreateAccountForm = () => {
   };
 
   return (
-    <section className={classes.auth}>
+    <section className={classes.form}>
       <h1>Create account</h1>
       <form onSubmit={submitHandler}>
         <div className={classes.control}>

@@ -7,7 +7,10 @@ export function fetchDataPost<T>(path: string, body: T): Promise<any> {
       "Content-Type": "application/json",
     },
   }).then((res) => {
+    if (res.status === 204) return res.text();
+
     const data = res.json();
+
     if (res.ok) {
       return data;
     } else {
@@ -17,7 +20,7 @@ export function fetchDataPost<T>(path: string, body: T): Promise<any> {
           errorMessage = data.error.message;
         }
 
-        throw { errorMessage: errorMessage, res: data };
+        throw { defaultMessage: errorMessage, errMessages: data };
       });
     }
   });
