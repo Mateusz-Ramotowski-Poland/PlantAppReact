@@ -7,6 +7,7 @@ export function fetchDataPost<T>(path: string, body: T): Promise<any> {
       "Content-Type": "application/json",
     },
   }).then((res) => {
+    console.log(res);
     if (res.status === 204) return res.text();
 
     const data = res.json();

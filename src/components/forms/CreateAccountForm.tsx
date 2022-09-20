@@ -45,11 +45,14 @@ export const CreateAccountForm = () => {
         })
         .catch((err) => {
           console.dir(err);
-          for (const property in err.res) {
-            for (const problem of err.res[property]) {
+          for (const property in err.errMessages) {
+            for (const problem of err.errMessages[property]) {
               problem !== undefined
                 ? showMessage(`User not created: ${problem}`, "error")
-                : showMessage(`User not created: ${err.errorMessage}`, "error");
+                : showMessage(
+                    `User not created: ${err.defaultMessage}`,
+                    "error"
+                  );
             }
           }
         });
