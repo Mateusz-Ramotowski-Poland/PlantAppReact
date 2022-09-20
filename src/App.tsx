@@ -9,6 +9,8 @@ import { AuthContext } from "./store/authContext";
 import { RetrievePasswordFormPage } from "./pages/RetrievePasswordFormPage";
 import { PasswordResetPage } from "./pages/PasswordResetPage";
 import { ActivateAccountPage } from "./pages/ActivateAccountPage";
+import { AddPlantFormPage } from "./pages/AddPlantFormPage";
+import { UpdatePlantFormPage } from "./pages/UpdatePlantFormPage";
 
 function App() {
   const authCtx = useContext(AuthContext);
@@ -29,7 +31,9 @@ function App() {
       {authCtx.isLoggedIn && (
         <Route path="/logged" element={<AfterLoginPage />} />
       )}
-      {<Route path="*" element={<NotFound />} />}
+      <Route path="/logged/addPlantForm" element={<AddPlantFormPage />} />
+      <Route path="/logged/updatePlantForm" element={<UpdatePlantFormPage />} />
+      <Route path="*" element={<NotFound />} />
     </Routes>
   );
 }

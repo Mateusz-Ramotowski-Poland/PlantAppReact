@@ -1,16 +1,13 @@
 import classes from "./MainNavigation.module.css";
 import { useContext } from "react";
 import { AuthContext } from "../../store/authContext";
+import { Link } from "react-router-dom";
 
-export const MainNavigation = (props: any) => {
+export const MainNavigation = () => {
   const authCtx = useContext(AuthContext);
 
   const logoutHandler = () => {
     authCtx.logout();
-  };
-
-  const changeFormState = (event: any) => {
-    props.changeFormState(event.target.textContent);
   };
 
   return (
@@ -25,21 +22,15 @@ export const MainNavigation = (props: any) => {
               Logout
             </button>
           </li>
-          <li>
-            <button type="button" onClick={changeFormState}>
-              add plant
-            </button>
-          </li>
-          <li>
-            <button type="button" onClick={changeFormState}>
-              update plant
-            </button>
-          </li>
-          <li>
-            <button type="button" onClick={changeFormState}>
-              show plants
-            </button>
-          </li>
+          <Link to={"/logged/addPlantForm"}>
+            <button type="button">add plant</button>
+          </Link>
+          <Link to={"/logged/updatePlantForm"}>
+            <button type="button">update plant</button>
+          </Link>
+          <Link to={"/logged"}>
+            <button type="button">show plants</button>
+          </Link>
         </ul>
       </nav>
     </header>
