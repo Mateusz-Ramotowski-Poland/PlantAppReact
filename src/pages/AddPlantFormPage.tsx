@@ -1,10 +1,12 @@
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import classes from "../assets/FormCard.module.css";
 import { fetchDataPost, showMessage } from "../shared";
 import { MainNavigation } from "../components/layout/MainNavigation";
 import { ToastContainer } from "react-toastify";
+import { formErrorState } from "../interafces";
 
 export const AddPlantFormPage = () => {
+  const [formError, setFormError] = useState<formErrorState>({});
   const nameInputRef = useRef<HTMLInputElement>(null);
   const speciesInputRef = useRef<HTMLInputElement>(null);
   const wateringIntervalInputRef = useRef<HTMLInputElement>(null);
@@ -52,13 +54,25 @@ export const AddPlantFormPage = () => {
           <div className={classes.control}>
             <label>
               Name
-              <input data-testid="name" type="text" ref={nameInputRef} />
+              <input
+                data-testid="name"
+                type="text"
+                ref={nameInputRef}
+                required
+                maxLength={50}
+              />
             </label>
           </div>
           <div className={classes.control}>
             <label>
               Species
-              <input data-testid="species" type="text" ref={speciesInputRef} />
+              <input
+                data-testid="species"
+                type="text"
+                ref={speciesInputRef}
+                required
+                maxLength={50}
+              />
             </label>
           </div>
           <div className={classes.control}>
@@ -68,6 +82,9 @@ export const AddPlantFormPage = () => {
                 data-testid="wateringInterval"
                 type="number"
                 ref={wateringIntervalInputRef}
+                required
+                min={1}
+                max={2147483647}
               />
             </label>
           </div>
@@ -78,6 +95,9 @@ export const AddPlantFormPage = () => {
                 data-testid="sunExposure"
                 type="number"
                 ref={sunExposureInputRef}
+                required
+                min={1}
+                max={24}
               />
             </label>
           </div>
@@ -88,6 +108,9 @@ export const AddPlantFormPage = () => {
                 data-testid="temperature"
                 type="number"
                 ref={temperatureInputRef}
+                required
+                min={-100}
+                max={100}
               />
             </label>
           </div>
