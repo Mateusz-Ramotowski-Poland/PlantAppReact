@@ -1,7 +1,8 @@
 import { useRef } from "react";
 import classes from "../assets/FormCard.module.css";
-import { fetchDataPost } from "../shared";
+import { fetchDataPost, showMessage } from "../shared";
 import { MainNavigation } from "../components/layout/MainNavigation";
+import { ToastContainer } from "react-toastify";
 
 export const AddPlantFormPage = () => {
   const nameInputRef = useRef<HTMLInputElement>(null);
@@ -27,15 +28,18 @@ export const AddPlantFormPage = () => {
       temperature: temperature,
     };
 
-    console.log(body);
-    console.log(path);
-
-    fetchDataPost(path, body)
-      .then((data) => {
-        console.log(data);
+    fetchDataPost(path, body, true)
+      .then(() => {
+        showMessage("Added new plant", "info");
       })
       .catch((err) => {
-        console.log(err);
+        for (const property in err.errMessages) {
+          for (const problem of err.errMessages[property]) {
+            problem !== undefined
+              ? showMessage(`User not created: ${problem}`, "error")
+              : showMessage(`User not created: ${err.defaultMessage}`, "error");
+          }
+        }
       });
   };
 
@@ -92,6 +96,7 @@ export const AddPlantFormPage = () => {
             <button type="submit">Add plant</button>
           </div>
         </form>
+        <ToastContainer />
       </section>
     </>
   );

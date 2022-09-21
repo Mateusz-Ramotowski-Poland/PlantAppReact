@@ -8,13 +8,13 @@ import {
   showMessage,
   checkFormValidity,
 } from "../shared";
-import { FormErrorState } from "../interafces";
+import { formErrorState } from "../interafces";
 import { ToastContainer } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 
 export const PasswordResetPage = () => {
   const navigate = useNavigate();
-  const [formError, setFormError] = useState<FormErrorState>({});
+  const [formError, setFormError] = useState<formErrorState>({});
   const { uid, token } = useParams();
   const passwordInputRef = useRef<HTMLInputElement>(null);
   const confirmPasswordInputRef = useRef<HTMLInputElement>(null);

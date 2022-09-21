@@ -9,10 +9,10 @@ import {
 } from "../../shared";
 import { Link } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
-import { FormErrorState } from "../../interafces";
+import { formErrorState } from "../../interafces";
 
 export const CreateAccountForm = () => {
-  const [formError, setFormError] = useState<FormErrorState>({});
+  const [formError, setFormError] = useState<formErrorState>({});
   const usernameInputRef = useRef<HTMLInputElement>(null);
   const passwordInputRef = useRef<HTMLInputElement>(null);
   const confirmPasswordInputRef = useRef<HTMLInputElement>(null);

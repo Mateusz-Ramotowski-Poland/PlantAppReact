@@ -1,7 +1,7 @@
-import { FormErrorState } from "../../interafces";
+import { formErrorState } from "../../interafces";
 
 export function confirmValueValidation(value: string, confirmValue: string) {
-  return (errorState: FormErrorState) => ({
+  return (errorState: formErrorState) => ({
     ...errorState,
     passwordMissmatch: value !== confirmValue,
   });

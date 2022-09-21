@@ -3,7 +3,7 @@ export interface credentialsInterface {
   password: string;
 }
 
-export interface FormErrorState {
+export interface formErrorState {
   passwordMissmatch?: boolean;
   onlyDigits?: boolean;
 }
