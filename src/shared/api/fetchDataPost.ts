@@ -1,20 +1,34 @@
 import { tokenInterface } from "../../interafces";
 
+interface headerInterface {
+  "Content-Type": string;
+  Authorization?: string;
+}
+
 export function fetchDataPost<T>(
   path: string,
   body: T,
-  isTokenInHeaders: boolean = false
+  config: any = {
+    "Content-Type": "application/json",
+  }
+): Promise<any> {
+  if (Object.keys(config).includes("authorization")) {
+    const token: tokenInterface = JSON.parse(
+      localStorage.getItem("token") as string
+    );
+    config.authorization = `JWT ${token.access}`;
+  }
+
+  return makeRequest(path, body, config);
+}
+
+export function makeRequest<T>(
+  path: string,
+  body: T,
+  config: any
 ): Promise<any> {
   const url = `${process.env.REACT_APP_DOMAIN as string}${path}`;
-  const headers = new Headers({
-    "Content-Type": "application/json",
-  });
-  let token: tokenInterface;
-
-  if (isTokenInHeaders) {
-    token = JSON.parse(localStorage.getItem("token") as string);
-    headers.append("Authorization", `JWT ${token.access}`);
-  }
+  const headers = new Headers(config);
 
   return fetch(url, {
     method: "POST",

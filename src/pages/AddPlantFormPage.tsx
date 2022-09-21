@@ -1,12 +1,10 @@
-import { useRef, useState } from "react";
+import { useRef } from "react";
 import classes from "../assets/FormCard.module.css";
 import { fetchDataPost, showMessage } from "../shared";
 import { MainNavigation } from "../components/layout/MainNavigation";
 import { ToastContainer } from "react-toastify";
-import { formErrorState } from "../interafces";
 
 export const AddPlantFormPage = () => {
-  const [formError, setFormError] = useState<formErrorState>({});
   const nameInputRef = useRef<HTMLInputElement>(null);
   const speciesInputRef = useRef<HTMLInputElement>(null);
   const wateringIntervalInputRef = useRef<HTMLInputElement>(null);
@@ -30,7 +28,10 @@ export const AddPlantFormPage = () => {
       temperature: temperature,
     };
 
-    fetchDataPost(path, body, true)
+    fetchDataPost(path, body, {
+      "Content-Type": "application/json",
+      authorization: "",
+    })
       .then(() => {
         showMessage("Added new plant", "info");
       })
