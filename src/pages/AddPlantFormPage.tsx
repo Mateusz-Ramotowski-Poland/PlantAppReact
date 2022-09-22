@@ -39,8 +39,11 @@ export const AddPlantFormPage = () => {
         for (const property in err.errMessages) {
           for (const problem of err.errMessages[property]) {
             problem !== undefined
-              ? showMessage(`User not created: ${problem}`, "error")
-              : showMessage(`User not created: ${err.defaultMessage}`, "error");
+              ? showMessage(`Plant not created: ${problem}`, "error")
+              : showMessage(
+                  `Plant not created: ${err.defaultMessage}`,
+                  "error"
+                );
           }
         }
       });
