@@ -19,11 +19,11 @@ export const LoginForm = () => {
     const body = { username: username, password: password };
     setLoginError("");
     api
-      .post(path, body)
-      .then((data: TokenInterface) => {
+      .post<TokenInterface>(path, body)
+      .then((data) => {
         login(data);
       })
-      .catch((err) => {
+      .catch(() => {
         setLoginError("Wrong credentials for loggin");
       });
   };

@@ -29,13 +29,11 @@ export const AddPlantFormPage = () => {
     };
 
     api
-      .post(path, body, {
-        Authorization: "",
-      })
+      .post(path, body)
       .then(() => {
         showMessage("Added new plant", "info");
       })
-      .catch((err: any) => {
+      .catch((err) => {
         for (const property in err.errMessages) {
           for (const problem of err.errMessages[property]) {
             problem !== undefined
