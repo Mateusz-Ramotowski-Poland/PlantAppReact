@@ -9,14 +9,13 @@ jest.mock("../../hooks/useLogin", () => ({
   useLogin: () => mockedUseLogin,
 }));
 
-const post = jest.spyOn(api, "post");
-
 describe("login tests", () => {
+  let post: jest.SpyInstance;
   const username = "admin";
   const password = "pass";
 
   beforeEach(() => {
-    post.mockImplementation(() => {
+    post = jest.spyOn(api, "post").mockImplementation(() => {
       return Promise.resolve();
     });
     render(
@@ -45,7 +44,7 @@ describe("login tests", () => {
   });
 
   test("login with wrong credentials", async () => {
-    post.mockImplementation(() => {
+    post = jest.spyOn(api, "post").mockImplementation(() => {
       return Promise.reject(new Error("wrong credentials"));
     });
     userEvent.click(screen.getByRole("button", { name: "Login" }));

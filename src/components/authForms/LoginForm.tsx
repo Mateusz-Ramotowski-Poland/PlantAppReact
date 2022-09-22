@@ -1,6 +1,6 @@
 import React, { useRef, useState } from "react";
 import classes from "../../assets/FormCard.module.css";
-import { tokenInterface } from "../../interafces";
+import { TokenInterface } from "../../interafces";
 import { api } from "../../shared";
 import { useLogin } from "../../hooks/useLogin";
 import { Link } from "react-router-dom";
@@ -20,7 +20,7 @@ export const LoginForm = () => {
     setLoginError("");
     api
       .post(path, body)
-      .then((data: tokenInterface) => {
+      .then((data: TokenInterface) => {
         login(data);
       })
       .catch((err) => {

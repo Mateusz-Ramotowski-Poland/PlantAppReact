@@ -3,13 +3,12 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { RetrievePasswordFormPage } from "./RetrievePasswordFormPage";
 
-const post = jest.spyOn(api, "post");
-
 describe("Retrieve password tests", () => {
   const email = "mateuszramot@wp.pl";
+  let post: jest.SpyInstance;
 
   beforeEach(() => {
-    post.mockImplementation(() => {
+    post = jest.spyOn(api, "post").mockImplementation(() => {
       return Promise.resolve();
     });
 

@@ -9,10 +9,10 @@ import {
 } from "../../shared";
 import { Link } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
-import { formErrorState } from "../../interafces";
+import { FormErrorState } from "../../interafces";
 
 export const CreateAccountForm = () => {
-  const [formError, setFormError] = useState<formErrorState>({});
+  const [formError, setFormError] = useState<FormErrorState>({});
   const usernameInputRef = useRef<HTMLInputElement>(null);
   const passwordInputRef = useRef<HTMLInputElement>(null);
   const confirmPasswordInputRef = useRef<HTMLInputElement>(null);
@@ -44,16 +44,21 @@ export const CreateAccountForm = () => {
         .then(() => {
           showMessage("New account was created!", "info");
         })
-        .catch((err) => {
-          for (const property in err.errMessages) {
-            for (const problem of err.errMessages[property]) {
-              problem !== undefined
-                ? showMessage(`User not created: ${problem}`, "error")
-                : showMessage(
-                    `User not created: ${err.defaultMessage}`,
-                    "error"
-                  );
+        .catch((err: unknown) => {
+          if (isApiError(err)) {
+            for (const property in err.errMessages) {
+              for (const problem of err.errMessages[property]) {
+                problem !== undefined
+                  ? showMessage(`User not created: ${problem}`, "error")
+                  : showMessage(
+                      `User not created: ${err.defaultMessage}`,
+                      "error"
+                    );
+              }
             }
+          } else {
+            showMessage(`Unknown error`, "error");
+            throw err;
           }
         });
     }
@@ -128,3 +133,12 @@ export const CreateAccountForm = () => {
     </section>
   );
 };
+
+interface ApiError {
+  errMessages: Record<string, string[]>;
+  defaultMessage: string;
+}
+
+function isApiError(err: any): err is ApiError {
+  return (err as ApiError).errMessages !== undefined;
+}

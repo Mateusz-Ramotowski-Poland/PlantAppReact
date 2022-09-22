@@ -30,7 +30,6 @@ export const AddPlantFormPage = () => {
 
     api
       .post(path, body, {
-        "Content-Type": "application/json",
         Authorization: "",
       })
       .then(() => {

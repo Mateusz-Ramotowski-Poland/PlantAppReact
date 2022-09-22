@@ -1,5 +1,5 @@
-import { formErrorState } from "../../interafces";
+import { FormErrorState } from "../../interafces";
 
-export const checkFormValidity = (formError: formErrorState) => {
+export const checkFormValidity = (formError: FormErrorState) => {
   return Object.values(formError).every((val) => !val);
 };

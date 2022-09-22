@@ -14,16 +14,15 @@ jest.mock("../../shared", () => {
   };
 });
 
-const post = jest.spyOn(api, "post");
-
 describe("create account test", () => {
+  let post: jest.SpyInstance;
   const username = "admin";
   const password = "password";
   const email = "mateusz.ramotowski@profil-software.com";
   const differentPassword = "differentPassword";
 
   beforeEach(() => {
-    post.mockImplementation(() => {
+    post = jest.spyOn(api, "post").mockImplementation(() => {
       return Promise.resolve();
     });
 

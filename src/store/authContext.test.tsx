@@ -5,9 +5,7 @@ import { AuthContext, AuthContextProvider } from "./authContext";
 import { BrowserRouter } from "react-router-dom";
 import { api } from "../shared/index";
 
-const post = jest.spyOn(api, "post");
-
-const Consumenr = (props: any) => {
+const Consumer = (props: any) => {
   const ctx = useContext(AuthContext);
 
   const fn = () => {
@@ -17,14 +15,13 @@ const Consumenr = (props: any) => {
   return (
     <>
       {ctx.isLoggedIn ? "auth" : "not auth"}
-
       <button onClick={fn}>login</button>
     </>
   );
 };
 
 test("NameProvider composes full name from first, last", async () => {
-  post.mockImplementation(() => {
+  const post = jest.spyOn(api, "post").mockImplementation(() => {
     return Promise.reject();
   });
 
@@ -33,7 +30,7 @@ test("NameProvider composes full name from first, last", async () => {
   const { debug } = render(
     <BrowserRouter>
       <AuthContextProvider>
-        <Consumenr a={a}></Consumenr>
+        <Consumer a={a}></Consumer>
       </AuthContextProvider>
     </BrowserRouter>
   );

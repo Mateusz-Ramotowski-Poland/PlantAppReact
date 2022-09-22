@@ -1,13 +1,13 @@
-import { tokenInterface } from "../../interafces";
+import { TokenInterface } from "../../interafces";
 
 interface RequestConfig {
   "Content-Type"?: string;
   Authorization?: string;
 }
 
-function createHeaders(headers: RequestConfig) {
+function addAuth(headers: RequestConfig) {
   if (Object.hasOwn(headers, "Authorization")) {
-    const token: tokenInterface = JSON.parse(
+    const token: TokenInterface = JSON.parse(
       localStorage.getItem("token") as string
     );
     headers.Authorization = `JWT ${token.access}`;
@@ -15,13 +15,14 @@ function createHeaders(headers: RequestConfig) {
   return headers;
 }
 
-function ProcessInputData<T>(
+function processInputData<T>(
   path: string,
   body: T | string,
   headers: RequestConfig
 ) {
   const changedBody = JSON.stringify(body);
   const url = `${process.env.REACT_APP_DOMAIN as string}${path}`;
+  const headers = new Headers(changedConfig as Record<string, string>);
   const changedConfig = createHeaders(headers);
 
   return { changedBody, url, changedConfig };
@@ -34,7 +35,7 @@ function post<T>(
     "Content-Type": "application/json",
   }
 ): Promise<any> {
-  const { changedBody, url, changedConfig } = ProcessInputData(
+  const { changedBody, url, changedConfig } = processInputData(
     path,
     body,
     config

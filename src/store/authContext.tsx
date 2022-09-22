@@ -1,4 +1,4 @@
-import { tokenInterface } from "../interafces";
+import { TokenInterface } from "../interafces";
 import { useNavigate } from "react-router-dom";
 import { api } from "../shared";
 
@@ -10,7 +10,7 @@ type authProps = {
 
 export const AuthContext = React.createContext({
   isLoggedIn: false,
-  login: (token: tokenInterface) => {},
+  login: (token: TokenInterface) => {},
   logout: () => {},
 });
 
@@ -50,7 +50,7 @@ export const AuthContextProvider = (props: authProps) => {
     navigate("/");
   }, []);
 
-  const loginHandler = useCallback((token: tokenInterface) => {
+  const loginHandler = useCallback((token: TokenInterface) => {
     setIsLoggedIn(true);
     localStorage.setItem("token", JSON.stringify(token));
     navigate("/logged");

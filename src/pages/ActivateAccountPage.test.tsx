@@ -14,8 +14,6 @@ jest.mock("../shared", () => {
   };
 });
 
-const post = jest.spyOn(api, "post");
-
 const mockedUsedNavigate = jest.fn();
 jest.mock("react-router-dom", () => ({
   ...(jest.requireActual("react-router-dom") as any),
@@ -23,6 +21,8 @@ jest.mock("react-router-dom", () => ({
 }));
 
 describe("activate account tests", () => {
+  let post: jest.SpyInstance;
+
   beforeEach(() => {
     render(
       <BrowserRouter>
@@ -32,7 +32,7 @@ describe("activate account tests", () => {
   });
 
   test("navigate page after activation", async () => {
-    post.mockImplementation(() => {
+    post = jest.spyOn(api, "post").mockImplementation(() => {
       return Promise.resolve();
     });
     userEvent.click(screen.getByRole("button", { name: "Click to activate" }));
@@ -42,7 +42,7 @@ describe("activate account tests", () => {
   });
 
   test("show error message after unsuccessful activation", async () => {
-    post.mockImplementation(() => {
+    post = jest.spyOn(api, "post").mockImplementation(() => {
       return Promise.reject(100);
     });
 
