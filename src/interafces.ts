@@ -1,4 +1,4 @@
-export interface credentialsInterface {
+export interface CredentialsInterface {
   username: string;
   password: string;
 }
@@ -8,7 +8,7 @@ export interface FormErrorState {
   onlyDigits?: boolean;
 }
 
-export interface tokenInterface {
+export interface TokenInterface {
   access: string;
   refresh: string;
 }

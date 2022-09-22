@@ -1,1 +1,1 @@
-export * from "./fetchDataPost";
+export * from "./api";

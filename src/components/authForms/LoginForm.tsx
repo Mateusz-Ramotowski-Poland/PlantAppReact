@@ -1,7 +1,7 @@
 import React, { useRef, useState } from "react";
 import classes from "../../assets/FormCard.module.css";
-import { tokenInterface } from "../../interafces";
-import { fetchDataPost } from "../../shared";
+import { TokenInterface } from "../../interafces";
+import { api } from "../../shared";
 import { useLogin } from "../../hooks/useLogin";
 import { Link } from "react-router-dom";
 
@@ -18,11 +18,12 @@ export const LoginForm = () => {
     const path = "/accounts/jwt/create";
     const body = { username: username, password: password };
     setLoginError("");
-    fetchDataPost(path, body)
-      .then((data: tokenInterface) => {
+    api
+      .post<TokenInterface>(path, body)
+      .then((data) => {
         login(data);
       })
-      .catch((err) => {
+      .catch(() => {
         setLoginError("Wrong credentials for loggin");
       });
   };

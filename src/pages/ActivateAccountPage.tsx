@@ -1,6 +1,6 @@
 import { useParams } from "react-router-dom";
 import classes from "../assets/FormCard.module.css";
-import { fetchDataPost, showMessage } from "../shared";
+import { api, showMessage } from "../shared";
 import { ToastContainer } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 
@@ -15,7 +15,8 @@ export const ActivateAccountPage = () => {
       uid: uid,
       token: token,
     };
-    fetchDataPost(path, body)
+    api
+      .post(path, body)
       .then(() => {
         navigate("/");
       })

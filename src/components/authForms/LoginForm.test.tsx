@@ -1,23 +1,21 @@
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { LoginForm } from "./LoginForm";
-import { fetchDataPost } from "../../shared";
+import { api } from "../../shared";
 import { BrowserRouter } from "react-router-dom";
 
-jest.mock("../../shared", () => ({
-  fetchDataPost: jest.fn(),
-}));
 const mockedUseLogin = jest.fn();
 jest.mock("../../hooks/useLogin", () => ({
   useLogin: () => mockedUseLogin,
 }));
 
 describe("login tests", () => {
+  let post: jest.SpyInstance;
   const username = "admin";
   const password = "pass";
 
   beforeEach(() => {
-    (fetchDataPost as jest.Mock).mockImplementation(() => {
+    post = jest.spyOn(api, "post").mockImplementation(() => {
       return Promise.resolve();
     });
     render(
@@ -31,24 +29,22 @@ describe("login tests", () => {
 
   test("check if login with credentials from inputs", () => {
     userEvent.click(screen.getByRole("button"));
-    expect(fetchDataPost as jest.Mock).toHaveBeenNthCalledWith(
-      1,
-      "/accounts/jwt/create",
-      { username, password }
-    );
+    expect(post).toHaveBeenCalledWith("/accounts/jwt/create", {
+      username,
+      password,
+    });
   });
 
-  test("fetchDataPost function was called", () => {
+  test("api.post function was called", () => {
     userEvent.click(screen.getByRole("button"));
-    expect(fetchDataPost as jest.Mock).toHaveBeenNthCalledWith(
-      1,
-      "/accounts/jwt/create",
-      { username, password }
-    );
+    expect(post as jest.Mock).toHaveBeenCalledWith("/accounts/jwt/create", {
+      username,
+      password,
+    });
   });
 
   test("login with wrong credentials", async () => {
-    (fetchDataPost as jest.Mock).mockImplementation(() => {
+    post = jest.spyOn(api, "post").mockImplementation(() => {
       return Promise.reject(new Error("wrong credentials"));
     });
     userEvent.click(screen.getByRole("button", { name: "Login" }));
@@ -60,7 +56,7 @@ describe("login tests", () => {
 
   test("login function was called", async () => {
     userEvent.click(screen.getByRole("button", { name: "Login" }));
-    expect(fetchDataPost as jest.Mock).toHaveBeenCalled();
+    expect(post).toHaveBeenCalled();
     await waitFor(() => {
       expect(mockedUseLogin).toHaveBeenCalled();
     });

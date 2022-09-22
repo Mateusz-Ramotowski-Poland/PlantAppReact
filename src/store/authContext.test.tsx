@@ -3,13 +3,9 @@ import { fireEvent, render, screen } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import { AuthContext, AuthContextProvider } from "./authContext";
 import { BrowserRouter } from "react-router-dom";
-import { fetchDataPost } from "../shared/index";
+import { api } from "../shared/index";
 
-jest.mock("../shared/index", () => ({
-  fetchDataPost: jest.fn(),
-}));
-
-const Consumenr = (props: any) => {
+const Consumer = (props: any) => {
   const ctx = useContext(AuthContext);
 
   const fn = () => {
@@ -19,14 +15,13 @@ const Consumenr = (props: any) => {
   return (
     <>
       {ctx.isLoggedIn ? "auth" : "not auth"}
-
       <button onClick={fn}>login</button>
     </>
   );
 };
 
 test("NameProvider composes full name from first, last", async () => {
-  (fetchDataPost as jest.Mock).mockImplementation(() => {
+  const post = jest.spyOn(api, "post").mockImplementation(() => {
     return Promise.reject();
   });
 
@@ -35,7 +30,7 @@ test("NameProvider composes full name from first, last", async () => {
   const { debug } = render(
     <BrowserRouter>
       <AuthContextProvider>
-        <Consumenr a={a}></Consumenr>
+        <Consumer a={a}></Consumer>
       </AuthContextProvider>
     </BrowserRouter>
   );
