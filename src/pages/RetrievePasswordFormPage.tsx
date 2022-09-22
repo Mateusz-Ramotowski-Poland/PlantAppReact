@@ -1,6 +1,6 @@
 import classes from "../assets/FormCard.module.css";
 import { useRef } from "react";
-import { fetchDataPost, showMessage } from "../shared";
+import { api, showMessage } from "../shared";
 import { ToastContainer } from "react-toastify";
 
 export const RetrievePasswordFormPage = () => {
@@ -13,7 +13,8 @@ export const RetrievePasswordFormPage = () => {
     const path = "/accounts/users/reset_password/";
     const body = { email: email };
 
-    fetchDataPost(path, body)
+    api
+      .post(path, body)
       .then(() => {
         showMessage("Check your email", "info");
       })

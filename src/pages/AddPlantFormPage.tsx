@@ -1,6 +1,6 @@
 import { useRef } from "react";
 import classes from "../assets/FormCard.module.css";
-import { fetchDataPost, showMessage } from "../shared";
+import { api, showMessage } from "../shared";
 import { MainNavigation } from "../components/layout/MainNavigation";
 import { ToastContainer } from "react-toastify";
 
@@ -28,14 +28,15 @@ export const AddPlantFormPage = () => {
       temperature: temperature,
     };
 
-    fetchDataPost(path, body, {
-      "Content-Type": "application/json",
-      authorization: "",
-    })
+    api
+      .post(path, body, {
+        "Content-Type": "application/json",
+        Authorization: "",
+      })
       .then(() => {
         showMessage("Added new plant", "info");
       })
-      .catch((err) => {
+      .catch((err: any) => {
         for (const property in err.errMessages) {
           for (const problem of err.errMessages[property]) {
             problem !== undefined

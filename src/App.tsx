@@ -2,7 +2,7 @@ import "./App.css";
 import { Routes, Route } from "react-router-dom";
 import { StartPage } from "./pages/StartPage";
 import { CreateAccountPage } from "./pages/CreateAccountPage";
-import { NotFound } from "./pages/NotFound";
+import { NotFoundPage } from "./pages/NotFoundPage";
 import { AfterLoginPage } from "./pages/AfterLoginPage";
 import { useContext } from "react";
 import { AuthContext } from "./store/authContext";
@@ -33,7 +33,7 @@ function App() {
       )}
       <Route path="/logged/addPlantForm" element={<AddPlantFormPage />} />
       <Route path="/logged/updatePlantForm" element={<UpdatePlantFormPage />} />
-      <Route path="*" element={<NotFound />} />
+      <Route path="*" element={<NotFoundPage />} />
     </Routes>
   );
 }

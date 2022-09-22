@@ -1,6 +1,6 @@
 import { tokenInterface } from "../interafces";
 import { useNavigate } from "react-router-dom";
-import { fetchDataPost } from "../shared";
+import { api } from "../shared";
 
 import React, { useCallback, useEffect, useState } from "react";
 
@@ -19,9 +19,10 @@ const checkIfLoggedIn = () => {
     const token: string | null = localStorage.getItem("token");
 
     if (token) {
-      return fetchDataPost("/accounts/jwt/verify", {
-        token: JSON.parse(token).access,
-      })
+      return api
+        .post("/accounts/jwt/verify", {
+          token: JSON.parse(token).access,
+        })
         .then(() => true)
         .catch(() => false);
     }

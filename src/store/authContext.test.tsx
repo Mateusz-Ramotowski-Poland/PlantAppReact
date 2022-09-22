@@ -3,11 +3,9 @@ import { fireEvent, render, screen } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import { AuthContext, AuthContextProvider } from "./authContext";
 import { BrowserRouter } from "react-router-dom";
-import { fetchDataPost } from "../shared/index";
+import { api } from "../shared/index";
 
-jest.mock("../shared/index", () => ({
-  fetchDataPost: jest.fn(),
-}));
+const post = jest.spyOn(api, "post");
 
 const Consumenr = (props: any) => {
   const ctx = useContext(AuthContext);
@@ -26,7 +24,7 @@ const Consumenr = (props: any) => {
 };
 
 test("NameProvider composes full name from first, last", async () => {
-  (fetchDataPost as jest.Mock).mockImplementation(() => {
+  post.mockImplementation(() => {
     return Promise.reject();
   });
 

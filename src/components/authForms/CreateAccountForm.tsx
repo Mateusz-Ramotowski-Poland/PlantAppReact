@@ -1,7 +1,7 @@
 import React, { useRef, useState } from "react";
 import classes from "../../assets/FormCard.module.css";
 import {
-  fetchDataPost,
+  api,
   showMessage,
   confirmValueValidation,
   confirmOnlyNumbersValidation,
@@ -39,12 +39,12 @@ export const CreateAccountForm = () => {
     };
 
     if (checkFormValidity(formError)) {
-      fetchDataPost(path, body)
+      api
+        .post(path, body)
         .then(() => {
           showMessage("New account was created!", "info");
         })
         .catch((err) => {
-          console.dir(err);
           for (const property in err.errMessages) {
             for (const problem of err.errMessages[property]) {
               problem !== undefined

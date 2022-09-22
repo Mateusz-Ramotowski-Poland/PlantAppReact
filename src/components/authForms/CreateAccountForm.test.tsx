@@ -2,7 +2,7 @@ import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { BrowserRouter } from "react-router-dom";
 import { CreateAccountForm } from "./CreateAccountForm";
-import { fetchDataPost, showMessage } from "../../shared";
+import { showMessage, api } from "../../shared";
 
 jest.mock("../../shared", () => {
   const originalModule = jest.requireActual("../../shared");
@@ -10,10 +10,11 @@ jest.mock("../../shared", () => {
   return {
     __esModule: true,
     ...originalModule,
-    fetchDataPost: jest.fn(),
     showMessage: jest.fn(),
   };
 });
+
+const post = jest.spyOn(api, "post");
 
 describe("create account test", () => {
   const username = "admin";
@@ -22,7 +23,7 @@ describe("create account test", () => {
   const differentPassword = "differentPassword";
 
   beforeEach(() => {
-    (fetchDataPost as jest.Mock).mockImplementation(() => {
+    post.mockImplementation(() => {
       return Promise.resolve();
     });
 
@@ -40,11 +41,11 @@ describe("create account test", () => {
   test("create account request with credentials from inputs", () => {
     userEvent.click(screen.getByRole("button", { name: "Create account" }));
 
-    expect(fetchDataPost as jest.Mock).toHaveBeenNthCalledWith(
-      1,
-      "/accounts/users/",
-      { username: username, password: password, email: email }
-    );
+    expect(post).toHaveBeenCalledWith("/accounts/users/", {
+      username: username,
+      password: password,
+      email: email,
+    });
   });
   test("When password and confirm-password differs: see arror and can not send request", () => {
     userEvent.type(screen.getByTestId("confirm-password"), differentPassword);
@@ -53,15 +54,14 @@ describe("create account test", () => {
     expect(
       screen.getByText("Passwod and confirm passsword mismatch")
     ).toBeInTheDocument();
-    expect(fetchDataPost as jest.Mock).not.toHaveBeenCalled();
+    expect(post).not.toHaveBeenCalled();
   });
 
   test("show message after create new account", async () => {
     userEvent.click(screen.getByRole("button", { name: "Create account" }));
 
     await waitFor(() => {
-      expect(showMessage as jest.Mock).toHaveBeenNthCalledWith(
-        1,
+      expect(showMessage as jest.Mock).toHaveBeenCalledWith(
         "New account was created!",
         "info"
       );

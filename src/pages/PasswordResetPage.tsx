@@ -4,7 +4,7 @@ import classes from "../assets/FormCard.module.css";
 import {
   confirmOnlyNumbersValidation,
   confirmValueValidation,
-  fetchDataPost,
+  api,
   showMessage,
   checkFormValidity,
 } from "../shared";
@@ -39,7 +39,8 @@ export const PasswordResetPage = () => {
     };
 
     if (checkFormValidity(formError))
-      fetchDataPost(path, body)
+      api
+        .post(path, body)
         .then(() => {
           navigate("/");
         })
