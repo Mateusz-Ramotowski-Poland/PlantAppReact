@@ -14,17 +14,38 @@ export const AuthContext = React.createContext({
   logout: () => {},
 });
 
+function tryRefreshToken(tokenObj: TokenInterface) {
+  return api
+    .post(
+      "/accounts/jwt/refresh/",
+      { refresh: tokenObj.refresh },
+      { Authorization: tokenObj.refresh }
+    )
+    .then((token) => {
+      localStorage.setItem("token", JSON.stringify(token));
+      return true;
+    })
+    .catch(() => {
+      return false;
+    });
+}
+
 const checkIfLoggedIn = () => {
   try {
     const token: string | null = localStorage.getItem("token");
 
     if (token) {
+      const tokenObj: TokenInterface = JSON.parse(token);
       return api
         .post("/accounts/jwt/verify", {
-          token: JSON.parse(token).access,
+          token: tokenObj.access,
         })
-        .then(() => true)
-        .catch(() => false);
+        .then(() => {
+          return true;
+        })
+        .catch(() => {
+          return tryRefreshToken(tokenObj);
+        });
     }
     return Promise.resolve(false);
   } catch (err: any) {
