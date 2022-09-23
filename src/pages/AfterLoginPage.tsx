@@ -1,3 +1,4 @@
+import React from "react";
 import { MainNavigation } from "../components/layout/MainNavigation";
 import { PlantsList } from "../components/plants/PlantsList";
 

@@ -1,5 +1,7 @@
 import React from "react";
 import { TokenInterface } from "../../interafces";
+import { useContext } from "react";
+import { AuthContext } from "../../store/authContext";
 import { api } from "../../shared";
 
 interface Params {
@@ -17,27 +19,34 @@ function tryRefreshToken(tokenObj: TokenInterface) {
     .post(
       "/accounts/jwt/refresh/",
       { refresh: tokenObj.refresh },
-      { Authorization: tokenObj.refresh }
+      { Authorization: tokenObj.access }
     )
     .then((token) => {
       localStorage.setItem("token", JSON.stringify(token));
-      return true;
     })
-    .catch(() => {
-      return false;
+    .catch((err) => {
+      throw new Error(err);
     });
 }
 
-function getUserData() {
-  api
+function getUserData(logout: () => void) {
+  return api
     .get("/accounts/users/me/")
     .then((userData) => userData)
     .catch(() => {
       const token: string | null = localStorage.getItem("token");
       if (token) {
         const tokenObj: TokenInterface = JSON.parse(token);
-        tryRefreshToken(tokenObj);
+        return tryRefreshToken(tokenObj)
+          .then(() => {
+            return api.get("/accounts/users/me/");
+          })
+          .catch(() => {
+            logout();
+            throw { message: "Page can't display plants" };
+          });
       }
+      throw { message: "Page can't display plants" };
     });
 }
 
@@ -49,13 +58,13 @@ async function getAllUserPlants(id: any) {
 }
 
 export const PlantsList = () => {
-  /* const params = { author: "admin" }; // get author from....token?
-  const plantsData = api.get("/plants/"); // I will  get promise */
-  getUserData()
+  const logout = useContext(AuthContext).logout;
+
+  getUserData(logout)
     .then((userData: any) => {
       getAllUserPlants(userData.id as string);
     })
-    .catch(() => {});
+    .catch((err) => console.log(err));
 
   return <p>plant list</p>;
 };
