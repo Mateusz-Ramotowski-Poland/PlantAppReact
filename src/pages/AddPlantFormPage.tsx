@@ -3,6 +3,7 @@ import classes from "../assets/FormCard.module.css";
 import { api, showMessage } from "../shared";
 import { MainNavigation } from "../components/layout/MainNavigation";
 import { ToastContainer } from "react-toastify";
+import React from "react";
 
 export const AddPlantFormPage = () => {
   const nameInputRef = useRef<HTMLInputElement>(null);

@@ -12,6 +12,8 @@ export const AuthContext = React.createContext({
   isLoggedIn: false,
   login: (token: TokenInterface) => {},
   logout: () => {},
+  loggedUserId: "",
+  setLoggedUserIdId: (user: string) => {},
 });
 
 function tryRefreshToken(tokenObj: TokenInterface) {
@@ -57,6 +59,7 @@ export const AuthContextProvider = (props: authProps) => {
   const navigate = useNavigate();
 
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [loggedUserId, setLoggedUserIdId] = useState("");
 
   useEffect(() => {
     checkIfLoggedIn().then((isLoggedIn) => {
@@ -67,6 +70,7 @@ export const AuthContextProvider = (props: authProps) => {
   const logoutHandler = useCallback(() => {
     setIsLoggedIn(false);
     localStorage.removeItem("token");
+    setLoggedUserIdId("");
 
     navigate("/");
   }, []);
@@ -81,6 +85,8 @@ export const AuthContextProvider = (props: authProps) => {
     isLoggedIn: isLoggedIn,
     login: loginHandler,
     logout: logoutHandler,
+    loggedUserId: loggedUserId,
+    setLoggedUserIdId: setLoggedUserIdId,
   };
 
   return (
