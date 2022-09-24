@@ -10,7 +10,7 @@ export const AfterLoginPage = () => {
   const setLoggedUserIdId = authCtx.setLoggedUserIdId;
 
   useEffect(() => {
-    getUserData(logout)
+    getUserData()
       .then((user: any) => {
         console.log("useEffect AfterLoginPage", user);
         setLoggedUserIdId(user.id as string);

@@ -1,4 +1,5 @@
 import { TokenInterface } from "../../interafces";
+import { tryRefreshToken } from "./tryRefreshToken";
 
 interface RequestConfig {
   Authorization?: string;
@@ -67,9 +68,32 @@ function createAndThrowError(data: Promise<any>) {
   });
 }
 
+function tryRefreshTokenAndRerunFunc(
+  func: any,
+  path: string,
+  body: any,
+  config?: RequestConfig
+) {
+  const token: string | null = localStorage.getItem("token");
+  if (token) {
+    const tokenObj: TokenInterface = JSON.parse(token);
+    return tryRefreshToken(tokenObj)
+      .then(() => {
+        console.log("rerun func");
+        return func(path, body, config);
+      })
+      .catch(() => {
+        //logout();
+        console.log("logout function should be called here");
+        throw { message: "Page can't display plants" };
+      });
+  }
+  throw { message: "Page can't display plants" };
+}
+
 function post<Response, Body = any>(
   path: string,
-  body: Body,
+  body: any,
   config?: RequestConfig
 ): Promise<Response> {
   const { changedBody, url, changedHeaders } = processInputData(
@@ -84,6 +108,13 @@ function post<Response, Body = any>(
     if (res.ok) {
       return data;
     } else {
+      if (res.status === 401) {
+        console.log("401 HTTP, tryRefreshTokenAndRerunFunc will be called");
+        tryRefreshTokenAndRerunFunc(api.post, path, body).catch((err) =>
+          console.log(err)
+        );
+      }
+
       return createAndThrowError(data);
     }
   });
@@ -101,6 +132,7 @@ function get<Response, Body = any>(
     if (res.ok) {
       return data;
     } else {
+      //TODO check if token err (check HTTP status code) and add and write ifRefreshTokenRerunFunc()
       return createAndThrowError(data);
     }
   });
