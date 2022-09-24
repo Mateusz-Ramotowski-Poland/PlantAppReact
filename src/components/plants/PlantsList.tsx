@@ -1,20 +1,71 @@
-import React, { useEffect, useState } from "react";
-import { useContext } from "react";
-import { AuthContext } from "../../store/authContext";
-import { getAllUserPlants } from "../../shared/api/getAllUserPlants";
+import { Plant } from "../../interafces";
+import { PlantItem } from "./PlantItem";
 
-export const PlantsList = () => {
-  const loggedUserId = useContext(AuthContext).loggedUserId;
-  const [plants, setPlants] = useState(); // TODo write initial value
+interface Props {
+  isLoading: boolean;
+  httpError: string | undefined;
+  plants: Plant[];
+}
 
-  useEffect(() => {
-    getAllUserPlants(loggedUserId)
-      .then((plants: any) => {
-        setPlants(plants);
-        console.log("useEffect PlantList", plants);
-      })
-      .catch((err) => console.log(err));
-  }, []);
+export const PlantsList = (props: Props) => {
+  console.log("outside useEffect, PlantList Page");
 
-  return <p>plant list</p>;
+  if (props.isLoading) {
+    return (
+      <section>
+        <p>Plants are loading</p>
+      </section>
+    );
+  }
+
+  if (props.httpError) {
+    return (
+      <section>
+        <p>{props.httpError}</p>
+      </section>
+    );
+  }
+
+  if (props.plants.length === 0) {
+    return (
+      <section>
+        <p>The user don't have any plants</p>
+      </section>
+    );
+  }
+
+  const plantsList = props.plants.map((plant: any) => (
+    <PlantItem
+      key={plant.id}
+      id={plant.id}
+      created_at={plant.created_at}
+      name={plant.name}
+      species={plant.species}
+      watering_interval={plant.watering_interval}
+      last_watering={plant.last_watering}
+      next_watering={plant.next_watering}
+      watering_count={plant.watering_count}
+      sun_exposure={plant.sun_exposure}
+      temperature={plant.temperature}
+    ></PlantItem>
+  ));
+
+  return (
+    <table>
+      <thead>
+        <tr>
+          <th>Created at</th>
+          <th>Name</th>
+          <th>species</th>
+          <th>Watering interval</th>
+          <th>Last watering</th>
+          <th>Next watering</th>
+          <th>Watering count</th>
+          <th>Sun exposure</th>
+          <th>Temperature</th>
+        </tr>
+      </thead>
+      <tbody>{plantsList}</tbody>
+    </table>
+  );
 };
