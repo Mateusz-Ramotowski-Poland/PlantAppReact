@@ -1,10 +1,6 @@
 import { TokenInterface } from "../../interafces";
 import { CONTENT_TYPE, CONTENT_TYPE_KEY } from "./constants";
 
-interface RequestConfig {
-  Authorization?: string;
-}
-
 interface RequestParameters {
   headers: Headers;
   method: string;
@@ -29,11 +25,7 @@ function addAuthHeader(createdHeaders: Headers) {
   return createdHeaders;
 }
 
-function processInputData<T>(
-  path: string,
-  headers: RequestConfig | undefined,
-  body: T | string | null = null
-) {
+function processInputData<T>(path: string, { body, method, headers }: any) {
   const changedBody = JSON.stringify(body);
   const url = `${process.env.REACT_APP_DOMAIN as string}${path}`;
   const createdHeaders = new Headers({
@@ -41,24 +33,15 @@ function processInputData<T>(
     ...headers,
   });
   const changedHeaders = addAuthHeader(createdHeaders);
-  return { changedBody, url, changedHeaders };
+  const changedConfig = {
+    body: changedBody,
+    method: method,
+    headers: changedHeaders,
+  };
+  return { url, changedConfig };
 }
 
-export function fetchData(
-  url: string,
-  changedHeaders: Headers,
-  changedBody?: string
-) {
-  const requestParameters: RequestParameters = {
-    headers: changedHeaders,
-    method: "GET",
-  };
-
-  if (changedBody) {
-    requestParameters.method = "POST";
-    requestParameters.body = changedBody;
-  }
-
+export function fetchData(url: string, requestParameters: RequestParameters) {
   return fetch(url, requestParameters).then((response) => {
     if (!response.ok) throw { response: response };
 
@@ -126,22 +109,17 @@ function is401HTTPResponse(data: any) {
 
 function post<Response, Body = any>(
   path: string,
-  body: Body,
-  config?: RequestConfig
+  config: any
 ): Promise<Response> {
-  const { changedBody, url, changedHeaders } = processInputData(
-    path,
-    config,
-    body
-  );
+  const { url, changedConfig } = processInputData(path, config);
 
-  return fetchData(url, changedHeaders, changedBody).catch((err) => {
+  return fetchData(url, changedConfig).catch((err) => {
     if (!is401HTTPResponse(err))
       throw new Error(`Unhandled response headers: ${err}`);
 
     return refreshToken()
       .then(() => {
-        return fetchData(url, changedHeaders, changedBody).catch((err) => {
+        return fetchData(url, changedConfig).catch((err) => {
           throw new Error(`Error while refreshing token: ${err}`);
         });
       })
