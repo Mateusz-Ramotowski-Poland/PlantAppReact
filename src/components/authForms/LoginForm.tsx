@@ -19,7 +19,7 @@ export const LoginForm = () => {
     const body = { username: username, password: password };
     setLoginError("");
     api
-      .post<TokenInterface>(path, body)
+      .post<TokenInterface>(path, { body: body, method: "POST", headers: {} })
       .then((data) => {
         login(data);
       })

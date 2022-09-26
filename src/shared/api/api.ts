@@ -5,6 +5,7 @@ interface RequestParameters {
   headers: Headers;
   method: string;
   body?: string;
+  params?: Record<string, string>;
 }
 
 const AUTH_TOKEN = "Authorization";
@@ -25,8 +26,7 @@ function addAuthHeader(createdHeaders: Headers) {
   return createdHeaders;
 }
 
-function processInputData<T>(path: string, { body, method, headers }: any) {
-  const changedBody = JSON.stringify(body);
+function processInputData<T>(path: string, { body, headers }: any) {
   const url = `${process.env.REACT_APP_DOMAIN as string}${path}`;
   const createdHeaders = new Headers({
     "Content-Type": "application/json",
@@ -34,8 +34,6 @@ function processInputData<T>(path: string, { body, method, headers }: any) {
   });
   const changedHeaders = addAuthHeader(createdHeaders);
   const changedConfig = {
-    body: changedBody,
-    method: method,
     headers: changedHeaders,
   };
   return { url, changedConfig };
@@ -82,7 +80,11 @@ function refreshToken() {
       "Content-Type": "application/json",
     });
     const body = JSON.stringify({ refresh: tokenObj.refresh });
-    return fetchData(url, headers, body).then((data: unknown) => {
+    return fetchData(url, {
+      headers: headers,
+      body: body,
+      method: "POSt",
+    }).then((data: unknown) => {
       if (!isTokenInterface(data)) {
         throw new Error(`${errorMessage}: ${data}`);
       }
@@ -112,16 +114,20 @@ function post<Response, Body = any>(
   config: any
 ): Promise<Response> {
   const { url, changedConfig } = processInputData(path, config);
+  (changedConfig as RequestParameters).body = JSON.stringify(config.body);
+  (changedConfig as RequestParameters).method = config.method;
 
-  return fetchData(url, changedConfig).catch((err) => {
+  return fetchData(url, changedConfig as RequestParameters).catch((err) => {
     if (!is401HTTPResponse(err))
       throw new Error(`Unhandled response headers: ${err}`);
 
     return refreshToken()
       .then(() => {
-        return fetchData(url, changedConfig).catch((err) => {
-          throw new Error(`Error while refreshing token: ${err}`);
-        });
+        return fetchData(url, changedConfig as RequestParameters).catch(
+          (err) => {
+            throw new Error(`Error while refreshing token: ${err}`);
+          }
+        );
       })
       .catch(() => {
         throw new Error(`Error while refreshing token: ${err}`);
@@ -131,11 +137,13 @@ function post<Response, Body = any>(
 
 function get<Response, Params = any>(
   path: string,
-  config?: RequestConfig
+  config: any
 ): Promise<Response> {
-  const { url, changedHeaders } = processInputData(path, config);
+  const pathWithParams =
+    path + "?" + new URLSearchParams([["author", config.id]]).toString();
+  const { url, changedConfig } = processInputData(pathWithParams, config);
 
-  return fetchData(url, changedHeaders).then((res) => {
+  return fetchData(url, changedConfig as RequestParameters).then((res) => {
     if (res.status === 204) return res.text();
     const data = res.json();
     if (res.ok) {
