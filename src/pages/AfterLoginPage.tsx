@@ -4,7 +4,6 @@ import { PlantsList } from "../components/plants/PlantsList";
 import { getAllUserPlants } from "../shared/api/getAllUserPlants";
 import { getUserData } from "../shared/api/getUserData";
 import { AuthContext } from "../store/authContext";
-import { Plant } from "../interafces";
 
 export const AfterLoginPage = () => {
   const [plants, setPlants] = useState([]);

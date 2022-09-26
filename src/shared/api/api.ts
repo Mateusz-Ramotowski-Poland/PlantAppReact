@@ -44,7 +44,11 @@ function processInputData<T>(
   return { changedBody, url, changedHeaders };
 }
 
-function fetchData(url: string, changedHeaders: Headers, changedBody?: string) {
+export function fetchData(
+  url: string,
+  changedHeaders: Headers,
+  changedBody?: string
+) {
   const requestParameters: RequestParameters = {
     headers: changedHeaders,
     method: "GET",
@@ -69,31 +73,38 @@ function createAndThrowError(data: Promise<any>) {
 }
 
 function tryRefreshTokenAndRerunFunc(
-  func: any,
-  path: string,
-  body: any,
-  config?: RequestConfig
+  url: string,
+  changedHeaders: Headers,
+  changedBody: string
 ) {
+  const errorMessage = "Error while refreshing token";
   const token: string | null = localStorage.getItem("token");
   if (token) {
     const tokenObj: TokenInterface = JSON.parse(token);
     return tryRefreshToken(tokenObj)
       .then(() => {
         console.log("rerun func");
-        return func(path, body, config);
+        return fetchData(url, changedHeaders, changedBody).then((res) => {
+          if (res.status === 204) return res.text();
+          const data = res.json();
+          if (res.ok) {
+            return data;
+          } else {
+            throw new Error(errorMessage);
+          }
+        });
       })
-      .catch(() => {
+      .catch((err) => {
         //logout();
-        console.log("logout function should be called here");
-        throw { message: "Page can't display plants" };
+        console.log(err);
       });
   }
-  throw { message: "Page can't display plants" };
+  throw new Error(errorMessage);
 }
 
 function post<Response, Body = any>(
   path: string,
-  body: any,
+  body: Body,
   config?: RequestConfig
 ): Promise<Response> {
   const { changedBody, url, changedHeaders } = processInputData(
@@ -110,9 +121,11 @@ function post<Response, Body = any>(
     } else {
       if (res.status === 401) {
         console.log("401 HTTP, tryRefreshTokenAndRerunFunc will be called");
-        tryRefreshTokenAndRerunFunc(api.post, path, body).catch((err) =>
-          console.log(err)
-        );
+        return tryRefreshTokenAndRerunFunc(
+          url,
+          changedHeaders,
+          changedBody
+        ).catch((err) => console.log(err));
       }
 
       return createAndThrowError(data);

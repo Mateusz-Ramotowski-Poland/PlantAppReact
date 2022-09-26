@@ -11,7 +11,6 @@ import { PasswordResetPage } from "./pages/PasswordResetPage";
 import { ActivateAccountPage } from "./pages/ActivateAccountPage";
 import { AddPlantFormPage } from "./pages/AddPlantFormPage";
 import { UpdatePlantFormPage } from "./pages/UpdatePlantFormPage";
-import React from "react";
 
 function App() {
   const authCtx = useContext(AuthContext);

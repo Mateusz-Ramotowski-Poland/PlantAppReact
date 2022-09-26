@@ -1,17 +1,20 @@
 import { TokenInterface } from "../../interafces";
-import { api } from "./api";
+import { fetchData } from "./api";
 
 export function tryRefreshToken(tokenObj: TokenInterface) {
-  return api
-    .post(
-      "/accounts/jwt/refresh/",
-      { refresh: tokenObj.refresh },
-      { Authorization: tokenObj.access }
-    )
-    .then((token) => {
+  const url = `${process.env.REACT_APP_DOMAIN as string}/accounts/jwt/refresh/`;
+  const headers = new Headers({
+    Authorization: tokenObj.access,
+    "Content-Type": "application/json",
+  });
+  const body = JSON.stringify({ refresh: tokenObj.refresh });
+  return fetchData(url, headers, body).then((res) => {
+    if (res.status === 204) return res.text();
+    const token = res.json();
+    if (res.ok) {
       localStorage.setItem("token", JSON.stringify(token));
-    })
-    .catch((err) => {
-      throw new Error(err);
-    });
+    } else {
+      throw new Error("Error while refreshing token");
+    }
+  });
 }

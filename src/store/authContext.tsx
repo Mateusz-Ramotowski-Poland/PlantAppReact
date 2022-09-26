@@ -16,22 +16,6 @@ export const AuthContext = React.createContext({
   setLoggedUserIdId: (user: string) => {},
 });
 
-function tryRefreshToken(tokenObj: TokenInterface) {
-  return api
-    .post(
-      "/accounts/jwt/refresh/",
-      { refresh: tokenObj.refresh },
-      { Authorization: tokenObj.refresh }
-    )
-    .then((token) => {
-      localStorage.setItem("token", JSON.stringify(token));
-      return true;
-    })
-    .catch(() => {
-      return false;
-    });
-}
-
 const checkIfLoggedIn = () => {
   try {
     const token: string | null = localStorage.getItem("token");
@@ -46,7 +30,8 @@ const checkIfLoggedIn = () => {
           return true;
         })
         .catch(() => {
-          return tryRefreshToken(tokenObj);
+          console.log("hello!");
+          return false;
         });
     }
     return Promise.resolve(false);
