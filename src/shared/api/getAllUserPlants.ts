@@ -4,7 +4,6 @@ export async function getAllUserPlants(id: string) {
   const config = {
     method: "GET",
     params: { author: id },
-    headers: {},
     id: id,
   };
 

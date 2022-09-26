@@ -32,7 +32,6 @@ export const AddPlantFormPage = () => {
     const config = {
       body: body,
       method: "POST",
-      headers: {},
     };
 
     api

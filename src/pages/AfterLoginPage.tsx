@@ -14,10 +14,11 @@ export const AfterLoginPage = () => {
   const setLoggedUserIdId = authCtx.setLoggedUserIdId;
 
   useEffect(() => {
-    console.log("inside useEffect, after Login Page");
     getUserData()
       .then((user: any) => {
+        console.log(user);
         setLoggedUserIdId(user.id as string);
+        localStorage.setItem("userId", user.id);
         getAllUserPlants(user.id)
           .then((plants: any) => {
             setPlants(plants.results);
@@ -30,7 +31,6 @@ export const AfterLoginPage = () => {
       .catch((err) => console.log(err));
   }, []);
 
-  console.log("outside useEffect, after Login Page");
   return (
     <>
       <MainNavigation />

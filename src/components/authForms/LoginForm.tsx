@@ -1,6 +1,6 @@
 import React, { useRef, useState } from "react";
 import classes from "../../assets/FormCard.module.css";
-import { TokenInterface } from "../../interafces";
+import { Config, TokenInterface } from "../../interafces";
 import { api } from "../../shared";
 import { useLogin } from "../../hooks/useLogin";
 import { Link } from "react-router-dom";
@@ -17,9 +17,13 @@ export const LoginForm = () => {
     const username = usernameInputRef?.current?.value;
     const path = "/accounts/jwt/create";
     const body = { username: username, password: password };
+    const config: Config = {
+      body: body,
+      method: "POST",
+    };
     setLoginError("");
     api
-      .post<TokenInterface>(path, { body: body, method: "POST", headers: {} })
+      .post<TokenInterface>(path, config)
       .then((data) => {
         login(data);
       })

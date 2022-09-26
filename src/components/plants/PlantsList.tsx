@@ -8,8 +8,6 @@ interface Props {
 }
 
 export const PlantsList = (props: Props) => {
-  console.log("outside useEffect, PlantList Page");
-
   if (props.isLoading) {
     return (
       <section>

@@ -25,3 +25,10 @@ export interface Plant {
   sun_exposure: number;
   temperature: number;
 }
+
+export interface Config {
+  method: string;
+  headers?: any;
+  body?: any;
+  params?: Record<string, string>;
+}

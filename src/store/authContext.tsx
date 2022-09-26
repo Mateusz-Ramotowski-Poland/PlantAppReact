@@ -22,10 +22,13 @@ const checkIfLoggedIn = () => {
 
     if (token) {
       const tokenObj: TokenInterface = JSON.parse(token);
+      const body = { token: tokenObj.access };
+      const config = {
+        body: body,
+        method: "POST",
+      };
       return api
-        .post("/accounts/jwt/verify", {
-          token: tokenObj.access,
-        })
+        .post("/accounts/jwt/verify", config)
         .then(() => {
           return true;
         })

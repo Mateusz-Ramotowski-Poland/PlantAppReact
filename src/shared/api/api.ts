@@ -1,12 +1,6 @@
 import { TokenInterface } from "../../interafces";
 import { CONTENT_TYPE, CONTENT_TYPE_KEY } from "./constants";
-
-interface RequestParameters {
-  headers: Headers;
-  method: string;
-  body?: string;
-  params?: Record<string, string>;
-}
+import { Config } from "../../interafces";
 
 const AUTH_TOKEN = "Authorization";
 
@@ -26,7 +20,7 @@ function addAuthHeader(createdHeaders: Headers) {
   return createdHeaders;
 }
 
-function processInputData<T>(path: string, { body, headers }: any) {
+function processInputData<T>(path: string, { headers }: any) {
   const url = `${process.env.REACT_APP_DOMAIN as string}${path}`;
   const createdHeaders = new Headers({
     "Content-Type": "application/json",
@@ -39,9 +33,11 @@ function processInputData<T>(path: string, { body, headers }: any) {
   return { url, changedConfig };
 }
 
-export function fetchData(url: string, requestParameters: RequestParameters) {
+export function fetchData(url: string, requestParameters: Config) {
   return fetch(url, requestParameters).then((response) => {
     if (!response.ok) throw { response: response };
+
+    if (response.status === 204) return response.text();
 
     if (response.headers.get(CONTENT_TYPE_KEY) === CONTENT_TYPE.JSON)
       return response.json();
@@ -109,25 +105,21 @@ function is401HTTPResponse(data: any) {
   return data.response.status === 401;
 }
 
-function post<Response, Body = any>(
-  path: string,
-  config: any
-): Promise<Response> {
+function post<Response>(path: string, config: Config): Promise<Response> {
   const { url, changedConfig } = processInputData(path, config);
-  (changedConfig as RequestParameters).body = JSON.stringify(config.body);
-  (changedConfig as RequestParameters).method = config.method;
+  (changedConfig as Config).body = JSON.stringify(config.body);
+  (changedConfig as Config).method = config.method;
 
-  return fetchData(url, changedConfig as RequestParameters).catch((err) => {
+  console.log(1);
+  return fetchData(url, changedConfig as Config).catch((err) => {
     if (!is401HTTPResponse(err))
       throw new Error(`Unhandled response headers: ${err}`);
 
     return refreshToken()
       .then(() => {
-        return fetchData(url, changedConfig as RequestParameters).catch(
-          (err) => {
-            throw new Error(`Error while refreshing token: ${err}`);
-          }
-        );
+        return fetchData(url, changedConfig as Config).catch((err) => {
+          throw new Error(`Error while refreshing token: ${err}`);
+        });
       })
       .catch(() => {
         throw new Error(`Error while refreshing token: ${err}`);
@@ -135,24 +127,16 @@ function post<Response, Body = any>(
   });
 }
 
-function get<Response, Params = any>(
-  path: string,
-  config: any
-): Promise<Response> {
-  const pathWithParams =
-    path + "?" + new URLSearchParams([["author", config.id]]).toString();
-  const { url, changedConfig } = processInputData(pathWithParams, config);
+function get<Response>(path: string, config: any): Promise<Response> {
+  if (config.params) {
+    path = path + "?" + new URLSearchParams([["author", config.id]]).toString();
+  }
 
-  return fetchData(url, changedConfig as RequestParameters).then((res) => {
-    if (res.status === 204) return res.text();
-    const data = res.json();
-    if (res.ok) {
-      return data;
-    } else {
-      //TODO check if token err (check HTTP status code) and add and write ifRefreshTokenRerunFunc()
-      return createAndThrowError(data);
-    }
-  });
+  const { url, changedConfig } = processInputData(path, config);
+
+  return fetchData(url, changedConfig as Config).catch((data) =>
+    createAndThrowError(data)
+  );
 }
 
 export const api = {
