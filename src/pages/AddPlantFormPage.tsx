@@ -35,6 +35,8 @@ export const AddPlantFormPage = () => {
         showMessage("Added new plant", "info");
       })
       .catch((err) => {
+        // i get string every letter - one message
+        // use type guardand unknown
         for (const property in err.errMessages) {
           for (const problem of err.errMessages[property]) {
             problem !== undefined

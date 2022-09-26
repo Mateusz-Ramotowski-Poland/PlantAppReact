@@ -1,5 +1,5 @@
 import { TokenInterface } from "../../interafces";
-import { tryRefreshToken } from "./tryRefreshToken";
+import { CONTENT_TYPE, CONTENT_TYPE_KEY } from "./constants";
 
 interface RequestConfig {
   Authorization?: string;
@@ -59,7 +59,17 @@ export function fetchData(
     requestParameters.body = changedBody;
   }
 
-  return fetch(url, requestParameters);
+  return fetch(url, requestParameters).then((response) => {
+    if (!response.ok) throw { response: response };
+
+    if (response.headers.get(CONTENT_TYPE_KEY) === CONTENT_TYPE.JSON)
+      return response.json();
+
+    if (response.headers.get(CONTENT_TYPE_KEY) === CONTENT_TYPE.TEXT)
+      return response.text();
+
+    throw new Error("Unhandled response headers", { cause: response });
+  });
 }
 
 function createAndThrowError(data: Promise<any>) {
@@ -72,34 +82,46 @@ function createAndThrowError(data: Promise<any>) {
   });
 }
 
-function tryRefreshTokenAndRerunFunc(
-  url: string,
-  changedHeaders: Headers,
-  changedBody: string
-) {
-  const errorMessage = "Error while refreshing token";
+function isTokenInterface(data: any): data is TokenInterface {
+  return (data as TokenInterface).access !== undefined;
+}
+
+function refreshToken() {
   const token: string | null = localStorage.getItem("token");
+  const errorMessage = "Error while refreshing token";
   if (token) {
     const tokenObj: TokenInterface = JSON.parse(token);
-    return tryRefreshToken(tokenObj)
-      .then(() => {
-        console.log("rerun func");
-        return fetchData(url, changedHeaders, changedBody).then((res) => {
-          if (res.status === 204) return res.text();
-          const data = res.json();
-          if (res.ok) {
-            return data;
-          } else {
-            throw new Error(errorMessage);
-          }
-        });
-      })
-      .catch((err) => {
-        //logout();
-        console.log(err);
-      });
+    const url = `${
+      process.env.REACT_APP_DOMAIN as string
+    }/accounts/jwt/refresh/`;
+    const headers = new Headers({
+      Authorization: tokenObj.access,
+      "Content-Type": "application/json",
+    });
+    const body = JSON.stringify({ refresh: tokenObj.refresh });
+    return fetchData(url, headers, body).then((data: unknown) => {
+      if (!isTokenInterface(data)) {
+        throw new Error(`${errorMessage}: ${data}`);
+      }
+
+      localStorage.setItem("token", JSON.stringify(data));
+    });
   }
   throw new Error(errorMessage);
+}
+
+interface Response {
+  response: any;
+}
+
+function isResponse(data: any): data is Response {
+  return (data as Response).response !== undefined;
+}
+
+function is401HTTPResponse(data: any) {
+  if (!isResponse) return false;
+
+  return data.response.status === 401;
 }
 
 function post<Response, Body = any>(
@@ -113,27 +135,23 @@ function post<Response, Body = any>(
     body
   );
 
-  return fetchData(url, changedHeaders, changedBody).then((res) => {
-    if (res.status === 204) return res.text();
-    const data = res.json();
-    if (res.ok) {
-      return data;
-    } else {
-      if (res.status === 401) {
-        console.log("401 HTTP, tryRefreshTokenAndRerunFunc will be called");
-        return tryRefreshTokenAndRerunFunc(
-          url,
-          changedHeaders,
-          changedBody
-        ).catch((err) => console.log(err));
-      }
+  return fetchData(url, changedHeaders, changedBody).catch((err) => {
+    if (!is401HTTPResponse(err))
+      throw new Error(`Unhandled response headers: ${err}`);
 
-      return createAndThrowError(data);
-    }
+    return refreshToken()
+      .then(() => {
+        return fetchData(url, changedHeaders, changedBody).catch((err) => {
+          throw new Error(`Error while refreshing token: ${err}`);
+        });
+      })
+      .catch(() => {
+        throw new Error(`Error while refreshing token: ${err}`);
+      });
   });
 }
 
-function get<Response, Body = any>(
+function get<Response, Params = any>(
   path: string,
   config?: RequestConfig
 ): Promise<Response> {
@@ -155,4 +173,6 @@ export const api = {
   post: post,
   get: get,
   delete() {},
+  put: {},
+  patch: {},
 };
