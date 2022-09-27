@@ -7,7 +7,7 @@ import {
   api,
   checkFormValidity,
 } from "../shared";
-import { Config, FormErrorState } from "../interafces";
+import { FormErrorState } from "../interafces";
 import { ToastContainer } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { showErrorMessages } from "../shared/utils/showErrorMessages";
@@ -37,13 +37,10 @@ export const PasswordResetPage = () => {
       token: token,
       new_password: password,
     };
-    const config: Config = {
-      body: body,
-      method: "POST",
-    };
+
     if (checkFormValidity(formError))
       api
-        .post(path, config)
+        .post(path, body)
         .then(() => {
           navigate("/");
         })

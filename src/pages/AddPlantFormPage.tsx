@@ -30,13 +30,8 @@ export const AddPlantFormPage = () => {
       temperature: temperature,
     };
 
-    const config = {
-      body: body,
-      method: "POST",
-    };
-
     api
-      .post(path, config)
+      .post(path, body)
       .then(() => {
         showMessage("Added new plant", "info");
       })

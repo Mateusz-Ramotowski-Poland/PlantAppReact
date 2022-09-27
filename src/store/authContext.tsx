@@ -23,12 +23,9 @@ const checkIfLoggedIn = () => {
     if (token) {
       const tokenObj: TokenInterface = JSON.parse(token);
       const body = { token: tokenObj.access };
-      const config = {
-        body: body,
-        method: "POST",
-      };
+
       return api
-        .post("/accounts/jwt/verify", config)
+        .post("/accounts/jwt/verify", body)
         .then(() => {
           return true;
         })

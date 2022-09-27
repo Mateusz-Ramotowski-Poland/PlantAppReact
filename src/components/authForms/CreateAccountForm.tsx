@@ -10,7 +10,7 @@ import {
 } from "../../shared";
 import { Link } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
-import { FormErrorState, Config } from "../../interafces";
+import { FormErrorState } from "../../interafces";
 
 export const CreateAccountForm = () => {
   const [formError, setFormError] = useState<FormErrorState>({});
@@ -39,13 +39,9 @@ export const CreateAccountForm = () => {
       email: email,
     };
 
-    const config: Config = {
-      body: body,
-      method: "POST",
-    };
     if (checkFormValidity(formError)) {
       api
-        .post(path, config)
+        .post(path, body)
         .then(() => {
           showMessage("New account was created!", "info");
         })

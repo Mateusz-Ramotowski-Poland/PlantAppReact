@@ -2,7 +2,6 @@ import classes from "../assets/FormCard.module.css";
 import { useRef } from "react";
 import { api, showMessage } from "../shared";
 import { ToastContainer } from "react-toastify";
-import { Config } from "../interafces";
 
 export const RetrievePasswordFormPage = () => {
   const emailInputRef = useRef<HTMLInputElement>(null);
@@ -13,13 +12,9 @@ export const RetrievePasswordFormPage = () => {
     const email = emailInputRef?.current?.value;
     const path = "/accounts/users/reset_password/";
     const body = { email: email };
-    const config: Config = {
-      body: body,
-      method: "POST",
-    };
 
     api
-      .post(path, config)
+      .post(path, body)
       .then(() => {
         showMessage("Check your email", "info");
       })

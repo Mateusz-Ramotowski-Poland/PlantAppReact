@@ -1,6 +1,19 @@
 import { TokenInterface } from "../../interafces";
 import { CONTENT_TYPE, CONTENT_TYPE_KEY, AUTH_TOKEN } from "./constants";
-import { Config } from "../../interafces";
+
+interface RequestConfig {
+  headers?: HeadersInit;
+  body?: BodyInit;
+  params?: object;
+}
+
+interface FetchConfig extends RequestConfig {
+  method: "POST" | "GET" | "PATCH" | "DELETE" | "PUT";
+}
+
+interface Response {
+  response: any;
+}
 
 function addAuthHeader(createdHeaders: Headers) {
   if (!createdHeaders.has(AUTH_TOKEN)) {
@@ -18,20 +31,25 @@ function addAuthHeader(createdHeaders: Headers) {
   return createdHeaders;
 }
 
-function processInputData<T>(path: string, { headers }: any) {
+function processInputData<T>(path: string, config: RequestConfig | undefined) {
   const url = `${process.env.REACT_APP_DOMAIN as string}${path}`;
-  const createdHeaders = new Headers({
+  let createdHeaders;
+  if (config?.headers) {
+    createdHeaders = new Headers({
+      "Content-Type": "application/json",
+      ...config.headers,
+    });
+  }
+  createdHeaders = new Headers({
     "Content-Type": "application/json",
-    ...headers,
   });
+
   const changedHeaders = addAuthHeader(createdHeaders);
-  const changedConfig = {
-    headers: changedHeaders,
-  };
-  return { url, changedConfig };
+
+  return { url, changedHeaders };
 }
 
-export function fetchData(url: string, requestParameters: Config) {
+export function fetchData(url: string, requestParameters: FetchConfig) {
   return fetch(url, requestParameters).then((response) => {
     if (!response.ok) throw { response: response };
 
@@ -76,7 +94,7 @@ function refreshToken() {
     return fetchData(url, {
       headers: headers,
       body: body,
-      method: "POSt",
+      method: "POST",
     }).then(async (data: unknown) => {
       if (!isTokenInterface(data)) {
         throw await createError(data);
@@ -86,10 +104,6 @@ function refreshToken() {
     });
   }
   throw new Error("Token does not exist");
-}
-
-interface Response {
-  response: any;
 }
 
 function isResponse(data: any): data is Response {
@@ -102,43 +116,62 @@ function is401HTTPResponse(data: any) {
   return data.response.status === 401;
 }
 
-function post<Response>(path: string, config: Config): Promise<Response> {
-  const { url, changedConfig } = processInputData(path, config);
-  (changedConfig as Config).body = JSON.stringify(config.body);
-  (changedConfig as Config).method = config.method;
-
-  return fetchData(url, changedConfig as Config).catch(async (err) => {
-    if (!is401HTTPResponse(err)) {
-      throw await createError(err);
-    }
+async function sendRequestAgain(
+  err: unknown,
+  requestParameters: FetchConfig,
+  url: string
+) {
+  if (is401HTTPResponse(err)) {
     return refreshToken()
       .then(() => {
-        return fetchData(url, changedConfig as Config).catch(async (err) => {
+        return fetchData(url, requestParameters).catch(async (err) => {
           throw await createError(err);
         });
       })
       .catch(async () => {
         throw await createError(err);
       });
-  });
+  }
+  throw await createError(err);
+}
+
+function post<Response>(
+  path: string,
+  body: object,
+  config?: RequestConfig
+): Promise<Response> {
+  const { url, changedHeaders } = processInputData(path, config);
+
+  const requestParameters: FetchConfig = {
+    method: "POST",
+    body: JSON.stringify(body),
+    headers: changedHeaders,
+  };
+
+  return fetchData(url, requestParameters).catch((err) =>
+    sendRequestAgain(err, requestParameters, url)
+  );
 }
 
 function get<Response>(path: string, config: any): Promise<Response> {
   if (config.params) {
     path = path + "?" + new URLSearchParams([["author", config.id]]).toString();
   }
+  const { url, changedHeaders } = processInputData(path, config);
+  const requestParameters: FetchConfig = {
+    method: "GET",
+    headers: changedHeaders,
+  };
 
-  const { url, changedConfig } = processInputData(path, config);
-
-  return fetchData(url, changedConfig as Config).catch(async (data) => {
-    throw await createError(data);
-  });
+  return fetchData(url, requestParameters).catch((err) =>
+    sendRequestAgain(err, requestParameters, url)
+  );
 }
 
 export const api = {
   post: post,
   get: get,
   delete() {},
-  put: {},
-  patch: {},
+  put: {}, // 3 parameters: path, body, config is optional
+  patch: {}, //3 parameters: path, body, config is optional
 };

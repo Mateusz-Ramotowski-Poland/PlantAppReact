@@ -26,13 +26,6 @@ export interface Plant {
   temperature: number;
 }
 
-export interface Config {
-  method: string;
-  headers?: any;
-  body?: any;
-  params?: Record<string, string>;
-}
-
 export interface ApiError {
   errMessages: Record<string, string[]>;
   defaultMessage: string;

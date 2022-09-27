@@ -3,7 +3,6 @@ import classes from "../assets/FormCard.module.css";
 import { api, showMessage } from "../shared";
 import { ToastContainer } from "react-toastify";
 import { useNavigate } from "react-router-dom";
-import { Config } from "../interafces";
 
 export const ActivateAccountPage = () => {
   const navigate = useNavigate();
@@ -16,12 +15,9 @@ export const ActivateAccountPage = () => {
       uid: uid,
       token: token,
     };
-    const config: Config = {
-      body: body,
-      method: "POST",
-    };
+
     api
-      .post(path, config)
+      .post(path, body)
       .then(() => {
         navigate("/");
       })
