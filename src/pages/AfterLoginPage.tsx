@@ -16,7 +16,6 @@ export const AfterLoginPage = () => {
   useEffect(() => {
     getUserData()
       .then((user: any) => {
-        console.log(user);
         setLoggedUserIdId(user.id as string);
         localStorage.setItem("userId", user.id);
         getAllUserPlants(user.id)

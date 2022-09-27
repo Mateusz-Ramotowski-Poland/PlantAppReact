@@ -32,3 +32,8 @@ export interface Config {
   body?: any;
   params?: Record<string, string>;
 }
+
+export interface ApiError {
+  errMessages: Record<string, string[]>;
+  defaultMessage: string;
+}

@@ -11,6 +11,7 @@ import {
 import { Config, FormErrorState } from "../interafces";
 import { ToastContainer } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import { showErrorMessages } from "../shared/utils/showErrorMessages";
 
 export const PasswordResetPage = () => {
   const navigate = useNavigate();
@@ -47,18 +48,7 @@ export const PasswordResetPage = () => {
         .then(() => {
           navigate("/");
         })
-        .catch((err) => {
-          for (const property in err.errMessages) {
-            for (const problem of err.errMessages[property]) {
-              problem !== undefined
-                ? showMessage(`Password is not changed: ${problem}`, "error")
-                : showMessage(
-                    `Password is not changed: ${err.defaultMessage}`,
-                    "error"
-                  );
-            }
-          }
-        });
+        .catch((err) => showErrorMessages(err));
   };
 
   return (

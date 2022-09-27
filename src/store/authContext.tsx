@@ -33,7 +33,6 @@ const checkIfLoggedIn = () => {
           return true;
         })
         .catch(() => {
-          console.log("hello!");
           return false;
         });
     }

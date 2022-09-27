@@ -1,8 +1,6 @@
 import { TokenInterface } from "../../interafces";
-import { CONTENT_TYPE, CONTENT_TYPE_KEY } from "./constants";
+import { CONTENT_TYPE, CONTENT_TYPE_KEY, AUTH_TOKEN } from "./constants";
 import { Config } from "../../interafces";
-
-const AUTH_TOKEN = "Authorization";
 
 function addAuthHeader(createdHeaders: Headers) {
   if (!createdHeaders.has(AUTH_TOKEN)) {
@@ -49,13 +47,15 @@ export function fetchData(url: string, requestParameters: Config) {
   });
 }
 
-function createAndThrowError(data: Promise<any>) {
-  return data.then((data) => {
+function createError(data: any) {
+  return data.response.json().then((data: any) => {
+    console.log(data);
     let errorMessage = "Wrong form data!";
     if (data?.error?.message) {
       errorMessage = data.error.message;
     }
-    throw { defaultMessage: errorMessage, errMessages: data };
+    console.log({ defaultMessage: errorMessage, errMessages: data });
+    return { defaultMessage: errorMessage, errMessages: data };
   });
 }
 
@@ -65,7 +65,6 @@ function isTokenInterface(data: any): data is TokenInterface {
 
 function refreshToken() {
   const token: string | null = localStorage.getItem("token");
-  const errorMessage = "Error while refreshing token";
   if (token) {
     const tokenObj: TokenInterface = JSON.parse(token);
     const url = `${
@@ -80,15 +79,15 @@ function refreshToken() {
       headers: headers,
       body: body,
       method: "POSt",
-    }).then((data: unknown) => {
+    }).then(async (data: unknown) => {
       if (!isTokenInterface(data)) {
-        throw new Error(`${errorMessage}: ${data}`);
+        throw await createError(data);
       }
 
       localStorage.setItem("token", JSON.stringify(data));
     });
   }
-  throw new Error(errorMessage);
+  throw new Error("Token does not exist");
 }
 
 interface Response {
@@ -110,19 +109,18 @@ function post<Response>(path: string, config: Config): Promise<Response> {
   (changedConfig as Config).body = JSON.stringify(config.body);
   (changedConfig as Config).method = config.method;
 
-  console.log(1);
-  return fetchData(url, changedConfig as Config).catch((err) => {
-    if (!is401HTTPResponse(err))
-      throw new Error(`Unhandled response headers: ${err}`);
-
+  return fetchData(url, changedConfig as Config).catch(async (err) => {
+    if (!is401HTTPResponse(err)) {
+      throw await createError(err);
+    }
     return refreshToken()
       .then(() => {
-        return fetchData(url, changedConfig as Config).catch((err) => {
-          throw new Error(`Error while refreshing token: ${err}`);
+        return fetchData(url, changedConfig as Config).catch(async (err) => {
+          throw await createError(err);
         });
       })
-      .catch(() => {
-        throw new Error(`Error while refreshing token: ${err}`);
+      .catch(async () => {
+        throw await createError(err);
       });
   });
 }
@@ -134,9 +132,9 @@ function get<Response>(path: string, config: any): Promise<Response> {
 
   const { url, changedConfig } = processInputData(path, config);
 
-  return fetchData(url, changedConfig as Config).catch((data) =>
-    createAndThrowError(data)
-  );
+  return fetchData(url, changedConfig as Config).catch(async (data) => {
+    throw await createError(data);
+  });
 }
 
 export const api = {

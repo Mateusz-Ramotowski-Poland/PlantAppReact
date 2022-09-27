@@ -4,6 +4,7 @@ import { api, showMessage } from "../shared";
 import { MainNavigation } from "../components/layout/MainNavigation";
 import { ToastContainer } from "react-toastify";
 import React from "react";
+import { showErrorMessages } from "../shared/utils/showErrorMessages";
 
 export const AddPlantFormPage = () => {
   const nameInputRef = useRef<HTMLInputElement>(null);
@@ -39,20 +40,7 @@ export const AddPlantFormPage = () => {
       .then(() => {
         showMessage("Added new plant", "info");
       })
-      .catch((err) => {
-        // i get string every letter - one message
-        // use type guardand unknown
-        for (const property in err.errMessages) {
-          for (const problem of err.errMessages[property]) {
-            problem !== undefined
-              ? showMessage(`Plant not created: ${problem}`, "error")
-              : showMessage(
-                  `Plant not created: ${err.defaultMessage}`,
-                  "error"
-                );
-          }
-        }
-      });
+      .catch((err) => showErrorMessages(err));
   };
 
   return (

@@ -26,7 +26,6 @@ export const ActivateAccountPage = () => {
         navigate("/");
       })
       .catch((err) => {
-        console.log(222);
         showMessage(err, "error");
       });
   };
