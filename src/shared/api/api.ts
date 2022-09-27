@@ -49,12 +49,10 @@ export function fetchData(url: string, requestParameters: Config) {
 
 function createError(data: any) {
   return data.response.json().then((data: any) => {
-    console.log(data);
     let errorMessage = "Wrong form data!";
     if (data?.error?.message) {
       errorMessage = data.error.message;
     }
-    console.log({ defaultMessage: errorMessage, errMessages: data });
     return { defaultMessage: errorMessage, errMessages: data };
   });
 }

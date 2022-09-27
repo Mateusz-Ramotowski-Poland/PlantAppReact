@@ -6,11 +6,11 @@ import {
   confirmValueValidation,
   confirmOnlyNumbersValidation,
   checkFormValidity,
+  showErrorMessages,
 } from "../../shared";
 import { Link } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
-import { FormErrorState, Config, ApiError } from "../../interafces";
-import { showErrorMessages } from "../../shared/utils/showErrorMessages";
+import { FormErrorState, Config } from "../../interafces";
 
 export const CreateAccountForm = () => {
   const [formError, setFormError] = useState<FormErrorState>({});

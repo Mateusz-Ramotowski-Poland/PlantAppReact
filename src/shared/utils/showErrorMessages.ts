@@ -2,7 +2,6 @@ import { isApiError } from "../validators/isApiError";
 import { showMessage } from "./toster";
 
 export function showErrorMessages(err: unknown) {
-  console.dir(err);
   if (isApiError(err)) {
     for (const property in err.errMessages) {
       for (const problem of err.errMessages[property]) {
