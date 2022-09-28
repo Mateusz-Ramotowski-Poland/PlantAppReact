@@ -5,6 +5,8 @@ import { MainNavigation } from "../components/layout/MainNavigation";
 import { ToastContainer } from "react-toastify";
 import React from "react";
 import { showErrorMessages } from "../shared/utils/showErrorMessages";
+import { useDispatch } from "react-redux";
+import { plantsActions } from "../store/plantsSlice";
 
 export const AddPlantFormPage = () => {
   const nameInputRef = useRef<HTMLInputElement>(null);
@@ -12,6 +14,7 @@ export const AddPlantFormPage = () => {
   const wateringIntervalInputRef = useRef<HTMLInputElement>(null);
   const sunExposureInputRef = useRef<HTMLInputElement>(null);
   const temperatureInputRef = useRef<HTMLInputElement>(null);
+  const dispatch = useDispatch();
 
   const submitHandler = (event: React.FormEvent) => {
     event.preventDefault();
@@ -32,8 +35,10 @@ export const AddPlantFormPage = () => {
 
     api
       .post(path, body)
-      .then(() => {
+      .then((plant) => {
+        console.log(plant);
         showMessage("Added new plant", "info");
+        dispatch(plantsActions.add({ payload: plant }));
       })
       .catch((err) => showErrorMessages(err));
   };
@@ -47,25 +52,13 @@ export const AddPlantFormPage = () => {
           <div className={classes.control}>
             <label>
               Name
-              <input
-                data-testid="name"
-                type="text"
-                ref={nameInputRef}
-                required
-                maxLength={50}
-              />
+              <input data-testid="name" type="text" ref={nameInputRef} required maxLength={50} />
             </label>
           </div>
           <div className={classes.control}>
             <label>
               Species
-              <input
-                data-testid="species"
-                type="text"
-                ref={speciesInputRef}
-                required
-                maxLength={50}
-              />
+              <input data-testid="species" type="text" ref={speciesInputRef} required maxLength={50} />
             </label>
           </div>
           <div className={classes.control}>
@@ -84,27 +77,13 @@ export const AddPlantFormPage = () => {
           <div className={classes.control}>
             <label>
               Sun exposure
-              <input
-                data-testid="sunExposure"
-                type="number"
-                ref={sunExposureInputRef}
-                required
-                min={1}
-                max={24}
-              />
+              <input data-testid="sunExposure" type="number" ref={sunExposureInputRef} required min={1} max={24} />
             </label>
           </div>
           <div className={classes.control}>
             <label>
               Temperature
-              <input
-                data-testid="temperature"
-                type="number"
-                ref={temperatureInputRef}
-                required
-                min={-100}
-                max={100}
-              />
+              <input data-testid="temperature" type="number" ref={temperatureInputRef} required min={-100} max={100} />
             </label>
           </div>
 

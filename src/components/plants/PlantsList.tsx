@@ -1,30 +1,12 @@
+import { useSelector } from "react-redux";
 import { Plant } from "../../interafces";
 import { PlantItem } from "./PlantItem";
 
-interface Props {
-  isLoading: boolean;
-  httpError: string | undefined;
-  plants: Plant[];
-}
+export const PlantsList = () => {
+  const plants = useSelector((state: any) => state.plants.plants);
+  console.log(plants);
 
-export const PlantsList = (props: Props) => {
-  if (props.isLoading) {
-    return (
-      <section>
-        <p>Plants are loading</p>
-      </section>
-    );
-  }
-
-  if (props.httpError) {
-    return (
-      <section>
-        <p>{props.httpError}</p>
-      </section>
-    );
-  }
-
-  if (props.plants.length === 0) {
+  if (plants.length === 0) {
     return (
       <section>
         <p>The user don't have any plants</p>
@@ -32,7 +14,7 @@ export const PlantsList = (props: Props) => {
     );
   }
 
-  const plantsList = props.plants.map((plant: any) => (
+  const plantsList = plants.map((plant: Plant) => (
     <PlantItem
       key={plant.id}
       id={plant.id}

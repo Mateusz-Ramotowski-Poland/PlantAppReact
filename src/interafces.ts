@@ -30,3 +30,7 @@ export interface ApiError {
   errMessages: Record<string, string[]>;
   defaultMessage: string;
 }
+
+export interface PlantsState {
+  plants: Plant[];
+}

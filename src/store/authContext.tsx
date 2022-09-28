@@ -4,6 +4,8 @@ import { api } from "../shared";
 
 import React, { useCallback, useEffect, useState } from "react";
 import { errorEvents } from "../shared/api/helpers";
+import { useDispatch } from "react-redux";
+import { plantsActions } from "./plantsSlice";
 
 type authProps = {
   children: React.ReactNode;
@@ -14,7 +16,7 @@ export const AuthContext = React.createContext({
   login: (token: AuthToken) => {},
   logout: () => {},
   loggedUserId: "",
-  setLoggedUserIdId: (user: string) => {},
+  setLoggedUserId: (user: string) => {},
 });
 
 const checkIfLoggedIn = () => {
@@ -42,9 +44,10 @@ const checkIfLoggedIn = () => {
 
 export const AuthContextProvider = (props: authProps) => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [loggedUserId, setLoggedUserIdId] = useState("");
+  const [loggedUserId, setLoggedUserId] = useState("");
 
   useEffect(() => {
     checkIfLoggedIn().then((isLoggedIn) => {
@@ -60,10 +63,15 @@ export const AuthContextProvider = (props: authProps) => {
     });
   }, []);
 
+  useEffect(() => {
+    setLoggedUserId(localStorage.getItem("userId") as string);
+  }, []);
+
   const logoutHandler = useCallback(() => {
     setIsLoggedIn(false);
     localStorage.removeItem("token");
-    setLoggedUserIdId("");
+    setLoggedUserId("");
+    dispatch(plantsActions.deleteAll());
 
     navigate("/");
   }, []);
@@ -79,7 +87,7 @@ export const AuthContextProvider = (props: authProps) => {
     login: loginHandler,
     logout: logoutHandler,
     loggedUserId: loggedUserId,
-    setLoggedUserIdId: setLoggedUserIdId,
+    setLoggedUserId: setLoggedUserId,
   };
 
   return <AuthContext.Provider value={contextValue}>{props.children}</AuthContext.Provider>;
