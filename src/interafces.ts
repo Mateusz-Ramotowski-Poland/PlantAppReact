@@ -8,7 +8,7 @@ export interface FormErrorState {
   onlyDigits?: boolean;
 }
 
-export interface TokenInterface {
+export interface AuthToken {
   access: string;
   refresh: string;
 }

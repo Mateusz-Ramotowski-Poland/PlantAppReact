@@ -1,11 +1,11 @@
-import { ApiError, TokenInterface } from "../../interafces";
+import { ApiError, AuthToken } from "../../interafces";
 
 export function isApiError(err: any): err is ApiError {
   return (err as ApiError).errMessages !== undefined;
 }
 
-export function isTokenInterface(data: any): data is TokenInterface {
-  return (data as TokenInterface).access !== undefined;
+export function isAuthToken(data: any): data is AuthToken {
+  return (data as AuthToken).access !== undefined;
 }
 
 export function isError(error: any): error is Error {

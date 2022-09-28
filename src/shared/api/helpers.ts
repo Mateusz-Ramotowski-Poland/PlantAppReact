@@ -1,11 +1,13 @@
-import { TokenInterface } from "../../interafces";
+import { AuthToken } from "../../interafces";
 import { AUTH_TOKEN, CONTENT_TYPE, CONTENT_TYPE_KEY } from "./constants";
-import { is401HTTPResponse, isTokenInterface } from "./guards";
+import { is401HTTPResponse, isAuthToken } from "./guards";
 import { FetchConfig, RequestConfig } from "./interfaces";
+
+export const errorEvents: Function[] = [];
 
 export function addAuthHeader(createdHeaders: Headers) {
   if (!createdHeaders.has(AUTH_TOKEN)) {
-    const token: TokenInterface = JSON.parse(localStorage.getItem("token") as string);
+    const token: AuthToken = JSON.parse(localStorage.getItem("token") as string);
     if (token) {
       createdHeaders.set(AUTH_TOKEN, `JWT ${token.access}`);
     }
@@ -58,7 +60,7 @@ export function createError(data: any) {
 export function refreshToken() {
   const token: string | null = localStorage.getItem("token");
   if (token) {
-    const tokenObj: TokenInterface = JSON.parse(token);
+    const tokenObj: AuthToken = JSON.parse(token);
     const url = `${process.env.REACT_APP_DOMAIN as string}/accounts/jwt/refresh/`;
     const headers = new Headers({
       Authorization: tokenObj.access,
@@ -70,7 +72,7 @@ export function refreshToken() {
       body: body,
       method: "POST",
     }).then(async (data: unknown) => {
-      if (!isTokenInterface(data)) {
+      if (!isAuthToken(data)) {
         throw await createError(data);
       }
 
@@ -89,6 +91,9 @@ export async function sendRequestAgain(err: unknown, requestParameters: FetchCon
         });
       })
       .catch(async () => {
+        errorEvents.forEach((cb) => {
+          cb("refreshTokenFailed");
+        });
         throw await createError(err);
       });
   }
