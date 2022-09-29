@@ -11,6 +11,7 @@ import { PasswordResetPage } from "./pages/PasswordResetPage";
 import { ActivateAccountPage } from "./pages/ActivateAccountPage";
 import { AddPlantFormPage } from "./pages/AddPlantFormPage";
 import { UpdatePlantFormPage } from "./pages/UpdatePlantFormPage";
+import { ShowPlantsPage } from "./pages/ShowPlantsPage";
 
 function App() {
   const authCtx = useContext(AuthContext);
@@ -20,19 +21,12 @@ function App() {
       <Route path="/" element={<StartPage />} />
       <Route path="/createAccount" element={<CreateAccountPage />} />
       <Route path="/retrievePassword" element={<RetrievePasswordFormPage />} />
-      <Route
-        path="/reset-password/:uid/:token"
-        element={<PasswordResetPage />}
-      />
-      <Route
-        path="activate-account/:uid/:token"
-        element={<ActivateAccountPage />}
-      />
-      {authCtx.isLoggedIn && (
-        <Route path="/logged" element={<AfterLoginPage />} />
-      )}
-      <Route path="/logged/addPlantForm" element={<AddPlantFormPage />} />
-      <Route path="/logged/updatePlantForm" element={<UpdatePlantFormPage />} />
+      <Route path="/reset-password/:uid/:token" element={<PasswordResetPage />} />
+      <Route path="activate-account/:uid/:token" element={<ActivateAccountPage />} />
+      {authCtx.isLoggedIn && <Route path="/logged" element={<AfterLoginPage />} />}
+      {authCtx.isLoggedIn && <Route path="/logged/addPlantForm" element={<AddPlantFormPage />} />}
+      {authCtx.isLoggedIn && <Route path="/logged/showPlants" element={<ShowPlantsPage />} />}
+      {authCtx.isLoggedIn && <Route path="/logged/updatePlantForm" element={<UpdatePlantFormPage />} />}
       <Route path="*" element={<NotFoundPage />} />
     </Routes>
   );

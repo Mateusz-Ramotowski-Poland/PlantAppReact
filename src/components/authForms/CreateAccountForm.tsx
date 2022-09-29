@@ -6,6 +6,7 @@ import {
   confirmValueValidation,
   confirmOnlyNumbersValidation,
   checkFormValidity,
+  showErrorMessages,
 } from "../../shared";
 import { Link } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
@@ -45,21 +46,7 @@ export const CreateAccountForm = () => {
           showMessage("New account was created!", "info");
         })
         .catch((err: unknown) => {
-          if (isApiError(err)) {
-            for (const property in err.errMessages) {
-              for (const problem of err.errMessages[property]) {
-                problem !== undefined
-                  ? showMessage(`User not created: ${problem}`, "error")
-                  : showMessage(
-                      `User not created: ${err.defaultMessage}`,
-                      "error"
-                    );
-              }
-            }
-          } else {
-            showMessage(`Unknown error`, "error");
-            throw err;
-          }
+          showErrorMessages(err);
         });
     }
   };
@@ -133,12 +120,3 @@ export const CreateAccountForm = () => {
     </section>
   );
 };
-
-interface ApiError {
-  errMessages: Record<string, string[]>;
-  defaultMessage: string;
-}
-
-function isApiError(err: any): err is ApiError {
-  return (err as ApiError).errMessages !== undefined;
-}

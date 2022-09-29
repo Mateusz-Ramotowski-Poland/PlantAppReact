@@ -1,8 +1,11 @@
-import { TokenInterface } from "../interafces";
+import { AuthToken } from "../interafces";
 import { useNavigate } from "react-router-dom";
 import { api } from "../shared";
 
 import React, { useCallback, useEffect, useState } from "react";
+import { errorEvents } from "../shared/api/helpers";
+import { useDispatch } from "react-redux";
+import { plantsActions } from "./plantsSlice";
 
 type authProps = {
   children: React.ReactNode;
@@ -10,8 +13,10 @@ type authProps = {
 
 export const AuthContext = React.createContext({
   isLoggedIn: false,
-  login: (token: TokenInterface) => {},
+  login: (token: AuthToken) => {},
   logout: () => {},
+  loggedUserId: "",
+  setLoggedUserId: (user: string) => {},
 });
 
 const checkIfLoggedIn = () => {
@@ -19,23 +24,30 @@ const checkIfLoggedIn = () => {
     const token: string | null = localStorage.getItem("token");
 
     if (token) {
+      const tokenObj: AuthToken = JSON.parse(token);
+      const body = { token: tokenObj.access };
+
       return api
-        .post("/accounts/jwt/verify", {
-          token: JSON.parse(token).access,
+        .post("/accounts/jwt/verify", body)
+        .then(() => {
+          return true;
         })
-        .then(() => true)
-        .catch(() => false);
+        .catch(() => {
+          return false;
+        });
     }
     return Promise.resolve(false);
-  } catch (err: any) {
+  } catch {
     return Promise.resolve(false);
   }
 };
 
 export const AuthContextProvider = (props: authProps) => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [loggedUserId, setLoggedUserId] = useState("");
 
   useEffect(() => {
     checkIfLoggedIn().then((isLoggedIn) => {
@@ -43,14 +55,28 @@ export const AuthContextProvider = (props: authProps) => {
     });
   }, []);
 
+  useEffect(() => {
+    errorEvents.push((data: string) => {
+      if (data === "refreshTokenFailed") {
+        logoutHandler();
+      }
+    });
+  }, []);
+
+  useEffect(() => {
+    setLoggedUserId(localStorage.getItem("userId") as string);
+  }, []);
+
   const logoutHandler = useCallback(() => {
     setIsLoggedIn(false);
     localStorage.removeItem("token");
+    setLoggedUserId("");
+    dispatch(plantsActions.deleteAll());
 
     navigate("/");
   }, []);
 
-  const loginHandler = useCallback((token: TokenInterface) => {
+  const loginHandler = useCallback((token: AuthToken) => {
     setIsLoggedIn(true);
     localStorage.setItem("token", JSON.stringify(token));
     navigate("/logged");
@@ -60,11 +86,9 @@ export const AuthContextProvider = (props: authProps) => {
     isLoggedIn: isLoggedIn,
     login: loginHandler,
     logout: logoutHandler,
+    loggedUserId: loggedUserId,
+    setLoggedUserId: setLoggedUserId,
   };
 
-  return (
-    <AuthContext.Provider value={contextValue}>
-      {props.children}
-    </AuthContext.Provider>
-  );
+  return <AuthContext.Provider value={contextValue}>{props.children}</AuthContext.Provider>;
 };

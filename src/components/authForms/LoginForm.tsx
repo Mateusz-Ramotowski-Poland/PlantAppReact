@@ -1,6 +1,6 @@
 import React, { useRef, useState } from "react";
 import classes from "../../assets/FormCard.module.css";
-import { TokenInterface } from "../../interafces";
+import { AuthToken } from "../../interafces";
 import { api } from "../../shared";
 import { useLogin } from "../../hooks/useLogin";
 import { Link } from "react-router-dom";
@@ -17,9 +17,10 @@ export const LoginForm = () => {
     const username = usernameInputRef?.current?.value;
     const path = "/accounts/jwt/create";
     const body = { username: username, password: password };
+
     setLoginError("");
     api
-      .post<TokenInterface>(path, body)
+      .post<AuthToken>(path, body)
       .then((data) => {
         login(data);
       })
@@ -35,23 +36,13 @@ export const LoginForm = () => {
         <div className={classes.control}>
           <label>
             Your Username
-            <input
-              data-testid="username"
-              type="text"
-              required
-              ref={usernameInputRef}
-            />
+            <input data-testid="username" type="text" required ref={usernameInputRef} />
           </label>
         </div>
         <div className={classes.control}>
           <label>
             Your Password
-            <input
-              data-testid="password"
-              type="password"
-              required
-              ref={passwordInputRef}
-            />
+            <input data-testid="password" type="password" required ref={passwordInputRef} />
           </label>
         </div>
         {loginError !== "" && <p className={classes.alert}>{loginError}</p>}

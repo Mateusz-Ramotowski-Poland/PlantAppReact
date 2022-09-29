@@ -15,6 +15,7 @@ export const ActivateAccountPage = () => {
       uid: uid,
       token: token,
     };
+
     api
       .post(path, body)
       .then(() => {

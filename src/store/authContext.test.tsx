@@ -4,8 +4,15 @@ import "@testing-library/jest-dom";
 import { AuthContext, AuthContextProvider } from "./authContext";
 import { BrowserRouter } from "react-router-dom";
 import { api } from "../shared/index";
+import { Provider } from "react-redux";
+import { rootStore } from "./rootStore";
+import { AuthToken } from "../interafces";
 
-const Consumer = (props: any) => {
+interface Props {
+  a: AuthToken;
+}
+
+const Consumer = (props: Props) => {
   const ctx = useContext(AuthContext);
 
   const fn = () => {
@@ -27,17 +34,17 @@ test("NameProvider composes full name from first, last", async () => {
 
   const a = { access: "" };
 
-  const { debug } = render(
+  render(
     <BrowserRouter>
-      <AuthContextProvider>
-        <Consumer a={a}></Consumer>
-      </AuthContextProvider>
+      <Provider store={rootStore}>
+        <AuthContextProvider>
+          <Consumer a={a}></Consumer>
+        </AuthContextProvider>
+      </Provider>
     </BrowserRouter>
   );
 
   fireEvent.click(screen.getByRole("button", { name: "login" }));
-
-  debug();
 
   await screen.findByText("auth");
 });
