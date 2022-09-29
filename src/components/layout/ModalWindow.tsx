@@ -3,7 +3,7 @@ import Modal from "react-modal";
 import { useDispatch } from "react-redux";
 import { api } from "../../shared";
 import { plantsActions } from "../../store/plantsSlice";
-import classes from "./../../assets/FormCard.module.css";
+import classes from "./ModalWindow.module.css";
 
 interface Props {
   id: string;
@@ -42,7 +42,7 @@ export const ModalWindow = (props: Props) => {
       style={customStyles}
       contentLabel="delete plant modal"
     >
-      <form>
+      <form className={classes.form}>
         <p>Are you sure to delete plant with id={props.id}?</p>
         <button onClick={deleteHandler}>Delete</button>
         <button onClick={props.closeModal}>Cancel</button>
