@@ -3,6 +3,11 @@ import { useSelector } from "react-redux";
 import { useGetPlants } from "../../hooks/useGetPlants";
 import { Plant } from "../../interafces";
 import { PlantItem } from "./PlantItem";
+import classes from "./PlantsList.module.css";
+
+function formatData(str: string) {
+  return str.slice(0, 10) + " " + str.slice(11, 19);
+}
 
 export const PlantsList = () => {
   let { getPlants } = useGetPlants();
@@ -22,35 +27,40 @@ export const PlantsList = () => {
     );
   }
 
-  const plantsList = plants.map((plant: Plant) => (
-    <PlantItem
-      key={plant.id}
-      id={plant.id}
-      created_at={plant.created_at}
-      name={plant.name}
-      species={plant.species}
-      watering_interval={plant.watering_interval}
-      last_watering={plant.last_watering}
-      next_watering={plant.next_watering}
-      watering_count={plant.watering_count}
-      sun_exposure={plant.sun_exposure}
-      temperature={plant.temperature}
-    ></PlantItem>
-  ));
+  const plantsList = plants.map((plant: Plant) => {
+    const dataCreated = formatData(plant.created_at);
+    const dataNextWatering = formatData(plant.next_watering);
+
+    return (
+      <PlantItem
+        key={plant.id}
+        id={plant.id}
+        created_at={dataCreated}
+        name={plant.name}
+        species={plant.species}
+        watering_interval={plant.watering_interval}
+        last_watering={plant.last_watering}
+        next_watering={dataNextWatering}
+        watering_count={plant.watering_count}
+        sun_exposure={plant.sun_exposure}
+        temperature={plant.temperature}
+      ></PlantItem>
+    );
+  });
 
   return (
-    <table>
+    <table className={classes.table}>
       <thead>
-        <tr>
-          <th>Created at</th>
-          <th>Name</th>
-          <th>species</th>
-          <th>Watering interval</th>
-          <th>Last watering</th>
-          <th>Next watering</th>
-          <th>Watering count</th>
-          <th>Sun exposure</th>
-          <th>Temperature</th>
+        <tr className={classes.row}>
+          <th className={classes.box}>Created at</th>
+          <th className={classes.box}>Name</th>
+          <th className={classes.box}>species</th>
+          <th className={classes.box}>Watering interval</th>
+          <th className={classes.box}>Last watering</th>
+          <th className={classes.box}>Next watering</th>
+          <th className={classes.box}>Watering count</th>
+          <th className={classes.box}>Sun exposure</th>
+          <th className={classes.box}>Temperature</th>
         </tr>
       </thead>
       <tbody>{plantsList}</tbody>

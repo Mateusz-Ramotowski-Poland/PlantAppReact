@@ -3,6 +3,8 @@ import { screen, render } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { AuthContextProvider } from "../../store/authContext";
 import { BrowserRouter } from "react-router-dom";
+import { Provider } from "react-redux";
+import { rootStore } from "../../store/rootStore";
 
 const mockedUsedNavigate = jest.fn();
 
@@ -14,11 +16,15 @@ jest.mock("react-router-dom", () => ({
 test("test logout button", () => {
   render(
     <BrowserRouter>
-      <AuthContextProvider>
-        <MainNavigation />
-      </AuthContextProvider>
+      <Provider store={rootStore}>
+        <AuthContextProvider>
+          <MainNavigation />
+        </AuthContextProvider>
+      </Provider>
     </BrowserRouter>
   );
+
+  <MainNavigation />;
 
   userEvent.click(screen.getByRole("button", { name: "Logout" }));
   expect(mockedUsedNavigate).toHaveBeenCalledWith("/");

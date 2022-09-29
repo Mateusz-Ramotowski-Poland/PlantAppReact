@@ -4,6 +4,8 @@ import "@testing-library/jest-dom";
 import { AuthContext, AuthContextProvider } from "./authContext";
 import { BrowserRouter } from "react-router-dom";
 import { api } from "../shared/index";
+import { Provider } from "react-redux";
+import { rootStore } from "./rootStore";
 
 const Consumer = (props: any) => {
   const ctx = useContext(AuthContext);
@@ -29,9 +31,11 @@ test("NameProvider composes full name from first, last", async () => {
 
   const { debug } = render(
     <BrowserRouter>
-      <AuthContextProvider>
-        <Consumer a={a}></Consumer>
-      </AuthContextProvider>
+      <Provider store={rootStore}>
+        <AuthContextProvider>
+          <Consumer a={a}></Consumer>
+        </AuthContextProvider>
+      </Provider>
     </BrowserRouter>
   );
 

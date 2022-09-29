@@ -3,7 +3,7 @@
   width: 95%;
   max-width: 25rem;
   border-radius: 6px;
-  background-color: #38015c;
+  background-color: #045c01;
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
   padding: 1rem;
   text-align: center;
@@ -29,7 +29,7 @@
 .control input {
   font: inherit;
   background-color: #f1e1fc;
-  color: #38015c;
+  color: #619c73;
   border-radius: 4px;
   border: 1px solid white;
   width: 100%;
@@ -48,15 +48,15 @@
   cursor: pointer;
   font: inherit;
   color: white;
-  background-color: #9f5ccc;
-  border: 1px solid #9f5ccc;
+  background-color: #619c73;
+  border: 1px solid #619c73;
   border-radius: 4px;
   padding: 0.5rem 2.5rem;
 }
 
 .actions button:hover {
-  background-color: #873abb;
-  border-color: #873abb;
+  background-color: #32834b;
+  border-color: #32834b;
 }
 
 .actions .toggle {
