@@ -1,7 +1,4 @@
 import classes from "./PlantItem.module.css";
-import React from "react";
-import Modal from "react-modal";
-import { api } from "../../shared";
 
 interface Props {
   id: string;
@@ -14,38 +11,12 @@ interface Props {
   watering_count: string;
   sun_exposure: number;
   temperature: number;
+  openModal: (id: string) => void;
 }
 
-const customStyles = {
-  content: {
-    top: "50%",
-    left: "50%",
-    right: "auto",
-    bottom: "auto",
-    marginRight: "-50%",
-    transform: "translate(-50%, -50%)",
-  },
-};
-
-Modal.setAppElement("#root");
-
 export const PlantItem = (props: Props) => {
-  const [modalIsOpen, setIsOpen] = React.useState(false);
-
-  function openModal() {
-    setIsOpen(true);
-  }
-
-  function closeModal() {
-    setIsOpen(false);
-  }
-
-  function deleteHandler(event: React.MouseEvent) {
-    event.preventDefault();
-    const path = `/plants/${props.id}/`;
-
-    api.delete(path);
-    closeModal();
+  function clickDeleteHandler() {
+    props.openModal(props.id);
   }
 
   return (
@@ -62,7 +33,7 @@ export const PlantItem = (props: Props) => {
         <td className={classes.box}>{props.sun_exposure}</td>
         <td className={classes.box}>{props.temperature}</td>
         <td className={classes.box}>
-          <button className={classes.button} onClick={openModal}>
+          <button className={classes.button} onClick={clickDeleteHandler}>
             Delete
           </button>
         </td>
@@ -70,13 +41,6 @@ export const PlantItem = (props: Props) => {
           <button className={classes.button}>Update</button>
         </td>
       </tr>
-      <Modal isOpen={modalIsOpen} onRequestClose={closeModal} style={customStyles} contentLabel="delete plant modal">
-        <div>Are you sure to delete plant with id={props.id}?</div>
-        <form>
-          <button onClick={deleteHandler}>Delete</button>
-          <button onClick={closeModal}>Cancel</button>
-        </form>
-      </Modal>
     </>
   );
 };

@@ -18,6 +18,9 @@ const plantsSlice = createSlice({
     deleteAll(state) {
       state.plants = [];
     },
+    delete(state, action) {
+      state.plants = state.plants.filter((el) => el.id !== action.payload.id);
+    },
   },
 });
 

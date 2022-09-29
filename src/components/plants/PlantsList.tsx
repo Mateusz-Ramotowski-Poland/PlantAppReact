@@ -1,9 +1,10 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useGetPlants } from "../../hooks/useGetPlants";
 import { Plant } from "../../interafces";
 import { PlantItem } from "./PlantItem";
 import { PlantsState } from "../../interafces";
+import { ModalWindow } from "../layout/ModalWindow";
 import classes from "./PlantsList.module.css";
 
 interface State {
@@ -15,6 +16,17 @@ function formatData(str: string) {
 }
 
 export const PlantsList = () => {
+  const [modalIsOpen, setIsOpen] = useState(false);
+  const [deletePlantId, setDeletePlantId] = useState("");
+
+  function openModal(id: string) {
+    setIsOpen(true);
+    setDeletePlantId(id);
+  }
+  function closeModal() {
+    setIsOpen(false);
+  }
+
   let { getPlants } = useGetPlants();
   const plants = useSelector((state: State) => state.plants.plants); //empty redux will return undefined
 
@@ -32,7 +44,6 @@ export const PlantsList = () => {
       </section>
     );
   }
-
   const plantsList = plants.map((plant: Plant) => {
     const dataCreated = formatData(plant.created_at);
     const dataNextWatering = formatData(plant.next_watering);
@@ -50,27 +61,31 @@ export const PlantsList = () => {
         watering_count={plant.watering_count}
         sun_exposure={plant.sun_exposure}
         temperature={plant.temperature}
+        openModal={openModal}
       ></PlantItem>
     );
   });
 
   return (
-    <table className={classes.table}>
-      <thead>
-        <tr className={classes.row}>
-          <th className={classes.box}>Id</th>
-          <th className={classes.box}>Created at</th>
-          <th className={classes.box}>Name</th>
-          <th className={classes.box}>species</th>
-          <th className={classes.box}>Watering interval</th>
-          <th className={classes.box}>Last watering</th>
-          <th className={classes.box}>Next watering</th>
-          <th className={classes.box}>Watering count</th>
-          <th className={classes.box}>Sun exposure</th>
-          <th className={classes.box}>Temperature</th>
-        </tr>
-      </thead>
-      <tbody>{plantsList}</tbody>
-    </table>
+    <>
+      <table className={classes.table}>
+        <thead>
+          <tr className={classes.row}>
+            <th className={classes.box}>Id</th>
+            <th className={classes.box}>Created at</th>
+            <th className={classes.box}>Name</th>
+            <th className={classes.box}>species</th>
+            <th className={classes.box}>Watering interval</th>
+            <th className={classes.box}>Last watering</th>
+            <th className={classes.box}>Next watering</th>
+            <th className={classes.box}>Watering count</th>
+            <th className={classes.box}>Sun exposure</th>
+            <th className={classes.box}>Temperature</th>
+          </tr>
+        </thead>
+        <tbody>{plantsList}</tbody>
+      </table>
+      <ModalWindow closeModal={closeModal} modalIsOpen={modalIsOpen} id={deletePlantId} />
+    </>
   );
 };
