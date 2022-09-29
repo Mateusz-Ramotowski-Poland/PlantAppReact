@@ -1,5 +1,6 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { AnyAction, createSlice, Dispatch, PayloadAction } from "@reduxjs/toolkit";
 import { Plant, PlantsState } from "../interafces";
+import { api } from "../shared";
 
 const initialState: PlantsState = {
   plants: [],
@@ -23,6 +24,15 @@ const plantsSlice = createSlice({
     },
   },
 });
+
+export function deletePlant(path: string, plantId: string, closeModal: () => void) {
+  return (dispatch: (arg0: { payload: any; type: string }) => AnyAction) => {
+    api.delete(path).then(() => {
+      dispatch(plantsActions.delete({ id: plantId }));
+      closeModal();
+    });
+  };
+}
 
 export const plantsActions = plantsSlice.actions;
 

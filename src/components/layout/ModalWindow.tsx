@@ -1,8 +1,8 @@
+import { AnyAction } from "@reduxjs/toolkit";
 import React from "react";
 import Modal from "react-modal";
 import { useDispatch } from "react-redux";
-import { api } from "../../shared";
-import { plantsActions } from "../../store/plantsSlice";
+import { deletePlant } from "../../store/plantsSlice";
 import classes from "./ModalWindow.module.css";
 
 interface Props {
@@ -30,9 +30,7 @@ export const ModalWindow = (props: Props) => {
   function deleteHandler(event: React.MouseEvent) {
     event.preventDefault();
     const path = `/plants/${props.id}/`;
-    api.delete(path);
-    dispatch(plantsActions.delete({ id: props.id }));
-    props.closeModal();
+    dispatch(deletePlant(path, props.id, props.closeModal) as unknown as AnyAction);
   }
 
   return (
