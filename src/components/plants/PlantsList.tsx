@@ -3,7 +3,12 @@ import { useSelector } from "react-redux";
 import { useGetPlants } from "../../hooks/useGetPlants";
 import { Plant } from "../../interafces";
 import { PlantItem } from "./PlantItem";
+import { PlantsState } from "../../interafces";
 import classes from "./PlantsList.module.css";
+
+interface State {
+  plants: PlantsState;
+}
 
 function formatData(str: string) {
   return str.slice(0, 10) + " " + str.slice(11, 19);
@@ -11,7 +16,7 @@ function formatData(str: string) {
 
 export const PlantsList = () => {
   let { getPlants } = useGetPlants();
-  const plants = useSelector((state: any) => state.plants.plants); //empty redux will return undefined
+  const plants = useSelector((state: State) => state.plants.plants); //empty redux will return undefined
 
   useEffect(() => {
     console.log(plants);

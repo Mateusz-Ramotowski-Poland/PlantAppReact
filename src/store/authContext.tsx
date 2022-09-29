@@ -37,7 +37,7 @@ const checkIfLoggedIn = () => {
         });
     }
     return Promise.resolve(false);
-  } catch (err: any) {
+  } catch {
     return Promise.resolve(false);
   }
 };
@@ -56,7 +56,7 @@ export const AuthContextProvider = (props: authProps) => {
   }, []);
 
   useEffect(() => {
-    errorEvents.push((data: any) => {
+    errorEvents.push((data: string) => {
       if (data === "refreshTokenFailed") {
         logoutHandler();
       }

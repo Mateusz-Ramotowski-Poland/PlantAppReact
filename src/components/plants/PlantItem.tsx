@@ -1,8 +1,19 @@
 import classes from "./PlantItem.module.css";
-import React from "react";
-import ReactDOM from "react-dom";
 
-export const PlantItem = (props: any) => {
+interface Props {
+  id: string;
+  created_at: string;
+  name: string;
+  species: string;
+  watering_interval: number;
+  last_watering: string;
+  next_watering: string;
+  watering_count: string;
+  sun_exposure: number;
+  temperature: number;
+}
+
+export const PlantItem = (props: Props) => {
   return (
     <tr data-id={props.id} className={classes.row}>
       <td className={classes.box}>{props.created_at}</td>
