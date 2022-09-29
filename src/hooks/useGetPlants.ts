@@ -1,6 +1,5 @@
 import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Plant } from "../interafces";
 import { showErrorMessages } from "../shared";
 import { getAllUserPlants, getUserData } from "../shared/api";
 import { AuthContext } from "../store/authContext";
@@ -17,12 +16,12 @@ export function useGetPlants() {
 
   function getPlants() {
     getUserData()
-      .then((user: any) => {
-        setLoggedUserId(user.id as string);
+      .then((user) => {
+        setLoggedUserId(user.id);
         localStorage.setItem("userId", user.id);
         getAllUserPlants(user.id)
-          .then((plants: any) => {
-            dispatch(plantsActions.fetch({ plants: plants.results as Plant[] }));
+          .then((plants) => {
+            dispatch(plantsActions.insertMany({ plants: plants.results }));
             navigate("/logged/showPlants");
           })
           .catch((err) => {

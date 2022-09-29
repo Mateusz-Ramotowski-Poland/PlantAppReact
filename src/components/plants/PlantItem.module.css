@@ -11,3 +11,18 @@
   text-align: center;
   font-size: 19px;
 }
+
+.button {
+  cursor: pointer;
+  font: inherit;
+  color: white;
+  background-color: #15f157;
+  border: 1px solid #15f157;
+  border-radius: 4px;
+  padding: 0.5rem 2.5rem;
+  margin: 10px;
+}
+.button:hover {
+  background-color: #50be71;
+  border: 1px solid #50be71;
+}

@@ -14,6 +14,7 @@ export const PlantsList = () => {
   const plants = useSelector((state: any) => state.plants.plants); //empty redux will return undefined
 
   useEffect(() => {
+    console.log(plants);
     if (plants.length === 0) {
       getPlants();
     }

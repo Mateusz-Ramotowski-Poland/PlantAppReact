@@ -9,7 +9,7 @@ const plantsSlice = createSlice({
   name: "plants",
   initialState: initialState,
   reducers: {
-    fetch(state, action) {
+    insertMany(state, action) {
       state.plants = action.payload.plants;
     },
     add(state, { payload: { plant } }: PayloadAction<{ plant: Plant }>) {

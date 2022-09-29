@@ -1,4 +1,6 @@
 import classes from "./PlantItem.module.css";
+import React from "react";
+import ReactDOM from "react-dom";
 
 export const PlantItem = (props: any) => {
   return (
@@ -12,6 +14,12 @@ export const PlantItem = (props: any) => {
       <td className={classes.box}>{props.watering_count}</td>
       <td className={classes.box}>{props.sun_exposure}</td>
       <td className={classes.box}>{props.temperature}</td>
+      <td className={classes.box}>
+        <button className={classes.button}>Delete</button>
+      </td>
+      <td className={classes.box}>
+        <button className={classes.button}>Update</button>
+      </td>
     </tr>
   );
 };
