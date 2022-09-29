@@ -1,12 +1,20 @@
+import { useEffect } from "react";
 import { useSelector } from "react-redux";
+import { useGetPlants } from "../../hooks/useGetPlants";
 import { Plant } from "../../interafces";
 import { PlantItem } from "./PlantItem";
 
 export const PlantsList = () => {
-  const plants = useSelector((state: any) => state.plants.plants);
-  console.log(plants);
+  let { getPlants } = useGetPlants();
+  const plants = useSelector((state: any) => state.plants.plants); //empty redux will return undefined
 
-  if (plants.length === 0) {
+  useEffect(() => {
+    if (plants.length === 0) {
+      getPlants();
+    }
+  }, []);
+
+  if (!plants || plants.length === 0) {
     return (
       <section>
         <p>The user don't have any plants</p>

@@ -6,3 +6,5 @@ export const rootStore = configureStore({
     plants: plantsReducer,
   },
 });
+
+export type AppDispatch = typeof rootStore.dispatch;

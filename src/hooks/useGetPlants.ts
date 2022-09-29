@@ -1,9 +1,10 @@
 import { useContext, useState } from "react";
-import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { Plant } from "../interafces";
 import { showErrorMessages } from "../shared";
 import { getAllUserPlants, getUserData } from "../shared/api";
 import { AuthContext } from "../store/authContext";
+import { useAppDispatch } from "../store/hooks";
 import { plantsActions } from "../store/plantsSlice";
 
 export function useGetPlants() {
@@ -12,7 +13,7 @@ export function useGetPlants() {
   const authCtx = useContext(AuthContext);
   const navigate = useNavigate();
   const setLoggedUserId = authCtx.setLoggedUserId;
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   function getPlants() {
     getUserData()
@@ -21,7 +22,7 @@ export function useGetPlants() {
         localStorage.setItem("userId", user.id);
         getAllUserPlants(user.id)
           .then((plants: any) => {
-            dispatch(plantsActions.add(plants.results));
+            dispatch(plantsActions.fetch({ plants: plants.results as Plant[] }));
             navigate("/logged/showPlants");
           })
           .catch((err) => {

@@ -7,6 +7,7 @@ import React from "react";
 import { showErrorMessages } from "../shared/utils/showErrorMessages";
 import { useDispatch } from "react-redux";
 import { plantsActions } from "../store/plantsSlice";
+import { Plant } from "../interafces";
 
 export const AddPlantFormPage = () => {
   const nameInputRef = useRef<HTMLInputElement>(null);
@@ -34,11 +35,10 @@ export const AddPlantFormPage = () => {
     };
 
     api
-      .post(path, body)
+      .post<Plant>(path, body)
       .then((plant) => {
-        console.log(plant);
         showMessage("Added new plant", "info");
-        dispatch(plantsActions.add({ payload: plant }));
+        dispatch(plantsActions.add({ plant }));
       })
       .catch((err) => showErrorMessages(err));
   };
