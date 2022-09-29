@@ -99,27 +99,3 @@ export async function sendRequestAgain(err: unknown, requestParameters: FetchCon
   }
   throw await createError(err);
 }
-
-export function post<Response>(path: string, body: object, config?: RequestConfig): Promise<Response> {
-  const { url, changedHeaders } = processInputData(path, config);
-  const requestParameters: FetchConfig = {
-    method: "POST",
-    body: JSON.stringify(body),
-    headers: changedHeaders,
-  };
-
-  return fetchData(url, requestParameters).catch((err) => sendRequestAgain(err, requestParameters, url));
-}
-
-export function get<Response>(path: string, config?: RequestConfig): Promise<Response> {
-  if (config?.params) {
-    path = path + "?" + new URLSearchParams(Object.entries(config.params)).toString();
-  }
-  const { url, changedHeaders } = processInputData(path, config);
-  const requestParameters: FetchConfig = {
-    method: "GET",
-    headers: changedHeaders,
-  };
-
-  return fetchData(url, requestParameters).catch((err) => sendRequestAgain(err, requestParameters, url));
-}

@@ -32,7 +32,7 @@ test("NameProvider composes full name from first, last", async () => {
     return Promise.reject();
   });
 
-  const a = { access: "" };
+  const a = { access: "", refresh: "" };
 
   render(
     <BrowserRouter>

@@ -25,10 +25,20 @@ function get<Response>(path: string, config?: RequestConfig): Promise<Response> 
   return fetchData(url, requestParameters).catch((err) => sendRequestAgain(err, requestParameters, url));
 }
 
+function remove(path: string, config?: RequestConfig): Promise<void> {
+  const { url, changedHeaders } = processInputData(path, config);
+  const requestParameters: FetchConfig = {
+    method: "DELETE",
+    headers: changedHeaders,
+  };
+
+  return fetchData(url, requestParameters).catch((err) => sendRequestAgain(err, requestParameters, url));
+}
+
 export const api = {
   post: post,
   get: get,
-  delete() {},
+  delete: remove,
   put: {}, // 3 parameters: path, body, config is optional
   patch: {}, //3 parameters: path, body, config is optional
 };

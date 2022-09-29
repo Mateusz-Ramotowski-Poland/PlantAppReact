@@ -58,6 +58,7 @@ export const PlantsList = () => {
     <table className={classes.table}>
       <thead>
         <tr className={classes.row}>
+          <th className={classes.box}>Id</th>
           <th className={classes.box}>Created at</th>
           <th className={classes.box}>Name</th>
           <th className={classes.box}>species</th>
