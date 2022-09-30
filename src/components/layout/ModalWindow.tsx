@@ -1,7 +1,6 @@
-import { AnyAction } from "@reduxjs/toolkit";
 import React from "react";
 import Modal from "react-modal";
-import { useDispatch } from "react-redux";
+import { useAppDispatch } from "../../store/hooks";
 import { deletePlant } from "../../store/plantsSlice";
 import classes from "./ModalWindow.module.css";
 
@@ -25,12 +24,12 @@ const customStyles = {
 Modal.setAppElement("#root");
 
 export const ModalWindow = (props: Props) => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   function deleteHandler(event: React.MouseEvent) {
     event.preventDefault();
     const path = `/plants/${props.id}/`;
-    dispatch(deletePlant(path, props.id, props.closeModal) as unknown as AnyAction);
+    dispatch(deletePlant(path, props.id, props.closeModal));
   }
 
   return (

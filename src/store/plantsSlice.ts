@@ -1,6 +1,7 @@
-import { AnyAction, createSlice, Dispatch, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { Plant, PlantsState } from "../interafces";
 import { api } from "../shared";
+import { AppDispatch } from "./rootStore";
 
 const initialState: PlantsState = {
   plants: [],
@@ -10,7 +11,7 @@ const plantsSlice = createSlice({
   name: "plants",
   initialState: initialState,
   reducers: {
-    insertMany(state, action) {
+    insertMany(state, action: PayloadAction<{ plants: Plant[] }>) {
       state.plants = action.payload.plants;
     },
     add(state, { payload: { plant } }: PayloadAction<{ plant: Plant }>) {
@@ -26,7 +27,7 @@ const plantsSlice = createSlice({
 });
 
 export function deletePlant(path: string, plantId: string, closeModal: () => void) {
-  return (dispatch: (arg0: { payload: any; type: string }) => AnyAction) => {
+  return (dispatch: AppDispatch) => {
     api.delete(path).then(() => {
       dispatch(plantsActions.delete({ id: plantId }));
       closeModal();

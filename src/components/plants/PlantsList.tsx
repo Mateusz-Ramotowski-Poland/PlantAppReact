@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useAppSelector } from "../../store/hooks";
 import { useGetPlants } from "../../hooks/useGetPlants";
 import { Plant } from "../../interafces";
 import { PlantItem } from "./PlantItem";
@@ -28,7 +28,7 @@ export const PlantsList = () => {
   }
 
   let { getPlants } = useGetPlants();
-  const plants = useSelector((state: State) => state.plants.plants); //empty redux will return undefined
+  const plants = useAppSelector((state: State) => state.plants.plants); //empty redux will return undefined
 
   useEffect(() => {
     if (plants.length === 0) {

@@ -4,7 +4,7 @@ import { api } from "../shared";
 
 import React, { useCallback, useEffect, useState } from "react";
 import { errorEvents } from "../shared/api/helpers";
-import { useDispatch } from "react-redux";
+import { useAppDispatch } from "./hooks";
 import { plantsActions } from "./plantsSlice";
 
 type authProps = {
@@ -44,7 +44,7 @@ const checkIfLoggedIn = () => {
 
 export const AuthContextProvider = (props: authProps) => {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [loggedUserId, setLoggedUserId] = useState("");
