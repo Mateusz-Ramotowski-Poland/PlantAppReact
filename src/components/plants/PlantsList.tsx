@@ -28,7 +28,7 @@ export const PlantsList = () => {
   }
 
   let { getPlants } = useGetPlants();
-  const plants = useAppSelector((state: State) => state.plants.plants); //empty redux will return undefined
+  const plants = useAppSelector((state: State) => state.plants.plants);
 
   useEffect(() => {
     if (plants.length === 0) {

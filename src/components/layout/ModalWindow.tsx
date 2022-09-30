@@ -21,15 +21,13 @@ const customStyles = {
   },
 };
 
-Modal.setAppElement("#root");
-
 export const ModalWindow = (props: Props) => {
   const dispatch = useAppDispatch();
 
-  function deleteHandler(event: React.MouseEvent) {
-    event.preventDefault();
+  async function deleteHandler(event: React.MouseEvent) {
     const path = `/plants/${props.id}/`;
-    dispatch(deletePlant(path, props.id, props.closeModal));
+    await dispatch(deletePlant(path, props.id));
+    props.closeModal();
   }
 
   return (
@@ -41,8 +39,12 @@ export const ModalWindow = (props: Props) => {
     >
       <form className={classes.form}>
         <p>Are you sure to delete plant with id={props.id}?</p>
-        <button onClick={deleteHandler}>Delete</button>
-        <button onClick={props.closeModal}>Cancel</button>
+        <button type="button" onClick={deleteHandler}>
+          Delete
+        </button>
+        <button type="button" onClick={props.closeModal}>
+          Cancel
+        </button>
       </form>
     </Modal>
   );

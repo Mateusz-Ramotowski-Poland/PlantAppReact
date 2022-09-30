@@ -26,12 +26,10 @@ const plantsSlice = createSlice({
   },
 });
 
-export function deletePlant(path: string, plantId: string, closeModal: () => void) {
-  return (dispatch: AppDispatch) => {
-    api.delete(path).then(() => {
-      dispatch(plantsActions.delete({ id: plantId }));
-      closeModal();
-    });
+export function deletePlant(path: string, plantId: string) {
+  return async (dispatch: AppDispatch) => {
+    await api.delete(path);
+    dispatch(plantsActions.delete({ id: plantId }));
   };
 }
 
