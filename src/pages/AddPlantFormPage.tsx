@@ -5,7 +5,7 @@ import { MainNavigation } from "../components/layout/MainNavigation";
 import { ToastContainer } from "react-toastify";
 import React from "react";
 import { showErrorMessages } from "../shared/utils/showErrorMessages";
-import { useDispatch } from "react-redux";
+import { useAppDispatch } from "../store/hooks";
 import { plantsActions } from "../store/plantsSlice";
 import { Plant } from "../interafces";
 
@@ -15,7 +15,7 @@ export const AddPlantFormPage = () => {
   const wateringIntervalInputRef = useRef<HTMLInputElement>(null);
   const sunExposureInputRef = useRef<HTMLInputElement>(null);
   const temperatureInputRef = useRef<HTMLInputElement>(null);
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const submitHandler = (event: React.FormEvent) => {
     event.preventDefault();

@@ -2,7 +2,8 @@ import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { BrowserRouter } from "react-router-dom";
 import { CreateAccountForm } from "./CreateAccountForm";
-import { showMessage, api } from "../../shared";
+import { showMessage } from "../../shared";
+import { api } from "../../shared";
 
 jest.mock("../../shared", () => {
   const originalModule = jest.requireActual("../../shared");
@@ -50,9 +51,7 @@ describe("create account test", () => {
     userEvent.type(screen.getByTestId("confirm-password"), differentPassword);
     userEvent.click(screen.getByRole("button", { name: "Create account" }));
 
-    expect(
-      screen.getByText("Passwod and confirm passsword mismatch")
-    ).toBeInTheDocument();
+    expect(screen.getByText("Passwod and confirm passsword mismatch")).toBeInTheDocument();
     expect(post).not.toHaveBeenCalled();
   });
 
@@ -60,10 +59,7 @@ describe("create account test", () => {
     userEvent.click(screen.getByRole("button", { name: "Create account" }));
 
     await waitFor(() => {
-      expect(showMessage as jest.Mock).toHaveBeenCalledWith(
-        "New account was created!",
-        "info"
-      );
+      expect(showMessage as jest.Mock).toHaveBeenCalledWith("New account was created!", "info");
     });
   });
 });

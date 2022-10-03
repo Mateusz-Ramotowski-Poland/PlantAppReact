@@ -8,3 +8,4 @@ export const rootStore = configureStore({
 });
 
 export type AppDispatch = typeof rootStore.dispatch;
+export type RootState = ReturnType<typeof rootStore.getState>;

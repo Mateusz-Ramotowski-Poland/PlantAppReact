@@ -2,14 +2,12 @@ import { AuthToken } from "../interafces";
 import { useNavigate } from "react-router-dom";
 import { api } from "../shared";
 
-import React, { useCallback, useEffect, useState } from "react";
+import React, { PropsWithChildren, useCallback, useEffect, useState } from "react";
 import { errorEvents } from "../shared/api/helpers";
-import { useDispatch } from "react-redux";
+import { useAppDispatch } from "./hooks";
 import { plantsActions } from "./plantsSlice";
 
-type authProps = {
-  children: React.ReactNode;
-};
+type AuthProps = {};
 
 export const AuthContext = React.createContext({
   isLoggedIn: false,
@@ -42,15 +40,16 @@ const checkIfLoggedIn = () => {
   }
 };
 
-export const AuthContextProvider = (props: authProps) => {
+export const AuthContextProvider = (props: PropsWithChildren<AuthProps>) => {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [loggedUserId, setLoggedUserId] = useState("");
 
   useEffect(() => {
     checkIfLoggedIn().then((isLoggedIn) => {
+      console.log({ isLoggedIn });
       setIsLoggedIn(isLoggedIn);
     });
   }, []);
