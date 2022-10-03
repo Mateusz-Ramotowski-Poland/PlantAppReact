@@ -22,7 +22,6 @@ const plantsSlice = createSlice({
     },
     delete(state, action) {
       state.plants = state.plants.filter((el) => el.id !== action.payload.id);
-      console.log("hello");
     },
   },
 });

@@ -52,6 +52,7 @@
   border: 1px solid #619c73;
   border-radius: 4px;
   padding: 0.5rem 2.5rem;
+  margin-bottom: 20px;
 }
 
 .actions button:hover {

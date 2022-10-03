@@ -6,8 +6,8 @@ import classes from "./ModalWindow.module.css";
 
 interface Props {
   id: string;
-  closeModal: () => void;
-  modalIsOpen: boolean;
+  closeModalDelete: () => void;
+  deleteModalIsOpen: boolean;
 }
 
 const customStyles = {
@@ -21,20 +21,19 @@ const customStyles = {
   },
 };
 
-export const ModalWindow = (props: Props) => {
+export const ModalWindowDelete = (props: Props) => {
   const dispatch = useAppDispatch();
 
-  async function deleteHandler(event: React.MouseEvent) {
+  async function deleteHandler() {
     const path = `/plants/${props.id}/`;
     await dispatch(deletePlant(path, props.id));
-    props.closeModal();
-    console.log("hello2");
+    props.closeModalDelete();
   }
 
   return (
     <Modal
-      isOpen={props.modalIsOpen}
-      onRequestClose={props.closeModal}
+      isOpen={props.deleteModalIsOpen}
+      onRequestClose={props.closeModalDelete}
       style={customStyles}
       contentLabel="delete plant modal"
     >
@@ -43,7 +42,7 @@ export const ModalWindow = (props: Props) => {
         <button type="button" onClick={deleteHandler}>
           Delete plant
         </button>
-        <button type="button" onClick={props.closeModal}>
+        <button type="button" onClick={props.closeModalDelete}>
           Cancel
         </button>
       </form>

@@ -17,16 +17,12 @@ export function useGetPlants() {
   function getPlants() {
     getUserData()
       .then((user) => {
-        console.log(user);
         setLoggedUserId(user.id);
         localStorage.setItem("userId", user.id);
         getAllUserPlants(user.id)
           .then((plants) => {
-            console.log(plants);
-            console.log(plants.results);
             dispatch(plantsActions.insertMany({ plants: plants.results }));
             navigate("/logged/showPlants");
-            console.log("eewgwertwttewtewwe");
           })
           .catch((err) => {
             setIsFetchDataError(true);

@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import { useAppSelector } from "../../store/hooks";
 import { useGetPlants } from "../../hooks/useGetPlants";
-import { Plant } from "../../interafces";
+import { Plant, PlantsState } from "../../interafces";
 import { PlantItem } from "./PlantItem";
-import { PlantsState } from "../../interafces";
-import { ModalWindow } from "../layout/ModalWindow";
+import { ModalWindowDelete } from "../layout/ModalWindowDelete";
 import classes from "./PlantsList.module.css";
+import { ModalWindowUpdate } from "../layout/ModalWindowUpdate";
 
 interface State {
   plants: PlantsState;
@@ -16,15 +16,26 @@ function formatData(str: string) {
 }
 
 export const PlantsList = () => {
-  const [modalIsOpen, setIsOpen] = useState(false);
-  const [deletePlantId, setDeletePlantId] = useState("");
+  const [deleteModalIsOpen, setDeleteModalIsOpen] = useState(false);
+  const [updateModalIsOpen, setUpdateModalIsOpen] = useState(false);
+  const [PlantId, setPlantId] = useState("");
 
-  function openModal(id: string) {
-    setIsOpen(true);
-    setDeletePlantId(id);
+  function openModalDelete(id: string) {
+    setDeleteModalIsOpen(true);
+    setPlantId(id);
   }
-  function closeModal() {
-    setIsOpen(false);
+
+  function closeModalDelete() {
+    setDeleteModalIsOpen(false);
+  }
+
+  function openModalUpdate(id: string) {
+    setUpdateModalIsOpen(true);
+    setPlantId(id);
+  }
+
+  function closeModalUpdate() {
+    setUpdateModalIsOpen(false);
   }
 
   let { getPlants } = useGetPlants();
@@ -60,7 +71,8 @@ export const PlantsList = () => {
         watering_count={plant.watering_count}
         sun_exposure={plant.sun_exposure}
         temperature={plant.temperature}
-        openModal={openModal}
+        openModalDelete={openModalDelete}
+        openModalUpdate={openModalUpdate}
       ></PlantItem>
     );
   });
@@ -84,7 +96,8 @@ export const PlantsList = () => {
         </thead>
         <tbody>{plantsList}</tbody>
       </table>
-      <ModalWindow closeModal={closeModal} modalIsOpen={modalIsOpen} id={deletePlantId} />
+      <ModalWindowDelete closeModalDelete={closeModalDelete} deleteModalIsOpen={deleteModalIsOpen} id={PlantId} />
+      <ModalWindowUpdate closeModalUpdate={closeModalUpdate} updateModalIsOpen={updateModalIsOpen} id={PlantId} />
     </>
   );
 };

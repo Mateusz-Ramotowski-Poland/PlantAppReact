@@ -49,7 +49,6 @@ export const AuthContextProvider = (props: PropsWithChildren<AuthProps>) => {
 
   useEffect(() => {
     checkIfLoggedIn().then((isLoggedIn) => {
-      console.log({ isLoggedIn });
       setIsLoggedIn(isLoggedIn);
     });
   }, []);

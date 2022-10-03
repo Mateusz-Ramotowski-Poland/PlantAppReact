@@ -11,12 +11,17 @@ interface Props {
   watering_count: string;
   sun_exposure: number;
   temperature: number;
-  openModal: (id: string) => void;
+  openModalDelete: (id: string) => void;
+  openModalUpdate: (id: string) => void;
 }
 
 export const PlantItem = (props: Props) => {
   function clickDeleteHandler() {
-    props.openModal(props.id);
+    props.openModalDelete(props.id);
+  }
+
+  function clickUpdateHandler() {
+    props.openModalUpdate(props.id);
   }
 
   return (
@@ -38,7 +43,9 @@ export const PlantItem = (props: Props) => {
           </button>
         </td>
         <td className={classes.box}>
-          <button className={classes.button}>Update</button>
+          <button className={classes.button} onClick={clickUpdateHandler}>
+            Update
+          </button>
         </td>
       </tr>
     </>
