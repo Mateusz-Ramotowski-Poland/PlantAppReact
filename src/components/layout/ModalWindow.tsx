@@ -28,6 +28,7 @@ export const ModalWindow = (props: Props) => {
     const path = `/plants/${props.id}/`;
     await dispatch(deletePlant(path, props.id));
     props.closeModal();
+    console.log("hello2");
   }
 
   return (
@@ -40,7 +41,7 @@ export const ModalWindow = (props: Props) => {
       <form className={classes.form}>
         <p>Are you sure to delete plant with id={props.id}?</p>
         <button type="button" onClick={deleteHandler}>
-          Delete
+          Delete plant
         </button>
         <button type="button" onClick={props.closeModal}>
           Cancel
