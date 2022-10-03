@@ -2,12 +2,20 @@ import Modal from "react-modal";
 import { ToastContainer } from "react-toastify";
 import { useAppDispatch } from "../../store/hooks";
 import classes from "../../assets/FormCard.module.css";
-import React, { useState } from "react";
+import { useForm, SubmitHandler } from "react-hook-form";
 
 interface Props {
   id: string;
   closeModalUpdate: () => void;
   updateModalIsOpen: boolean;
+}
+
+interface Inputs {
+  name: string;
+  species: string;
+  wateringInterval: number;
+  sunExposure: number;
+  temperature: number;
 }
 
 const customStyles = {
@@ -22,26 +30,14 @@ const customStyles = {
 };
 
 export const ModalWindowUpdate = (props: Props) => {
-  const [name, setName] = useState("");
-  const [species, setSpecies] = useState("");
-  const [wateringInterval, setWateringInterval] = useState("");
-  const [sunExposure, setSunExposure] = useState("");
-  const [temperature, setTemperature] = useState("");
   const dispatch = useAppDispatch();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<Inputs>();
 
-  const nameInputHandler = (event: React.ChangeEvent) => setName((event.target as HTMLInputElement).value);
-  const speciesInputHandler = (event: React.ChangeEvent) => setSpecies((event.target as HTMLInputElement).value);
-  const wateringIntervalInputHandler = (event: React.ChangeEvent) =>
-    setWateringInterval((event.target as HTMLInputElement).value);
-  const sunExposureInputHandler = (event: React.ChangeEvent) =>
-    setSunExposure((event.target as HTMLInputElement).value);
-  const temperatureInputHandler = (event: React.ChangeEvent) =>
-    setTemperature((event.target as HTMLInputElement).value);
-
-  const submitHandler = (event: React.FormEvent) => {
-    event.preventDefault();
-    console.log(name, species, wateringInterval, sunExposure, temperature);
-  };
+  const submitHandler: SubmitHandler<Inputs> = (data) => console.log(data);
 
   return (
     <Modal
@@ -52,66 +48,48 @@ export const ModalWindowUpdate = (props: Props) => {
     >
       <section className={classes.form}>
         <h1>Update plant</h1>
-        <form onSubmit={submitHandler}>
+        <form onSubmit={handleSubmit(submitHandler)}>
           <div className={classes.control}>
             <label>
               Name
-              <input data-testid="name" type="text" required maxLength={50} value={name} onChange={nameInputHandler} />
+              <input type="text" {...register("name", { required: true, maxLength: 50 })} />
+              {errors.name?.type === "required" && <p role="alert">Name is required</p>}
+              {errors.name?.type === "maxLength" && <p role="alert">Max length is 50 characters</p>}
             </label>
           </div>
           <div className={classes.control}>
             <label>
               Species
-              <input
-                data-testid="species"
-                type="text"
-                required
-                maxLength={50}
-                value={species}
-                onChange={speciesInputHandler}
-              />
+              <input type="text" {...register("species", { required: true, maxLength: 50 })} />
+              {errors.species?.type === "required" && <p role="alert">Species is required</p>}
+              {errors.species?.type === "maxLength" && <p role="alert">Max length is 50 characters</p>}
             </label>
           </div>
           <div className={classes.control}>
             <label>
               Watering interval{" "}
-              <input
-                data-testid="wateringInterval"
-                type="number"
-                required
-                min={1}
-                max={2147483647}
-                value={wateringInterval}
-                onChange={wateringIntervalInputHandler}
-              />
+              <input type="number" {...register("wateringInterval", { required: true, min: 1, max: 2147483647 })} />
+              {errors.wateringInterval?.type === "required" && <p role="alert">Watering interval is required</p>}
+              {errors.wateringInterval?.type === "min" && <p role="alert">Min = 1 </p>}
+              {errors.wateringInterval?.type === "max" && <p role="alert">Max = 2147483647</p>}
             </label>
           </div>
           <div className={classes.control}>
             <label>
               Sun exposure
-              <input
-                data-testid="sunExposure"
-                type="number"
-                required
-                min={1}
-                max={24}
-                value={sunExposure}
-                onChange={sunExposureInputHandler}
-              />
+              <input type="number" {...register("sunExposure", { required: true, min: 1, max: 24 })} />
+              {errors.sunExposure?.type === "required" && <p role="alert">Sun exposure is required</p>}
+              {errors.sunExposure?.type === "min" && <p role="alert">Min = 1 </p>}
+              {errors.sunExposure?.type === "max" && <p role="alert">Max = 24</p>}
             </label>
           </div>
           <div className={classes.control}>
             <label>
               Temperature
-              <input
-                data-testid="temperature"
-                type="number"
-                required
-                min={-100}
-                max={100}
-                value={temperature}
-                onChange={temperatureInputHandler}
-              />
+              <input type="number" {...register("temperature", { required: true, min: -100, max: 100 })} />
+              {errors.temperature?.type === "required" && <p role="alert">Temperature is required</p>}
+              {errors.temperature?.type === "min" && <p role="alert">Min = -100 </p>}
+              {errors.temperature?.type === "max" && <p role="alert">Max = 100</p>}
             </label>
           </div>
 

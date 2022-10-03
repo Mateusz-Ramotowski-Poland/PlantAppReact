@@ -8,6 +8,7 @@ import { showErrorMessages } from "../shared/utils/showErrorMessages";
 import { useAppDispatch } from "../store/hooks";
 import { plantsActions } from "../store/plantsSlice";
 import { Plant } from "../interafces";
+import { errorEvents } from "../shared/api/helpers";
 
 export const AddPlantFormPage = () => {
   const nameInputRef = useRef<HTMLInputElement>(null);
