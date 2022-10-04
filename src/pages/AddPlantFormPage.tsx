@@ -1,14 +1,12 @@
-import { useRef } from "react";
+import React, { useRef } from "react";
 import classes from "../assets/FormCard.module.css";
 import { api, showMessage } from "../shared";
 import { MainNavigation } from "../components/layout/MainNavigation";
 import { ToastContainer } from "react-toastify";
-import React from "react";
 import { showErrorMessages } from "../shared/utils/showErrorMessages";
 import { useAppDispatch } from "../store/hooks";
 import { plantsActions } from "../store/plantsSlice";
 import { Plant } from "../interafces";
-import { errorEvents } from "../shared/api/helpers";
 
 export const AddPlantFormPage = () => {
   const nameInputRef = useRef<HTMLInputElement>(null);

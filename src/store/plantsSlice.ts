@@ -7,6 +7,12 @@ const initialState: PlantsState = {
   plants: [],
 };
 
+interface PlantAllInfo extends Plant {
+  url: string;
+  author: string;
+  water: string;
+}
+
 const plantsSlice = createSlice({
   name: "plants",
   initialState: initialState,
@@ -27,9 +33,17 @@ const plantsSlice = createSlice({
 });
 
 export function deletePlant(path: string, plantId: string) {
-  return async (dispatch: AppDispatch) => {
-    await api.delete(path);
-    dispatch(plantsActions.delete({ id: plantId }));
+  return (dispatch: AppDispatch) => {
+    api.delete(path).then(() => dispatch(plantsActions.delete({ id: plantId })));
+  };
+}
+
+export function updatePlant(path: string, plantId: string, body: object) {
+  return (dispatch: AppDispatch) => {
+    api.put<PlantAllInfo>(path, body).then((plant) => {
+      dispatch(plantsActions.delete({ id: plantId }));
+      dispatch(plantsActions.add({ plant }));
+    });
   };
 }
 

@@ -1,8 +1,8 @@
 import Modal from "react-modal";
-import { ToastContainer } from "react-toastify";
 import { useAppDispatch } from "../../store/hooks";
 import classes from "../../assets/FormCard.module.css";
 import { useForm, SubmitHandler } from "react-hook-form";
+import { updatePlant } from "../../store/plantsSlice";
 
 interface Props {
   id: string;
@@ -10,11 +10,11 @@ interface Props {
   updateModalIsOpen: boolean;
 }
 
-interface Inputs {
+interface PlantUpdate {
   name: string;
   species: string;
-  wateringInterval: number;
-  sunExposure: number;
+  watering_interval: number;
+  sun_exposure: number;
   temperature: number;
 }
 
@@ -35,9 +35,13 @@ export const ModalWindowUpdate = (props: Props) => {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<Inputs>();
+  } = useForm<PlantUpdate>();
 
-  const submitHandler: SubmitHandler<Inputs> = (data) => console.log(data);
+  const submitHandler: SubmitHandler<PlantUpdate> = async (body) => {
+    const path = `/plants/${props.id}/`;
+    await dispatch(updatePlant(path, props.id, body));
+    props.closeModalUpdate();
+  };
 
   return (
     <Modal
@@ -68,19 +72,19 @@ export const ModalWindowUpdate = (props: Props) => {
           <div className={classes.control}>
             <label>
               Watering interval{" "}
-              <input type="number" {...register("wateringInterval", { required: true, min: 1, max: 2147483647 })} />
-              {errors.wateringInterval?.type === "required" && <p role="alert">Watering interval is required</p>}
-              {errors.wateringInterval?.type === "min" && <p role="alert">Min = 1 </p>}
-              {errors.wateringInterval?.type === "max" && <p role="alert">Max = 2147483647</p>}
+              <input type="number" {...register("watering_interval", { required: true, min: 1, max: 2147483647 })} />
+              {errors.watering_interval?.type === "required" && <p role="alert">Watering interval is required</p>}
+              {errors.watering_interval?.type === "min" && <p role="alert">Min = 1 </p>}
+              {errors.watering_interval?.type === "max" && <p role="alert">Max = 2147483647</p>}
             </label>
           </div>
           <div className={classes.control}>
             <label>
               Sun exposure
-              <input type="number" {...register("sunExposure", { required: true, min: 1, max: 24 })} />
-              {errors.sunExposure?.type === "required" && <p role="alert">Sun exposure is required</p>}
-              {errors.sunExposure?.type === "min" && <p role="alert">Min = 1 </p>}
-              {errors.sunExposure?.type === "max" && <p role="alert">Max = 24</p>}
+              <input type="number" {...register("sun_exposure", { required: true, min: 1, max: 24 })} />
+              {errors.sun_exposure?.type === "required" && <p role="alert">Sun exposure is required</p>}
+              {errors.sun_exposure?.type === "min" && <p role="alert">Min = 1 </p>}
+              {errors.sun_exposure?.type === "max" && <p role="alert">Max = 24</p>}
             </label>
           </div>
           <div className={classes.control}>
@@ -100,7 +104,6 @@ export const ModalWindowUpdate = (props: Props) => {
             </button>
           </div>
         </form>
-        <ToastContainer />
       </section>
     </Modal>
   );
