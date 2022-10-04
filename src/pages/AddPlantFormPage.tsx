@@ -6,7 +6,7 @@ import { ToastContainer } from "react-toastify";
 import { showErrorMessages } from "../shared/utils/showErrorMessages";
 import { useAppDispatch } from "../store/hooks";
 import { plantsActions } from "../store/plantsSlice";
-import { Plant } from "../interafces";
+import { PlantAllInfo } from "../interafces";
 
 export const AddPlantFormPage = () => {
   const nameInputRef = useRef<HTMLInputElement>(null);
@@ -34,7 +34,7 @@ export const AddPlantFormPage = () => {
     };
 
     api
-      .post<Plant>(path, body)
+      .post<PlantAllInfo>(path, body)
       .then((plant) => {
         showMessage("Added new plant", "info");
         dispatch(plantsActions.add({ plant }));

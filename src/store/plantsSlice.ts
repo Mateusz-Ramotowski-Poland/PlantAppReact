@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { Plant, PlantsState } from "../interafces";
+import { Plant, PlantAllInfo, PlantsState } from "../interafces";
 import { api } from "../shared";
 import { AppDispatch } from "./rootStore";
 
@@ -7,20 +7,14 @@ const initialState: PlantsState = {
   plants: [],
 };
 
-interface PlantAllInfo extends Plant {
-  url: string;
-  author: string;
-  water: string;
-}
-
 const plantsSlice = createSlice({
   name: "plants",
   initialState: initialState,
   reducers: {
-    insertMany(state, action: PayloadAction<{ plants: Plant[] }>) {
+    insertMany(state, action: PayloadAction<{ plants: PlantAllInfo[] }>) {
       state.plants = action.payload.plants;
     },
-    add(state, { payload: { plant } }: PayloadAction<{ plant: Plant }>) {
+    add(state, { payload: { plant } }: PayloadAction<{ plant: PlantAllInfo }>) {
       state.plants.push(plant);
     },
     deleteAll(state) {
@@ -30,11 +24,8 @@ const plantsSlice = createSlice({
       state.plants = state.plants.filter((el) => el.id !== action.payload.id);
     },
     water(state, action) {
-      state.plants.forEach((plant) => {
-        if (plant.id === action.payload.id) {
-          plant.watering_count = (parseInt(plant.watering_count) + 1).toString();
-        }
-      });
+      const index = state.plants.findIndex((plant) => plant.id === action.payload.id);
+      state.plants[index].watering_count = (parseInt(state.plants[index].watering_count) + 1).toString();
     },
   },
 });
