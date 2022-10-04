@@ -6,6 +6,7 @@ import { updatePlant } from "../../store/plantsSlice";
 
 interface Props {
   id: string;
+  name: string;
   closeModalUpdate: () => void;
   updateModalIsOpen: boolean;
 }
@@ -56,49 +57,42 @@ export const ModalWindowUpdate = (props: Props) => {
           <div className={classes.control}>
             <label>
               Name
-              <input type="text" {...register("name", { required: true, maxLength: 50 })} />
-              {errors.name?.type === "required" && <p role="alert">Name is required</p>}
-              {errors.name?.type === "maxLength" && <p role="alert">Max length is 50 characters</p>}
+              <input type="text" {...register("name", { maxLength: 50 })} />
+              {errors.name?.type === "maxLength" && <p role="alert">The longest string can have 50 characters</p>}
             </label>
           </div>
           <div className={classes.control}>
             <label>
               Species
-              <input type="text" {...register("species", { required: true, maxLength: 50 })} />
-              {errors.species?.type === "required" && <p role="alert">Species is required</p>}
-              {errors.species?.type === "maxLength" && <p role="alert">Max length is 50 characters</p>}
+              <input type="text" {...register("species", { maxLength: 50 })} />
+              {errors.species?.type === "maxLength" && <p role="alert">The longest string can have 50 characters</p>}
             </label>
           </div>
           <div className={classes.control}>
             <label>
-              Watering interval{" "}
-              <input type="number" {...register("watering_interval", { required: true, min: 1, max: 2147483647 })} />
-              {errors.watering_interval?.type === "required" && <p role="alert">Watering interval is required</p>}
-              {errors.watering_interval?.type === "min" && <p role="alert">Min = 1 </p>}
-              {errors.watering_interval?.type === "max" && <p role="alert">Max = 2147483647</p>}
+              Watering interval <input type="number" {...register("watering_interval", { min: 1 })} />
+              {errors.watering_interval?.type === "min" && <p role="alert">The smallest number could be 1</p>}
             </label>
           </div>
           <div className={classes.control}>
             <label>
               Sun exposure
-              <input type="number" {...register("sun_exposure", { required: true, min: 1, max: 24 })} />
-              {errors.sun_exposure?.type === "required" && <p role="alert">Sun exposure is required</p>}
-              {errors.sun_exposure?.type === "min" && <p role="alert">Min = 1 </p>}
-              {errors.sun_exposure?.type === "max" && <p role="alert">Max = 24</p>}
+              <input type="number" {...register("sun_exposure", { min: 1, max: 24 })} />
+              {errors.sun_exposure?.type === "min" && <p role="alert">The smallest number could be 1</p>}
+              {errors.sun_exposure?.type === "max" && <p role="alert">The biggest number could be 24</p>}
             </label>
           </div>
           <div className={classes.control}>
             <label>
               Temperature
-              <input type="number" {...register("temperature", { required: true, min: -100, max: 100 })} />
-              {errors.temperature?.type === "required" && <p role="alert">Temperature is required</p>}
-              {errors.temperature?.type === "min" && <p role="alert">Min = -100 </p>}
-              {errors.temperature?.type === "max" && <p role="alert">Max = 100</p>}
+              <input type="number" {...register("temperature", { min: -100, max: 100 })} />
+              {errors.temperature?.type === "min" && <p role="alert">The smallest number could be -100 </p>}
+              {errors.temperature?.type === "max" && <p role="alert">The biggest number could be 100</p>}
             </label>
           </div>
 
           <div className={classes.actions}>
-            <button type="submit">Update plant with id={props.id}</button>
+            <button type="submit">Update plant with name={props.name}</button>
             <button type="button" onClick={props.closeModalUpdate}>
               Cancel
             </button>

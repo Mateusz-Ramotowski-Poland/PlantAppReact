@@ -11,17 +11,17 @@ interface Props {
   watering_count: string;
   sun_exposure: number;
   temperature: number;
-  openModalDelete: (id: string) => void;
-  openModalUpdate: (id: string) => void;
+  openModalDelete: (id: string, name: string) => void;
+  openModalUpdate: (id: string, name: string) => void;
 }
 
 export const PlantItem = (props: Props) => {
   function clickDeleteHandler() {
-    props.openModalDelete(props.id);
+    props.openModalDelete(props.id, props.name);
   }
 
   function clickUpdateHandler() {
-    props.openModalUpdate(props.id);
+    props.openModalUpdate(props.id, props.name);
   }
 
   return (

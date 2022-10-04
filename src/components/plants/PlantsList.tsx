@@ -19,19 +19,22 @@ export const PlantsList = () => {
   const [deleteModalIsOpen, setDeleteModalIsOpen] = useState(false);
   const [updateModalIsOpen, setUpdateModalIsOpen] = useState(false);
   const [PlantId, setPlantId] = useState("");
+  const [PlantName, setPlantName] = useState("");
 
-  function openModalDelete(id: string) {
+  function openModalDelete(id: string, name: string) {
     setDeleteModalIsOpen(true);
     setPlantId(id);
+    setPlantName(name);
   }
 
   function closeModalDelete() {
     setDeleteModalIsOpen(false);
   }
 
-  function openModalUpdate(id: string) {
+  function openModalUpdate(id: string, name: string) {
     setUpdateModalIsOpen(true);
     setPlantId(id);
+    setPlantName(name);
   }
 
   function closeModalUpdate() {
@@ -96,8 +99,18 @@ export const PlantsList = () => {
         </thead>
         <tbody>{plantsList}</tbody>
       </table>
-      <ModalWindowDelete closeModalDelete={closeModalDelete} deleteModalIsOpen={deleteModalIsOpen} id={PlantId} />
-      <ModalWindowUpdate closeModalUpdate={closeModalUpdate} updateModalIsOpen={updateModalIsOpen} id={PlantId} />
+      <ModalWindowDelete
+        closeModalDelete={closeModalDelete}
+        deleteModalIsOpen={deleteModalIsOpen}
+        id={PlantId}
+        name={PlantName}
+      />
+      <ModalWindowUpdate
+        closeModalUpdate={closeModalUpdate}
+        updateModalIsOpen={updateModalIsOpen}
+        id={PlantId}
+        name={PlantName}
+      />
     </>
   );
 };

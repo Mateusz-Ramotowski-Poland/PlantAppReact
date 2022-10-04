@@ -8,6 +8,7 @@ interface Props {
   id: string;
   closeModalDelete: () => void;
   deleteModalIsOpen: boolean;
+  name: string;
 }
 
 const customStyles = {
@@ -38,7 +39,7 @@ export const ModalWindowDelete = (props: Props) => {
       contentLabel="delete plant modal"
     >
       <form className={classes.form}>
-        <p>Are you sure to delete plant with id={props.id}?</p>
+        <p>Are you sure to delete plant with name={props.name}?</p>
         <button type="button" onClick={deleteHandler}>
           Delete plant
         </button>
