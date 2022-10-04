@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { Plant, PlantsState } from "../interafces";
+import { PlantAllInfo, PlantsState } from "../interafces";
 import { api } from "../shared";
 import { AppDispatch } from "./rootStore";
 
@@ -7,20 +7,14 @@ const initialState: PlantsState = {
   plants: [],
 };
 
-interface PlantAllInfo extends Plant {
-  url: string;
-  author: string;
-  water: string;
-}
-
 const plantsSlice = createSlice({
   name: "plants",
   initialState: initialState,
   reducers: {
-    insertMany(state, action: PayloadAction<{ plants: Plant[] }>) {
+    insertMany(state, action: PayloadAction<{ plants: PlantAllInfo[] }>) {
       state.plants = action.payload.plants;
     },
-    add(state, { payload: { plant } }: PayloadAction<{ plant: Plant }>) {
+    add(state, { payload: { plant } }: PayloadAction<{ plant: PlantAllInfo }>) {
       state.plants.push(plant);
     },
     deleteAll(state) {
@@ -28,6 +22,10 @@ const plantsSlice = createSlice({
     },
     delete(state, action) {
       state.plants = state.plants.filter((el) => el.id !== action.payload.id);
+    },
+    update(state, action) {
+      const index = state.plants.findIndex((plant) => plant.id === action.payload.id);
+      state.plants.splice(index, 1, action.payload.plant);
     },
   },
 });
@@ -38,11 +36,10 @@ export function deletePlant(path: string, plantId: string) {
   };
 }
 
-export function updatePlant(path: string, plantId: string, body: object) {
+export function updatePlant(path: string, body: object) {
   return (dispatch: AppDispatch) => {
-    api.put<PlantAllInfo>(path, body).then((plant) => {
-      dispatch(plantsActions.delete({ id: plantId }));
-      dispatch(plantsActions.add({ plant }));
+    api.patch<PlantAllInfo>(path, body).then((plant) => {
+      dispatch(plantsActions.update({ plant }));
     });
   };
 }

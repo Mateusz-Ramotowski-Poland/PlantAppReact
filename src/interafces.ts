@@ -32,5 +32,11 @@ export interface ApiError {
 }
 
 export interface PlantsState {
-  plants: Plant[];
+  plants: PlantAllInfo[];
+}
+
+export interface PlantAllInfo extends Plant {
+  url: string;
+  author: string;
+  water: string;
 }

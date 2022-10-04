@@ -40,7 +40,7 @@ export const ModalWindowUpdate = (props: Props) => {
 
   const submitHandler: SubmitHandler<PlantUpdate> = async (body) => {
     const path = `/plants/${props.id}/`;
-    await dispatch(updatePlant(path, props.id, body));
+    await dispatch(updatePlant(path, body));
     props.closeModalUpdate();
   };
 
@@ -57,37 +57,42 @@ export const ModalWindowUpdate = (props: Props) => {
           <div className={classes.control}>
             <label>
               Name
-              <input type="text" {...register("name", { maxLength: 50 })} />
+              <input type="text" {...register("name", { required: true, maxLength: 50 })} />
               {errors.name?.type === "maxLength" && <p role="alert">The longest string can have 50 characters</p>}
+              {errors.name?.type === "required" && <p role="alert">Please, write name.</p>}
             </label>
           </div>
           <div className={classes.control}>
             <label>
               Species
-              <input type="text" {...register("species", { maxLength: 50 })} />
+              <input type="text" {...register("species", { required: true, maxLength: 50 })} />
               {errors.species?.type === "maxLength" && <p role="alert">The longest string can have 50 characters</p>}
+              {errors.species?.type === "required" && <p role="alert">Please, write species.</p>}
             </label>
           </div>
           <div className={classes.control}>
             <label>
-              Watering interval <input type="number" {...register("watering_interval", { min: 1 })} />
+              Watering interval <input type="number" {...register("watering_interval", { required: true, min: 1 })} />
               {errors.watering_interval?.type === "min" && <p role="alert">The smallest number could be 1</p>}
+              {errors.watering_interval?.type === "required" && <p role="alert">Please, write watering interval.</p>}
             </label>
           </div>
           <div className={classes.control}>
             <label>
               Sun exposure
-              <input type="number" {...register("sun_exposure", { min: 1, max: 24 })} />
+              <input type="number" {...register("sun_exposure", { required: true, min: 1, max: 24 })} />
               {errors.sun_exposure?.type === "min" && <p role="alert">The smallest number could be 1</p>}
               {errors.sun_exposure?.type === "max" && <p role="alert">The biggest number could be 24</p>}
+              {errors.sun_exposure?.type === "required" && <p role="alert">Please, write sun exposure.</p>}
             </label>
           </div>
           <div className={classes.control}>
             <label>
               Temperature
-              <input type="number" {...register("temperature", { min: -100, max: 100 })} />
+              <input type="number" {...register("temperature", { required: true, min: -100, max: 100 })} />
               {errors.temperature?.type === "min" && <p role="alert">The smallest number could be -100 </p>}
               {errors.temperature?.type === "max" && <p role="alert">The biggest number could be 100</p>}
+              {errors.temperature?.type === "required" && <p role="alert">Please, write temperature.</p>}
             </label>
           </div>
 
