@@ -1,17 +1,17 @@
 import "./App.css";
 import { Routes, Route } from "react-router-dom";
 import { StartPage } from "./pages/StartPage";
-import { CreateAccountPage } from "./pages/CreateAccountPage";
+import { CreateAccountPage } from "./pages/auth/CreateAccountPage";
 import { NotFoundPage } from "./pages/NotFoundPage";
-import { AfterLoginPage } from "./pages/AfterLoginPage";
+import { AfterLoginPage } from "./pages/auth/AfterLoginPage";
 import { useContext } from "react";
 import { AuthContext } from "./store/authContext";
-import { RetrievePasswordFormPage } from "./pages/RetrievePasswordFormPage";
-import { PasswordResetPage } from "./pages/PasswordResetPage";
-import { ActivateAccountPage } from "./pages/ActivateAccountPage";
-import { AddPlantFormPage } from "./pages/AddPlantFormPage";
-import { UpdatePlantFormPage } from "./pages/UpdatePlantFormPage";
-import { ShowPlantsPage } from "./pages/ShowPlantsPage";
+import { RetrievePasswordFormPage } from "./pages/auth/RetrievePasswordFormPage";
+import { PasswordResetPage } from "./pages/auth/PasswordResetPage";
+import { ActivateAccountPage } from "./pages/auth/ActivateAccountPage";
+import { AddPlantFormPage } from "./pages/plants/AddPlantFormPage";
+import { UpdatePlantFormPage } from "./pages/plants/UpdatePlantFormPage";
+import { ShowPlantsPage } from "./pages/plants/ShowPlantsPage";
 
 function App() {
   const authCtx = useContext(AuthContext);
