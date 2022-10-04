@@ -1,6 +1,6 @@
 import { useParams } from "react-router-dom";
-import classes from "../assets/FormCard.module.css";
-import { api, showMessage } from "../shared";
+import classes from "../../assets/FormCard.module.css";
+import { api, showMessage } from "../../shared";
 import { ToastContainer } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 

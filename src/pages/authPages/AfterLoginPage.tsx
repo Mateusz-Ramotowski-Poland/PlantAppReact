@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
-import { useGetPlants } from "../hooks/useGetPlants";
+import { useGetPlants } from "../../hooks/useGetPlants";
 
 export const AfterLoginPage = () => {
   const navigate = useNavigate();

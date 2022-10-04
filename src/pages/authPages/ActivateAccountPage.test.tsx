@@ -1,11 +1,11 @@
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { BrowserRouter } from "react-router-dom";
-import { showMessage, api } from "../shared";
-import { ActivateAccountPage } from "./ActivateAccountPage";
+import { showMessage, api } from "../../shared";
+import { ActivateAccountPage } from "../authPages/ActivateAccountPage";
 
-jest.mock("../shared", () => {
-  const originalModule = jest.requireActual("../shared");
+jest.mock("../../shared", () => {
+  const originalModule = jest.requireActual("../../shared");
 
   return {
     __esModule: true,

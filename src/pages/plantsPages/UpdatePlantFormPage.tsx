@@ -1,4 +1,4 @@
-import { MainNavigation } from "../components/layout/MainNavigation";
+import { MainNavigation } from "../../components/layout/MainNavigation";
 
 export const UpdatePlantFormPage = () => {
   return (

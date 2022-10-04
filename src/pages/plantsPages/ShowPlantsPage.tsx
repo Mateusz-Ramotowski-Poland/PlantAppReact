@@ -1,5 +1,5 @@
-import { MainNavigation } from "../components/layout/MainNavigation";
-import { PlantsList } from "../components/plants/PlantsList";
+import { MainNavigation } from "../../components/layout/MainNavigation";
+import { PlantsList } from "../../components/plants/PlantsList";
 import classes from "./ShowPlantsPage.module.css";
 
 export const ShowPlantsPage = () => {

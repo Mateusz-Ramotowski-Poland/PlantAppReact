@@ -1,6 +1,6 @@
-import classes from "../assets/FormCard.module.css";
+import classes from "../../assets/FormCard.module.css";
 import { useRef } from "react";
-import { api, showMessage } from "../shared";
+import { api, showMessage } from "../../shared";
 import { ToastContainer } from "react-toastify";
 
 export const RetrievePasswordFormPage = () => {
@@ -31,12 +31,7 @@ export const RetrievePasswordFormPage = () => {
           <div className={classes.control}>
             <label>
               Your email
-              <input
-                data-testid="email"
-                type="email"
-                required
-                ref={emailInputRef}
-              />
+              <input data-testid="email" type="email" required ref={emailInputRef} />
             </label>
           </div>
           <div className={classes.actions}>

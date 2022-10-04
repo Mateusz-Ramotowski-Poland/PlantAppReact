@@ -1,16 +1,11 @@
 import { useParams } from "react-router-dom";
 import { useRef, useState } from "react";
-import classes from "../assets/FormCard.module.css";
-import {
-  confirmOnlyNumbersValidation,
-  confirmValueValidation,
-  api,
-  checkFormValidity,
-} from "../shared";
-import { FormErrorState } from "../interafces";
+import classes from "../../assets/FormCard.module.css";
+import { confirmOnlyNumbersValidation, confirmValueValidation, api, checkFormValidity } from "../../shared";
+import { FormErrorState } from "../../interafces";
 import { ToastContainer } from "react-toastify";
 import { useNavigate } from "react-router-dom";
-import { showErrorMessages } from "../shared/utils/showErrorMessages";
+import { showErrorMessages } from "../../shared/utils/showErrorMessages";
 
 export const PasswordResetPage = () => {
   const navigate = useNavigate();
@@ -76,14 +71,8 @@ export const PasswordResetPage = () => {
               />
             </label>
           </div>
-          {formError.passwordMissmatch && (
-            <p className={classes.alert}>
-              Passwod and confirm passsword mismatch
-            </p>
-          )}
-          {formError.onlyDigits && (
-            <p className={classes.alert}>Passwod can't contain only digits</p>
-          )}
+          {formError.passwordMissmatch && <p className={classes.alert}>Passwod and confirm passsword mismatch</p>}
+          {formError.onlyDigits && <p className={classes.alert}>Passwod can't contain only digits</p>}
           <div className={classes.actions}>
             <button type="submit">Change password</button>
           </div>
