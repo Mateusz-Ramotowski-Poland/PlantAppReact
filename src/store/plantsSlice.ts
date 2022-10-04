@@ -29,6 +29,13 @@ const plantsSlice = createSlice({
     delete(state, action) {
       state.plants = state.plants.filter((el) => el.id !== action.payload.id);
     },
+    water(state, action) {
+      state.plants.forEach((plant) => {
+        if (plant.id === action.payload.id) {
+          plant.watering_count = (parseInt(plant.watering_count) + 1).toString();
+        }
+      });
+    },
   },
 });
 
@@ -43,6 +50,13 @@ export function updatePlant(path: string, plantId: string, body: object) {
     api.put<PlantAllInfo>(path, body).then((plant) => {
       dispatch(plantsActions.delete({ id: plantId }));
       dispatch(plantsActions.add({ plant }));
+    });
+  };
+}
+export function waterPlant(path: string, id: string) {
+  return (dispatch: AppDispatch) => {
+    api.post<void>(path).then(() => {
+      dispatch(plantsActions.water({ id }));
     });
   };
 }

@@ -1,7 +1,7 @@
 import { fetchData, processInputData, sendRequestAgain } from "./helpers";
 import { RequestConfig, FetchConfig } from "./interfaces";
 
-function post<Response>(path: string, body: object, config?: RequestConfig): Promise<Response> {
+function post<Response>(path: string, body?: object, config?: RequestConfig): Promise<Response> {
   const { url, changedHeaders } = processInputData(path, config);
   const requestParameters: FetchConfig = {
     method: "POST",

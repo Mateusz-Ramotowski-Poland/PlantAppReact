@@ -1,3 +1,5 @@
+import { useAppDispatch } from "../../store/hooks";
+import { waterPlant } from "../../store/plantsSlice";
 import classes from "./PlantItem.module.css";
 
 interface Props {
@@ -16,12 +18,19 @@ interface Props {
 }
 
 export const PlantItem = (props: Props) => {
+  const dispatch = useAppDispatch();
+
   function clickDeleteHandler() {
     props.openModalDelete(props.id);
   }
 
   function clickUpdateHandler() {
     props.openModalUpdate(props.id);
+  }
+
+  function clickWateredHandler() {
+    const path = `/plants/${props.id}/water/`;
+    dispatch(waterPlant(path, props.id));
   }
 
   return (
@@ -38,13 +47,18 @@ export const PlantItem = (props: Props) => {
         <td className={classes.box}>{props.sun_exposure}</td>
         <td className={classes.box}>{props.temperature}</td>
         <td className={classes.box}>
-          <button className={classes.button} onClick={clickDeleteHandler}>
+          <button type="button" className={classes.button} onClick={clickDeleteHandler}>
             Delete
           </button>
         </td>
         <td className={classes.box}>
-          <button className={classes.button} onClick={clickUpdateHandler}>
+          <button type="button" className={classes.button} onClick={clickUpdateHandler}>
             Update
+          </button>
+        </td>
+        <td>
+          <button type="button" className={classes.button} onClick={clickWateredHandler}>
+            Set as watered
           </button>
         </td>
       </tr>
