@@ -1,4 +1,8 @@
+import { Plant } from "../../../interafces";
+
 export const paths = {
-  amendPlant: "/plants/",
-  removePlant: "/plants/",
+  addPlant: "/plants/",
+  amendPlant: (plantId: Plant["id"]) => `/plants/${plantId}/`,
+  getPlants: "/plants/",
+  removePlant: (plantId: Plant["id"]) => `/plants/${plantId}/`,
 };

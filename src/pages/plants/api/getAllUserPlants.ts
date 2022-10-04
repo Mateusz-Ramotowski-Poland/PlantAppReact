@@ -1,5 +1,6 @@
 import { PlantAllInfo } from "../../../interafces";
 import { api } from "../../../shared/api/api";
+import { paths } from "./paths";
 
 interface PaginatedList<ListItem> {
   results: ListItem[];
@@ -13,5 +14,5 @@ export async function getAllUserPlants(id: string) {
     params: { author: id },
   };
 
-  return await api.get<PaginatedList<PlantAllInfo>>("/plants/", config);
+  return await api.get<PaginatedList<PlantAllInfo>>(paths.getPlants, config);
 }

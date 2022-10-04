@@ -7,6 +7,7 @@ import { showErrorMessages } from "../../shared/utils/showErrorMessages";
 import { useAppDispatch } from "../../store/hooks";
 import { plantsActions } from "./store/plantsSlice";
 import { PlantAllInfo } from "../../interafces";
+import { paths } from "./api";
 
 export const AddPlantFormPage = () => {
   const nameInputRef = useRef<HTMLInputElement>(null);
@@ -24,7 +25,6 @@ export const AddPlantFormPage = () => {
     const sunExposure = sunExposureInputRef?.current?.value;
     const temperature = temperatureInputRef?.current?.value;
 
-    const path = "/plants/";
     const body = {
       name: name,
       species: species,
@@ -34,7 +34,7 @@ export const AddPlantFormPage = () => {
     };
 
     api
-      .post<PlantAllInfo>(path, body)
+      .post<PlantAllInfo>(paths.addPlant, body)
       .then((plant) => {
         showMessage("Added new plant", "info");
         dispatch(plantsActions.add({ plant }));
