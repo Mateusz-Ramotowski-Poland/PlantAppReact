@@ -58,19 +58,20 @@ export const PlantsList = () => {
     );
   }
   const plantsList = plants.map((plant: Plant) => {
-    const dataCreated = formatData(plant.created_at);
-    const dataNextWatering = formatData(plant.next_watering);
+    const createdAt = formatData(plant.created_at);
+    const NextWatering = formatData(plant.next_watering);
+    const LastWatering = formatData(plant.next_watering);
 
     return (
       <PlantItem
         key={plant.id}
         id={plant.id}
-        created_at={dataCreated}
+        created_at={createdAt}
         name={plant.name}
         species={plant.species}
         watering_interval={plant.watering_interval}
-        last_watering={plant.last_watering}
-        next_watering={dataNextWatering}
+        last_watering={LastWatering}
+        next_watering={NextWatering}
         watering_count={plant.watering_count}
         sun_exposure={plant.sun_exposure}
         temperature={plant.temperature}

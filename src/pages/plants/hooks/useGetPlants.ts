@@ -1,10 +1,9 @@
 import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { showErrorMessages } from "../../../shared";
-import { getUserData } from "../../../shared/api";
+import { getUserData, showErrorMessages } from "../../../shared";
 import { AuthContext } from "../../../store/authContext";
 import { useAppDispatch } from "../../../store/hooks";
-import { getAllUserPlants } from "../api/getAllUserPlants";
+import { getAllUserPlants } from "../api";
 import { plantsActions } from "../store/plantsSlice";
 
 export function useGetPlants() {

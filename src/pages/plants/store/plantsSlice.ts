@@ -1,8 +1,8 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { PlantAllInfo, PlantsState } from "../../../interafces";
-import { api } from "../../../shared";
 import { AppDispatch } from "../../../store/rootStore";
 import { amendPlant } from "../api/amendPlant";
+import { giveWaterToPlant } from "../api/giveWaterToPlant";
 import { removePlant } from "../api/removePlant";
 
 const initialState: PlantsState = {
@@ -29,6 +29,10 @@ const plantsSlice = createSlice({
       const index = state.plants.findIndex((plant) => plant.id === action.payload.id);
       state.plants.splice(index, 1, action.payload.plant);
     },
+    water(state, action) {
+      const index = state.plants.findIndex((plant) => plant.id === action.payload.id);
+      state.plants[index].watering_count = (parseInt(state.plants[index].watering_count) + 1).toString();
+    },
   },
 });
 
@@ -42,6 +46,14 @@ export function updatePlant(id: string, body: object) {
   return (dispatch: AppDispatch) => {
     amendPlant(id, body).then((plant) => {
       dispatch(plantsActions.update({ plant }));
+    });
+  };
+}
+
+export function waterPlant(id: string) {
+  return (dispatch: AppDispatch) => {
+    giveWaterToPlant(id).then(() => {
+      dispatch(plantsActions.water({ id }));
     });
   };
 }

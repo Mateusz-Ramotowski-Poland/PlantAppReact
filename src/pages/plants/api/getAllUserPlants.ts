@@ -1,5 +1,5 @@
 import { PlantAllInfo } from "../../../interafces";
-import { api } from "../../../shared/api/api";
+import { api } from "../../../shared";
 import { paths } from "./paths";
 
 interface PaginatedList<ListItem> {
