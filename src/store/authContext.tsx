@@ -5,7 +5,7 @@ import { api } from "../shared";
 import React, { PropsWithChildren, useCallback, useEffect, useState } from "react";
 import { errorEvents } from "../shared/api/helpers";
 import { useAppDispatch } from "./hooks";
-import { plantsActions } from "./plantsSlice";
+import { plantsActions } from "../pages/plants/store/plantsSlice";
 
 type AuthProps = {};
 
