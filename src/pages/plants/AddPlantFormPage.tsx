@@ -1,15 +1,14 @@
 import React, { useRef, useState } from "react";
 import classes from "../assets/FormCard.module.css";
-import autocompleteClasses from "./AddPlantFormPage.module.css";
 import { api, showErrorMessages, showMessage } from "../../shared";
 import { MainNavigation } from "./layout/MainNavigation";
 import { ToastContainer } from "react-toastify";
 import { paths } from "./api";
 import { useAppDispatch } from "../../store/hooks";
 import { PlantAllInfo } from "../../interafces";
-import { AutoComplete } from "@react-md/autocomplete";
 import { plantsActions } from "./store/plantsSlice";
 import { PaginatedList } from "./interfaces/interfaces";
+import { Autocomplete } from "./components/Autocomplete";
 
 interface Species {
   id: number;
@@ -88,8 +87,8 @@ export const AddPlantFormPage = () => {
             </label>
           </div>
           <div className={classes.control}>
-            <label className={autocompleteClasses.speciesLabel}>
-              <AutoComplete
+            <label>
+              {/* <AutoComplete
                 maxLength={50}
                 required
                 id="Autocomplete"
@@ -98,7 +97,8 @@ export const AddPlantFormPage = () => {
                 data={aaSpecies}
                 onChange={onSpeciesInputChangeHandler}
                 ref={speciesInputRef}
-              />
+              /> */}
+              {/* <Autocomplete></Autocomplete> */}
             </label>
           </div>
 
@@ -134,6 +134,7 @@ export const AddPlantFormPage = () => {
         </form>
         <ToastContainer />
       </section>
+      <Autocomplete></Autocomplete>
     </>
   );
 };
