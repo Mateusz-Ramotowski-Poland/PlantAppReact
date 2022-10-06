@@ -10,11 +10,6 @@ import { plantsActions } from "./store/plantsSlice";
 import { PaginatedList } from "./interfaces/interfaces";
 import { Autocomplete } from "./components/Autocomplete";
 
-interface Species {
-  id: number;
-  name: string;
-}
-
 let aaSpecies: string[] = [];
 
 export const AddPlantFormPage = () => {
@@ -27,27 +22,6 @@ export const AddPlantFormPage = () => {
   const sunExposureInputRef = useRef<HTMLInputElement>(null);
   const temperatureInputRef = useRef<HTMLInputElement>(null);
   const dispatch = useAppDispatch();
-
-  console.log(`Component load ${aaSpecies}`);
-
-  function makeSpeciesRequest(search: string) {
-    console.log("request send");
-    const config = [["search", search]];
-    api.get<PaginatedList<Species>>(paths.getSpecies(config)).then((species) => {
-      /* console.log(species); */
-      aaSpecies = species.results.map((species) => species.name);
-      /* console.log(speciesNames); */
-      setspecies([""]);
-    });
-  }
-
-  const onSpeciesInputChangeHandler = (event: React.ChangeEvent) => {
-    console.log("typed letter");
-    const typedSpecies = (event.target as HTMLInputElement).value;
-    clearTimeout(timerId);
-
-    timerId = setTimeout(makeSpeciesRequest.bind(this, typedSpecies), 200) as unknown as number;
-  };
 
   const submitHandler = (event: React.FormEvent) => {
     event.preventDefault();

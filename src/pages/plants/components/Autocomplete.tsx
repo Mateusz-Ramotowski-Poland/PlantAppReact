@@ -1,34 +1,41 @@
 import { useCombobox } from "downshift";
-import React from "react";
+import { useState } from "react";
+import { api } from "../../../shared";
+import { paths } from "../api";
+import { PaginatedList } from "../interfaces/interfaces";
 
-interface Book {
-  author: string;
-  title: string;
+interface Species {
+  id: number;
+  name: string;
 }
 
 export function Autocomplete() {
-  const books = [
-    { author: "Harper Lee", title: "To Kill a Mockingbird" },
-    { author: "Lev Tolstoy", title: "War and Peace" },
-    { author: "Fyodor Dostoyevsy", title: "The Idiot" },
-    { author: "Oscar Wilde", title: "A Picture of Dorian Gray" },
-    { author: "George Orwell", title: "1984" },
-    { author: "Jane Austen", title: "Pride and Prejudice" },
-    { author: "Marcus Aurelius", title: "Meditations" },
-    { author: "Fyodor Dostoevsky", title: "The Brothers Karamazov" },
-    { author: "Lev Tolstoy", title: "Anna Karenina" },
-    { author: "Fyodor Dostoevsky", title: "Crime and Punishment" },
-  ];
-  function getBooksFilter(inputValue: string) {
-    return function booksFilter(book: Book) {
-      return (
-        !inputValue || book.title.toLowerCase().includes(inputValue) || book.author.toLowerCase().includes(inputValue)
-      );
+  let timerId: ReturnType<typeof setTimeout>;
+
+  function getSpeciesFilter(inputValue: string) {
+    return function speciesFilter(spiecies: string) {
+      return !inputValue || spiecies.toLowerCase().includes(inputValue);
     };
   }
 
   function ComboBox() {
-    const [items, setItems] = React.useState(books);
+    function makeSpeciesRequest(search: string) {
+      const config = [["search", search]];
+      api.get<PaginatedList<Species>>(paths.getSpecies(config)).then((paginatedList) => {
+        console.log(paginatedList);
+        const species = paginatedList.results.map((species) => species.name);
+        setItems(species);
+      });
+    }
+
+    const onSpeciesInputChangeHandler = (inputValue: string | undefined) => {
+      clearTimeout(timerId);
+      if (inputValue) {
+        timerId = setTimeout(makeSpeciesRequest.bind(null, inputValue), 400);
+      }
+    };
+
+    const [items, setItems] = useState<string[]>([]);
     const {
       isOpen,
       getToggleButtonProps,
@@ -41,22 +48,20 @@ export function Autocomplete() {
       selectedItem,
     } = useCombobox({
       onInputValueChange({ inputValue }) {
-        setItems(books.filter(getBooksFilter(inputValue as string)));
+        onSpeciesInputChangeHandler(inputValue);
+        setItems(items.filter(getSpeciesFilter(inputValue as string)));
       },
       items,
-      itemToString(item) {
-        return item ? item.title : "";
-      },
     });
 
     return (
       <div>
         <div className="w-72 flex flex-col gap-1">
           <label className="w-fit" {...getLabelProps()}>
-            Choose your favorite book:
+            Species:
           </label>
           <div className="flex shadow-sm bg-white gap-0.5" {...getComboboxProps()}>
-            <input placeholder="Best book ever" className="w-full p-1.5" {...getInputProps()} />
+            <input placeholder="choose species" className="w-full p-1.5" {...getInputProps()} />
             <button aria-label="toggle menu" className="px-2" type="button" {...getToggleButtonProps()}>
               {isOpen ? <>&#8593;</> : <>&#8595;</>}
             </button>
@@ -74,8 +79,7 @@ export function Autocomplete() {
                 key={`${item}${index}`}
                 {...getItemProps({ item, index })}
               >
-                <span>{item.title}</span>
-                <span className="text-sm text-gray-700">{item.author}</span>
+                <span>{item}</span>
               </li>
             ))}
         </ul>
