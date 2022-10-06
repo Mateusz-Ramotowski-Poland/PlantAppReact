@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import classes from "../assets/FormCard.module.css";
+import autocompleteClasses from "./AddPlantFormPage.module.css";
 import { api, showErrorMessages, showMessage } from "../../shared";
 import { MainNavigation } from "./layout/MainNavigation";
 import { ToastContainer } from "react-toastify";
@@ -16,7 +17,6 @@ interface Species {
 }
 
 export const AddPlantFormPage = () => {
-  const [speciesInput, setSpeciesInput] = useState("");
   const [species, setspecies] = useState<string[]>([]);
   const nameInputRef = useRef<HTMLInputElement>(null);
   const speciesInputRef = useRef<HTMLInputElement>(null);
@@ -39,7 +39,6 @@ export const AddPlantFormPage = () => {
     });
   }, []);
   const onSpeciesInputChangeHandler = (event: React.ChangeEvent) => {
-    setSpeciesInput((event.target as HTMLInputElement).value);
     console.log("Handler");
     console.dir(speciesInputRef?.current);
     console.dir(document.activeElement === speciesInputRef?.current);
@@ -83,34 +82,20 @@ export const AddPlantFormPage = () => {
             </label>
           </div>
           <div className={classes.control}>
-            <label>
-              Species
-              <input
-                data-testid="species"
-                type="text"
-                ref={speciesInputRef}
-                required
+            <label className={autocompleteClasses.speciesLabel}>
+              <AutoComplete
                 maxLength={50}
-                value={speciesInput}
+                required
+                id="search-species"
+                name="species"
+                label="Species"
+                data={species}
                 onChange={onSpeciesInputChangeHandler}
+                ref={speciesInputRef}
               />
             </label>
           </div>
-          {<AutoComplete id="search-species" name="species" label="species" placeholder="..." data={species} />}
-          {/*           {speciesInput !== "" && document.activeElement === speciesInputRef?.current && (
-            <ul>
-              <li>Hello</li>
-              <li>Hello</li>
-              <li>Hello</li>
-              <li>Hello</li>
-              <li>Hello</li>
-              <li>Hello</li>
-              <li>Hello</li>
-              <li>Hello</li>
-              <li>Hello</li>
-              <li>Hello</li>
-            </ul>
-          )} */}
+
           <div className={classes.control}>
             <label>
               Watering interval{" "}
