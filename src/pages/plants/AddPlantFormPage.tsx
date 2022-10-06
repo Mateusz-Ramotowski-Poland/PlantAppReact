@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import classes from "../assets/FormCard.module.css";
 import { api, showErrorMessages, showMessage } from "../../shared";
 import { MainNavigation } from "./layout/MainNavigation";
@@ -6,15 +6,44 @@ import { ToastContainer } from "react-toastify";
 import { paths } from "./api";
 import { useAppDispatch } from "../../store/hooks";
 import { PlantAllInfo } from "../../interafces";
+import { AutoComplete } from "@react-md/autocomplete";
 import { plantsActions } from "./store/plantsSlice";
+import { PaginatedList } from "./interfaces/interfaces";
+
+interface Species {
+  id: number;
+  name: string;
+}
 
 export const AddPlantFormPage = () => {
+  const [speciesInput, setSpeciesInput] = useState("");
+  const [species, setspecies] = useState<string[]>([]);
   const nameInputRef = useRef<HTMLInputElement>(null);
   const speciesInputRef = useRef<HTMLInputElement>(null);
   const wateringIntervalInputRef = useRef<HTMLInputElement>(null);
   const sunExposureInputRef = useRef<HTMLInputElement>(null);
   const temperatureInputRef = useRef<HTMLInputElement>(null);
   const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    const re = /ab+c/;
+    const config = [
+      /* ["page", "2"], */
+      ["search", `a`],
+    ];
+    const path = paths.getSpecies + "?" + new URLSearchParams(config).toString();
+    api.get<PaginatedList<Species>>(path).then((species) => {
+      console.log(species);
+      const speciesNames = species.results.map((species) => species.name);
+      setspecies(speciesNames);
+    });
+  }, []);
+  const onSpeciesInputChangeHandler = (event: React.ChangeEvent) => {
+    setSpeciesInput((event.target as HTMLInputElement).value);
+    console.log("Handler");
+    console.dir(speciesInputRef?.current);
+    console.dir(document.activeElement === speciesInputRef?.current);
+  };
 
   const submitHandler = (event: React.FormEvent) => {
     event.preventDefault();
@@ -56,9 +85,32 @@ export const AddPlantFormPage = () => {
           <div className={classes.control}>
             <label>
               Species
-              <input data-testid="species" type="text" ref={speciesInputRef} required maxLength={50} />
+              <input
+                data-testid="species"
+                type="text"
+                ref={speciesInputRef}
+                required
+                maxLength={50}
+                value={speciesInput}
+                onChange={onSpeciesInputChangeHandler}
+              />
             </label>
           </div>
+          {<AutoComplete id="search-species" name="species" label="species" placeholder="..." data={species} />}
+          {/*           {speciesInput !== "" && document.activeElement === speciesInputRef?.current && (
+            <ul>
+              <li>Hello</li>
+              <li>Hello</li>
+              <li>Hello</li>
+              <li>Hello</li>
+              <li>Hello</li>
+              <li>Hello</li>
+              <li>Hello</li>
+              <li>Hello</li>
+              <li>Hello</li>
+              <li>Hello</li>
+            </ul>
+          )} */}
           <div className={classes.control}>
             <label>
               Watering interval{" "}
