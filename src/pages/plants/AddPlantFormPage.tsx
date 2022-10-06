@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import classes from "../assets/FormCard.module.css";
 import autocompleteClasses from "./AddPlantFormPage.module.css";
 import { api, showErrorMessages, showMessage } from "../../shared";
@@ -16,7 +16,11 @@ interface Species {
   name: string;
 }
 
+let aaSpecies: string[] = [];
+
 export const AddPlantFormPage = () => {
+  let timerId = 0;
+
   const [species, setspecies] = useState<string[]>([]);
   const nameInputRef = useRef<HTMLInputElement>(null);
   const speciesInputRef = useRef<HTMLInputElement>(null);
@@ -25,23 +29,25 @@ export const AddPlantFormPage = () => {
   const temperatureInputRef = useRef<HTMLInputElement>(null);
   const dispatch = useAppDispatch();
 
-  useEffect(() => {
-    const re = /ab+c/;
-    const config = [
-      /* ["page", "2"], */
-      ["search", `a`],
-    ];
-    const path = paths.getSpecies + "?" + new URLSearchParams(config).toString();
-    api.get<PaginatedList<Species>>(path).then((species) => {
-      console.log(species);
-      const speciesNames = species.results.map((species) => species.name);
-      setspecies(speciesNames);
+  console.log(`Component load ${aaSpecies}`);
+
+  function makeSpeciesRequest(search: string) {
+    console.log("request send");
+    const config = [["search", search]];
+    api.get<PaginatedList<Species>>(paths.getSpecies(config)).then((species) => {
+      /* console.log(species); */
+      aaSpecies = species.results.map((species) => species.name);
+      /* console.log(speciesNames); */
+      setspecies([""]);
     });
-  }, []);
+  }
+
   const onSpeciesInputChangeHandler = (event: React.ChangeEvent) => {
-    console.log("Handler");
-    console.dir(speciesInputRef?.current);
-    console.dir(document.activeElement === speciesInputRef?.current);
+    console.log("typed letter");
+    const typedSpecies = (event.target as HTMLInputElement).value;
+    clearTimeout(timerId);
+
+    timerId = setTimeout(makeSpeciesRequest.bind(this, typedSpecies), 200) as unknown as number;
   };
 
   const submitHandler = (event: React.FormEvent) => {
@@ -86,10 +92,10 @@ export const AddPlantFormPage = () => {
               <AutoComplete
                 maxLength={50}
                 required
-                id="search-species"
+                id="Autocomplete"
                 name="species"
                 label="Species"
-                data={species}
+                data={aaSpecies}
                 onChange={onSpeciesInputChangeHandler}
                 ref={speciesInputRef}
               />
