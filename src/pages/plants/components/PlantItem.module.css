@@ -27,12 +27,12 @@
   border: 1px solid #50be71;
 }
 
-.red {
+.wateringAlarm {
   color: red;
 }
-.orange {
+.wateringWarning {
   color: orange;
 }
-.blue {
+.wateringOk {
   color: blue;
 }

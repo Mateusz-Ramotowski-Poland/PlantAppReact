@@ -24,7 +24,7 @@ export interface Plant {
   watering_count: string;
   sun_exposure: number;
   temperature: number;
-  color?: string;
+  wateringStatus?: string;
 }
 
 export interface ApiError {

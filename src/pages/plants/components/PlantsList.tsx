@@ -10,17 +10,24 @@ import classes from "./PlantsList.module.css";
 interface State {
   plants: PlantsState;
 }
+const getWateringStatus = (nextWatering: string) => {
+  const nowMiliSeconds = Date.now();
+  const nextWateringMiliseconds = Date.parse(new Date(nextWatering).toString());
+  const difference = nextWateringMiliseconds - nowMiliSeconds;
+  if (difference < 24 * 60 * 60 * 1000) {
+    return "wateringAlarm";
+  } else if (difference < 3 * 24 * 60 * 60 * 1000) {
+    return "wateringWarning";
+  } else {
+    return "wateringOk";
+  }
+};
 
 export const PlantsList = () => {
   const [deleteModalIsOpen, setDeleteModalIsOpen] = useState(false);
   const [updateModalIsOpen, setUpdateModalIsOpen] = useState(false);
   const [PlantId, setPlantId] = useState("");
   const [PlantName, setPlantName] = useState("");
-
-  const getColor = (nextWatering: string) => {
-    const nowMiliSeconds = console.log(new Date(), typeof new Date());
-    return "blue";
-  };
 
   function openModalDelete(id: string, name: string) {
     setDeleteModalIsOpen(true);
@@ -58,13 +65,14 @@ export const PlantsList = () => {
       </section>
     );
   }
+
   const plantsList = plants.map((plant: Plant) => {
     return (
       <PlantItem
         key={plant.id}
         openModalDelete={openModalDelete}
         openModalUpdate={openModalUpdate}
-        plant={{ ...plant, color: getColor(plant.next_watering) }}
+        plant={{ ...plant, wateringStatus: getWateringStatus(plant.next_watering) }}
       ></PlantItem>
     );
   });
@@ -88,18 +96,8 @@ export const PlantsList = () => {
         </thead>
         <tbody>{plantsList}</tbody>
       </table>
-      <ModalWindowDelete
-        closeModalDelete={closeModalDelete}
-        deleteModalIsOpen={deleteModalIsOpen}
-        id={PlantId}
-        name={PlantName}
-      />
-      <ModalWindowUpdate
-        closeModalUpdate={closeModalUpdate}
-        updateModalIsOpen={updateModalIsOpen}
-        id={PlantId}
-        name={PlantName}
-      />
+      <ModalWindowDelete closeModalDelete={closeModalDelete} deleteModalIsOpen={deleteModalIsOpen} id={PlantId} name={PlantName} />
+      <ModalWindowUpdate closeModalUpdate={closeModalUpdate} updateModalIsOpen={updateModalIsOpen} id={PlantId} name={PlantName} />
     </>
   );
 };

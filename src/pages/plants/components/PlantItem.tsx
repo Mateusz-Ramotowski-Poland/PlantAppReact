@@ -11,7 +11,7 @@ interface Props {
 
 export const PlantItem = (props: Props) => {
   // prettier-ignore
-  const {id, created_at, name, species, watering_interval, last_watering, next_watering, watering_count, sun_exposure, temperature, color,} = props.plant;
+  const {id, created_at, name, species, watering_interval, last_watering, next_watering, watering_count, sun_exposure, temperature, wateringStatus,} = props.plant;
   const dispatch = useAppDispatch();
 
   function clickDeleteHandler() {
@@ -31,8 +31,8 @@ export const PlantItem = (props: Props) => {
   }
 
   const createdAt = created_at ? formatData(created_at) : created_at;
-  const nextWatering = last_watering ? formatData(last_watering) : last_watering;
-  const lastWatering = next_watering ? formatData(next_watering) : next_watering;
+  const nextWatering = next_watering ? formatData(next_watering) : next_watering;
+  const lastWatering = last_watering ? formatData(last_watering) : last_watering;
 
   return (
     <>
@@ -43,7 +43,7 @@ export const PlantItem = (props: Props) => {
         <td className={classes.box}>{species}</td>
         <td className={classes.box}>{watering_interval}</td>
         <td className={classes.box}>{lastWatering}</td>
-        <td className={`${classes.box} ${classes[color as string]}`}>{nextWatering}</td>
+        <td className={`${classes.box} ${classes[wateringStatus as string]}`}>{nextWatering}</td>
         <td className={classes.box}>{watering_count}</td>
         <td className={classes.box}>{sun_exposure}</td>
         <td className={classes.box}>{temperature}</td>
