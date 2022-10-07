@@ -5,7 +5,6 @@ import { AuthContext } from "../../../store/authContext";
 
 export const MainNavigation = () => {
   const authCtx = useContext(AuthContext);
-
   const logoutHandler = () => {
     authCtx.logout();
   };

@@ -40,9 +40,3 @@ export interface PlantAllInfo extends Plant {
   author: string;
   water: string;
 }
-
-export interface PlantAllInfo extends Plant {
-  url: string;
-  author: string;
-  water: string;
-}
