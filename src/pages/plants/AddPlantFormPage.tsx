@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useRef } from "react";
 import classes from "../assets/FormCard.module.css";
 import { api, showErrorMessages, showMessage } from "../../shared";
 import { MainNavigation } from "./layout/MainNavigation";
@@ -7,26 +7,20 @@ import { paths } from "./api";
 import { useAppDispatch } from "../../store/hooks";
 import { PlantAllInfo } from "../../interafces";
 import { plantsActions } from "./store/plantsSlice";
-import { PaginatedList } from "./interfaces/interfaces";
 import { Autocomplete } from "./components/Autocomplete";
 
-let aaSpecies: string[] = [];
-
 export const AddPlantFormPage = () => {
-  let timerId = 0;
-
-  const [species, setspecies] = useState<string[]>([]);
   const nameInputRef = useRef<HTMLInputElement>(null);
-  const speciesInputRef = useRef<HTMLInputElement>(null);
   const wateringIntervalInputRef = useRef<HTMLInputElement>(null);
   const sunExposureInputRef = useRef<HTMLInputElement>(null);
+  const spieciesInputRef = React.createRef<HTMLInputElement>();
   const temperatureInputRef = useRef<HTMLInputElement>(null);
   const dispatch = useAppDispatch();
 
   const submitHandler = (event: React.FormEvent) => {
     event.preventDefault();
     const name = nameInputRef?.current?.value;
-    const species = speciesInputRef?.current?.value;
+    const species = spieciesInputRef?.current?.value;
     const wateringInterval = wateringIntervalInputRef?.current?.value;
     const sunExposure = sunExposureInputRef?.current?.value;
     const temperature = temperatureInputRef?.current?.value;
@@ -61,19 +55,7 @@ export const AddPlantFormPage = () => {
             </label>
           </div>
           <div className={classes.control}>
-            <label>
-              {/* <AutoComplete
-                maxLength={50}
-                required
-                id="Autocomplete"
-                name="species"
-                label="Species"
-                data={aaSpecies}
-                onChange={onSpeciesInputChangeHandler}
-                ref={speciesInputRef}
-              /> */}
-              {/* <Autocomplete></Autocomplete> */}
-            </label>
+            <Autocomplete ref={spieciesInputRef}></Autocomplete>
           </div>
 
           <div className={classes.control}>
@@ -108,7 +90,6 @@ export const AddPlantFormPage = () => {
         </form>
         <ToastContainer />
       </section>
-      <Autocomplete></Autocomplete>
     </>
   );
 };
