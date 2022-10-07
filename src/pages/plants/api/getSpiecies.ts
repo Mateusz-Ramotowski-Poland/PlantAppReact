@@ -1,4 +1,4 @@
-import { api } from "../../../shared";
+import { api, RequestConfig } from "../../../shared";
 import { PaginatedList } from "../interfaces/interfaces";
 import { paths } from "./paths";
 
@@ -7,6 +7,6 @@ interface Species {
   name: string;
 }
 
-export function getSpiecies(config: string[][]) {
-  return api.get<PaginatedList<Species>>(paths.getSpecies(config));
+export function getSpiecies(config: RequestConfig) {
+  return api.get<PaginatedList<Species>>(paths.getSpecies, config);
 }

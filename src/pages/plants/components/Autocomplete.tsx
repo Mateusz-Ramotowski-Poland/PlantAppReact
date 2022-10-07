@@ -1,6 +1,6 @@
 import { useCombobox } from "downshift";
-import React from "react";
-import { useState } from "react";
+import React, { useState } from "react";
+import { RequestConfig } from "../../../shared";
 import { getSpiecies } from "../api";
 import addedClasses from "./Autocomplete.module.css";
 
@@ -16,38 +16,26 @@ export const Autocomplete = React.forwardRef<HTMLInputElement, Props>((props, fo
   }
 
   function makeSpeciesRequest(search: string) {
-    const config = [["search", search]];
+    const config: RequestConfig = { params: { search } };
     getSpiecies(config).then((paginatedList) => {
-      const species = paginatedList.results.map((species) => species.name);
-      setItems(species);
+      setItems(paginatedList.results.map((species) => species.name));
     });
   }
 
   const onSpeciesInputChangeHandler = (inputValue: string | undefined) => {
     clearTimeout(timerId);
-    if (inputValue) {
-      timerId = setTimeout(makeSpeciesRequest.bind(null, inputValue), 400);
-    }
+    inputValue && (timerId = setTimeout(makeSpeciesRequest.bind(null, inputValue), 400));
   };
 
   const [items, setItems] = useState<string[]>([]);
-  const {
-    isOpen,
-    getToggleButtonProps,
-    getLabelProps,
-    getMenuProps,
-    getInputProps,
-    getComboboxProps,
-    highlightedIndex,
-    getItemProps,
-    selectedItem,
-  } = useCombobox({
-    onInputValueChange({ inputValue }) {
-      onSpeciesInputChangeHandler(inputValue);
-      setItems(items.filter(getSpeciesFilter(inputValue as string)));
-    },
-    items,
-  });
+  const { isOpen, getToggleButtonProps, getLabelProps, getMenuProps, getInputProps, getComboboxProps, getItemProps } =
+    useCombobox({
+      onInputValueChange({ inputValue }) {
+        onSpeciesInputChangeHandler(inputValue);
+        setItems(items.filter(getSpeciesFilter(inputValue as string)));
+      },
+      items,
+    });
 
   return (
     <div>
@@ -56,7 +44,13 @@ export const Autocomplete = React.forwardRef<HTMLInputElement, Props>((props, fo
           Species:
         </label>
         <div className="flex shadow-sm bg-white gap-0.5" {...getComboboxProps()}>
-          <input placeholder="choose species" className="w-full p-1.5" {...getInputProps({ ref: forwardedRef })} />
+          <input
+            placeholder="choose species"
+            className="w-full p-1.5"
+            {...getInputProps({ ref: forwardedRef })}
+            required
+            maxLength={50}
+          />
           <button aria-label="toggle menu" className="px-2" type="button" {...getToggleButtonProps()}>
             {isOpen ? <>&#8593;</> : <>&#8595;</>}
           </button>
@@ -67,11 +61,13 @@ export const Autocomplete = React.forwardRef<HTMLInputElement, Props>((props, fo
         className={`absolute p-0 w-72 bg-white shadow-md max-h-80 overflow-scroll ${addedClasses.ul}`}
       >
         {isOpen &&
-          items.map((item, index) => (
-            <li key={`${item}${index}`} {...getItemProps({ item, index })}>
-              <span>{item}</span>
-            </li>
-          ))}
+          items
+            .map((item, index) => (
+              <li key={`${item}${index}`} {...getItemProps({ item, index })}>
+                <span>{item}</span>
+              </li>
+            ))
+            .filter((_, index) => index < 13)}
       </ul>
     </div>
   );

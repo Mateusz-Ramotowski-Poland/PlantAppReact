@@ -24,7 +24,6 @@ export const AddPlantFormPage = () => {
     const wateringInterval = wateringIntervalInputRef?.current?.value;
     const sunExposure = sunExposureInputRef?.current?.value;
     const temperature = temperatureInputRef?.current?.value;
-
     const body = {
       name: name,
       species: species,
@@ -55,20 +54,12 @@ export const AddPlantFormPage = () => {
             </label>
           </div>
           <div className={classes.control}>
-            <Autocomplete ref={spieciesInputRef}></Autocomplete>
+            <Autocomplete ref={spieciesInputRef} />
           </div>
-
           <div className={classes.control}>
             <label>
-              Watering interval{" "}
-              <input
-                data-testid="wateringInterval"
-                type="number"
-                ref={wateringIntervalInputRef}
-                required
-                min={1}
-                max={2147483647}
-              />
+              Watering interval
+              <input data-testid="wateringInterval" type="number" ref={wateringIntervalInputRef} required min={1} />
             </label>
           </div>
           <div className={classes.control}>
@@ -83,7 +74,6 @@ export const AddPlantFormPage = () => {
               <input data-testid="temperature" type="number" ref={temperatureInputRef} required min={-100} max={100} />
             </label>
           </div>
-
           <div className={classes.actions}>
             <button type="submit">Add plant</button>
           </div>
