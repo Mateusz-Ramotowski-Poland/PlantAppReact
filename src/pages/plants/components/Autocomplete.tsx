@@ -56,7 +56,7 @@ export const Autocomplete = React.forwardRef<HTMLInputElement, Props>((props, fo
           Species:
         </label>
         <div className="flex shadow-sm bg-white gap-0.5" {...getComboboxProps()}>
-          <input placeholder="choose species" className="w-full p-1.5" {...getInputProps()} ref={forwardedRef} />
+          <input placeholder="choose species" className="w-full p-1.5" {...getInputProps({ ref: forwardedRef })} />
           <button aria-label="toggle menu" className="px-2" type="button" {...getToggleButtonProps()}>
             {isOpen ? <>&#8593;</> : <>&#8595;</>}
           </button>
