@@ -5,7 +5,7 @@ import { MainNavigation } from "./layout/MainNavigation";
 import { ToastContainer } from "react-toastify";
 import { paths } from "./api";
 import { useAppDispatch } from "../../store/hooks";
-import { PlantAllInfo } from "../../interafces";
+import { PlantAllInfo } from "../../interfaces";
 import { plantsActions } from "./store/plantsSlice";
 import { Autocomplete } from "./components/Autocomplete";
 

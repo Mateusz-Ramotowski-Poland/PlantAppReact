@@ -1,16 +1,10 @@
 import React, { useRef, useState } from "react";
 import classes from "../../assets/FormCard.module.css";
-import {
-  api,
-  showMessage,
-  confirmValueValidation,
-  confirmOnlyNumbersValidation,
-  checkFormValidity,
-  showErrorMessages,
-} from "../../../shared";
+import { api, showMessage, confirmValueValidation, checkFormValidity, showErrorMessages } from "../../../shared";
+import { confirmOnlyNumbersValidation } from "../../../shared";
 import { Link } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
-import { FormErrorState } from "../../../interafces";
+import { FormErrorState } from "../../../interfaces";
 
 export const CreateAccountForm = () => {
   const [formError, setFormError] = useState<FormErrorState>({});

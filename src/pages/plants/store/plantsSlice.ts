@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { PlantAllInfo, PlantsState } from "../../../interafces";
+import { PlantAllInfo, PlantsState } from "../../../interfaces";
 import { AppDispatch } from "../../../store/rootStore";
 import { amendPlant } from "../api/amendPlant";
 import { giveWaterToPlant } from "../api/giveWaterToPlant";

@@ -1,4 +1,4 @@
-import { Plant } from "../../../interafces";
+import { Plant } from "../../../interfaces";
 
 export const paths = {
   addPlant: "/plants/",

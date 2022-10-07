@@ -1,4 +1,4 @@
-import { PlantAllInfo } from "../../../interafces";
+import { PlantAllInfo } from "../../../interfaces";
 import { api } from "../../../shared";
 import { PaginatedList } from "../interfaces/interfaces";
 import { paths } from "./paths";

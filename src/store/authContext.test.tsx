@@ -4,8 +4,8 @@ import { AuthContext, AuthContextProvider } from "./authContext";
 import { BrowserRouter } from "react-router-dom";
 import { api } from "../shared/index";
 import { Provider } from "react-redux";
+import { AuthToken } from "../interfaces";
 import { rootStore } from "./rootStore";
-import { AuthToken } from "../interafces";
 
 interface Props {
   a: AuthToken;

@@ -1,7 +1,7 @@
 import React, { useRef, useState } from "react";
 import classes from "../../assets/FormCard.module.css";
 import { Link } from "react-router-dom";
-import { AuthToken } from "../../../interafces";
+import { AuthToken } from "../../../interfaces";
 import { api } from "../../../shared";
 import { useLogin } from "../hooks/useLogin";
 
