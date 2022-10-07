@@ -63,7 +63,10 @@ export const Autocomplete = React.forwardRef<HTMLInputElement, Props>((props, fo
             </button>
           </div>
         </div>
-        <ul {...getMenuProps()} className={`absolute p-0 w-72 bg-white shadow-md max-h-80 overflow-scroll`}>
+        <ul
+          {...getMenuProps()}
+          className={`absolute p-0 w-72 bg-white shadow-md max-h-80 overflow-scroll ${addedClasses.ul}`}
+        >
           {isOpen &&
             items.map((item, index) => (
               <li key={`${item}${index}`} {...getItemProps({ item, index })}>
