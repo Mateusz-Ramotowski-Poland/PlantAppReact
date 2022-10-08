@@ -4,25 +4,13 @@ import { useAppSelector } from "../../../store/hooks";
 import { useGetPlants } from "../hooks/useGetPlants";
 import { ModalWindowDelete } from "../layout/ModalWindowDelete";
 import { ModalWindowUpdate } from "../layout/ModalWindowUpdate";
+import { getWateringStatus } from "./helpers";
 import { PlantItem } from "./PlantItem";
 import classes from "./PlantsList.module.css";
 
 interface State {
   plants: PlantsState;
 }
-const getWateringStatus = (nextWatering: string): string => {
-  console.log("getWateringStatus runed");
-  const nowMiliSeconds = Date.now();
-  const nextWateringMiliseconds = Date.parse(new Date(nextWatering).toString());
-  const difference = nextWateringMiliseconds - nowMiliSeconds;
-  if (difference < 24 * 60 * 60 * 1000) {
-    return "wateringAlarm";
-  } else if (difference < 3 * 24 * 60 * 60 * 1000) {
-    return "wateringWarning";
-  } else {
-    return "wateringOk";
-  }
-};
 
 export const PlantsList = () => {
   const [deleteModalIsOpen, setDeleteModalIsOpen] = useState(false);
@@ -30,6 +18,27 @@ export const PlantsList = () => {
   const [PlantId, setPlantId] = useState("");
   const [PlantName, setPlantName] = useState("");
   const [wateringCounter, setWateringCounter] = useState(0);
+
+  let { getPlants } = useGetPlants();
+  const plants = useAppSelector((state: State) => state.plants.plants);
+
+  const wateringStatuses: string[] = useMemo(() => {
+    return plants.map((plant) => getWateringStatus(plant.next_watering));
+  }, [wateringCounter]);
+
+  useEffect(() => {
+    if (plants.length === 0) {
+      getPlants();
+    }
+  }, []);
+
+  if (!plants || plants.length === 0) {
+    return (
+      <section>
+        <p>The user don't have any plants</p>
+      </section>
+    );
+  }
 
   function openModalDelete(id: string, name: string) {
     setDeleteModalIsOpen(true);
@@ -51,27 +60,6 @@ export const PlantsList = () => {
     setUpdateModalIsOpen(false);
   }
 
-  let { getPlants } = useGetPlants();
-  const plants = useAppSelector((state: State) => state.plants.plants);
-
-  useEffect(() => {
-    if (plants.length === 0) {
-      getPlants();
-    }
-  }, []);
-
-  const wateringStatuses: string[] = useMemo(() => {
-    return plants.map((plant) => getWateringStatus(plant.next_watering));
-  }, [wateringCounter]);
-
-  if (!plants || plants.length === 0) {
-    return (
-      <section>
-        <p>The user don't have any plants</p>
-      </section>
-    );
-  }
-
   const plantsList = plants.map((plant: Plant, index) => {
     return (
       <PlantItem
@@ -84,10 +72,17 @@ export const PlantsList = () => {
     );
   });
 
+  const sortByNameAscendingHandler = () => {};
+
   return (
     <>
       <table className={classes.table}>
         <thead>
+          <tr>
+            <button type="button" onClick={sortByNameAscendingHandler}>
+              Sort by name: ascending
+            </button>
+          </tr>
           <tr className={classes.row}>
             <th className={classes.box}>Id</th>
             <th className={classes.box}>Created at</th>
