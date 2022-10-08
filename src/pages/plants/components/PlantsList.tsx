@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Plant, PlantsState } from "../../../interfaces";
 import { useAppSelector } from "../../../store/hooks";
 import { useGetPlants } from "../hooks/useGetPlants";
@@ -10,7 +10,8 @@ import classes from "./PlantsList.module.css";
 interface State {
   plants: PlantsState;
 }
-const getWateringStatus = (nextWatering: string) => {
+const getWateringStatus = (nextWatering: string): string => {
+  console.log("getWateringStatus runed");
   const nowMiliSeconds = Date.now();
   const nextWateringMiliseconds = Date.parse(new Date(nextWatering).toString());
   const difference = nextWateringMiliseconds - nowMiliSeconds;
@@ -28,6 +29,7 @@ export const PlantsList = () => {
   const [updateModalIsOpen, setUpdateModalIsOpen] = useState(false);
   const [PlantId, setPlantId] = useState("");
   const [PlantName, setPlantName] = useState("");
+  const [wateringCounter, setWateringCounter] = useState(0);
 
   function openModalDelete(id: string, name: string) {
     setDeleteModalIsOpen(true);
@@ -58,6 +60,10 @@ export const PlantsList = () => {
     }
   }, []);
 
+  const wateringStatuses: string[] = useMemo(() => {
+    return plants.map((plant) => getWateringStatus(plant.next_watering));
+  }, [wateringCounter]);
+
   if (!plants || plants.length === 0) {
     return (
       <section>
@@ -66,13 +72,14 @@ export const PlantsList = () => {
     );
   }
 
-  const plantsList = plants.map((plant: Plant) => {
+  const plantsList = plants.map((plant: Plant, index) => {
     return (
       <PlantItem
         key={plant.id}
         openModalDelete={openModalDelete}
         openModalUpdate={openModalUpdate}
-        plant={{ ...plant, wateringStatus: getWateringStatus(plant.next_watering) }}
+        plant={{ ...plant, wateringStatus: wateringStatuses[index] }}
+        setWateringCounter={setWateringCounter}
       ></PlantItem>
     );
   });

@@ -7,6 +7,7 @@ interface Props {
   plant: Plant;
   openModalDelete: (id: string, name: string) => void;
   openModalUpdate: (id: string, name: string) => void;
+  setWateringCounter: React.Dispatch<React.SetStateAction<number>>;
 }
 
 export const PlantItem = (props: Props) => {
@@ -24,6 +25,7 @@ export const PlantItem = (props: Props) => {
 
   function clickWateredHandler() {
     dispatch(waterPlant(id));
+    props.setWateringCounter((prevCount) => prevCount + 1);
   }
 
   function formatData(str: string) {
