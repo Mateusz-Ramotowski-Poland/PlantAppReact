@@ -1,5 +1,5 @@
-import { useEffect, useMemo, useState } from "react";
-import { Plant, PlantsState } from "../../../interfaces";
+import { useEffect, useState } from "react";
+import { RenderPlant, PlantsState } from "../../../interfaces";
 import { useAppSelector } from "../../../store/hooks";
 import { useGetPlants } from "../hooks/useGetPlants";
 import { ModalWindowDelete } from "../layout/ModalWindowDelete";
@@ -10,26 +10,12 @@ import classes from "./PlantsList.module.css";
 interface State {
   plants: PlantsState;
 }
-const getWateringStatus = (nextWatering: string): string => {
-  console.log("getWateringStatus runed");
-  const nowMiliSeconds = Date.now();
-  const nextWateringMiliseconds = Date.parse(new Date(nextWatering).toString());
-  const difference = nextWateringMiliseconds - nowMiliSeconds;
-  if (difference < 24 * 60 * 60 * 1000) {
-    return "wateringAlarm";
-  } else if (difference < 3 * 24 * 60 * 60 * 1000) {
-    return "wateringWarning";
-  } else {
-    return "wateringOk";
-  }
-};
 
 export const PlantsList = () => {
   const [deleteModalIsOpen, setDeleteModalIsOpen] = useState(false);
   const [updateModalIsOpen, setUpdateModalIsOpen] = useState(false);
   const [PlantId, setPlantId] = useState("");
   const [PlantName, setPlantName] = useState("");
-  const [wateringCounter, setWateringCounter] = useState(0);
 
   function openModalDelete(id: string, name: string) {
     setDeleteModalIsOpen(true);
@@ -60,10 +46,6 @@ export const PlantsList = () => {
     }
   }, []);
 
-  const wateringStatuses: string[] = useMemo(() => {
-    return plants.map((plant) => getWateringStatus(plant.next_watering));
-  }, [wateringCounter]);
-
   if (!plants || plants.length === 0) {
     return (
       <section>
@@ -72,16 +54,8 @@ export const PlantsList = () => {
     );
   }
 
-  const plantsList = plants.map((plant: Plant, index) => {
-    return (
-      <PlantItem
-        key={plant.id}
-        openModalDelete={openModalDelete}
-        openModalUpdate={openModalUpdate}
-        plant={{ ...plant, wateringStatus: wateringStatuses[index] }}
-        setWateringCounter={setWateringCounter}
-      ></PlantItem>
-    );
+  const plantsList = plants.map((plant: RenderPlant, index) => {
+    return <PlantItem key={plant.id} openModalDelete={openModalDelete} openModalUpdate={openModalUpdate} plant={plant}></PlantItem>;
   });
 
   return (

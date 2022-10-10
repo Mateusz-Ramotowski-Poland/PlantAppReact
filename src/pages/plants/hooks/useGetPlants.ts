@@ -5,6 +5,7 @@ import { AuthContext } from "../../../store/authContext";
 import { useAppDispatch } from "../../../store/hooks";
 import { getAllUserPlants } from "../api";
 import { plantsActions } from "../store/plantsSlice";
+import { getWateringStatus } from "../utils";
 
 export function useGetPlants() {
   const [isFetchDataError, setIsFetchDataError] = useState(false);
@@ -20,8 +21,11 @@ export function useGetPlants() {
         setLoggedUserId(user.id);
         localStorage.setItem("userId", user.id);
         getAllUserPlants(user.id)
-          .then((plants) => {
-            dispatch(plantsActions.insertMany({ plants: plants.results }));
+          .then((apiPlants) => {
+            const plants = apiPlants.results.map((plant) => {
+              return { ...plant, wateringStatus: getWateringStatus(plant.next_watering) };
+            });
+            dispatch(plantsActions.insertMany({ plants: plants }));
             navigate("/logged/showPlants");
           })
           .catch((err) => {

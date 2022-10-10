@@ -1,13 +1,12 @@
-import { Plant } from "../../../interfaces";
+import { RenderPlant } from "../../../interfaces";
 import { useAppDispatch } from "../../../store/hooks";
 import { waterPlant } from "../store/plantsSlice";
 import classes from "./PlantItem.module.css";
 
 interface Props {
-  plant: Plant;
+  plant: RenderPlant;
   openModalDelete: (id: string, name: string) => void;
   openModalUpdate: (id: string, name: string) => void;
-  setWateringCounter: React.Dispatch<React.SetStateAction<number>>;
 }
 
 export const PlantItem = (props: Props) => {
@@ -25,7 +24,6 @@ export const PlantItem = (props: Props) => {
 
   function clickWateredHandler() {
     dispatch(waterPlant(id));
-    props.setWateringCounter((prevCount) => prevCount + 1);
   }
 
   function formatData(str: string) {

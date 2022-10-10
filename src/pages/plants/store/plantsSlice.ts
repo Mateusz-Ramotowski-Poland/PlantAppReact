@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { PlantAllInfo, PlantsState } from "../../../interfaces";
+import { PlantsState, RenderPlant } from "../../../interfaces";
 import { AppDispatch } from "../../../store/rootStore";
 import { amendPlant } from "../api/amendPlant";
 import { giveWaterToPlant } from "../api/giveWaterToPlant";
@@ -13,10 +13,10 @@ const plantsSlice = createSlice({
   name: "plants",
   initialState: initialState,
   reducers: {
-    insertMany(state, action: PayloadAction<{ plants: PlantAllInfo[] }>) {
+    insertMany(state, action: PayloadAction<{ plants: RenderPlant[] }>) {
       state.plants = action.payload.plants;
     },
-    add(state, { payload: { plant } }: PayloadAction<{ plant: PlantAllInfo }>) {
+    add(state, { payload: { plant } }: PayloadAction<{ plant: RenderPlant }>) {
       state.plants.push(plant);
     },
     deleteAll(state) {
