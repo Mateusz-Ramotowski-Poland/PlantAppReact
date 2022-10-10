@@ -5,7 +5,9 @@ export function sortPlantArray(
   sortOrder: "descending" | "ascending",
   byPropertyName: "name" | "watering_interval" | "next_watering"
 ) {
-  return array.sort(function (a, b) {
+  const deepCopyOfArray: PlantAllInfo[] = JSON.parse(JSON.stringify(array)) ?? [];
+
+  return deepCopyOfArray.sort(function (a, b) {
     let aProperty = a[byPropertyName];
     let bProperty = b[byPropertyName];
 

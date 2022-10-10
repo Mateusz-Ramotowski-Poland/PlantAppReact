@@ -1,10 +1,11 @@
 import { useEffect, useMemo, useState } from "react";
 import { Plant, PlantsState } from "../../../interfaces";
-import { useAppSelector } from "../../../store/hooks";
+import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import { useGetPlants } from "../hooks/useGetPlants";
 import { ModalWindowDelete } from "../layout/ModalWindowDelete";
 import { ModalWindowUpdate } from "../layout/ModalWindowUpdate";
-import { getWateringStatus } from "./helpers";
+import { plantsActions } from "../store/plantsSlice";
+import { getWateringStatus, sortPlantArray } from "./helpers";
 import { PlantItem } from "./PlantItem";
 import classes from "./PlantsList.module.css";
 
@@ -13,6 +14,7 @@ interface State {
 }
 
 export const PlantsList = () => {
+  const dispatch = useAppDispatch();
   const [deleteModalIsOpen, setDeleteModalIsOpen] = useState(false);
   const [updateModalIsOpen, setUpdateModalIsOpen] = useState(false);
   const [PlantId, setPlantId] = useState("");
@@ -72,16 +74,46 @@ export const PlantsList = () => {
     );
   });
 
-  const sortByNameAscendingHandler = () => {};
+  function sortPlants(sortOrder: "descending" | "ascending", byPropertyName: "name" | "watering_interval" | "next_watering") {
+    const sortedArray = sortPlantArray(plants, sortOrder, byPropertyName);
+    dispatch(plantsActions.insertMany({ plants: sortedArray }));
+  }
 
   return (
     <>
       <table className={classes.table}>
         <thead>
           <tr>
-            <button type="button" onClick={sortByNameAscendingHandler}>
-              Sort by name: ascending
-            </button>
+            <td>
+              <button type="button" onClick={sortPlants.bind(null, "ascending", "name")}>
+                Sort by name: ascending
+              </button>
+            </td>
+            <td>
+              <button type="button" onClick={sortPlants.bind(null, "descending", "name")}>
+                Sort by name: descending
+              </button>
+            </td>
+            <td>
+              <button type="button" onClick={sortPlants.bind(null, "ascending", "watering_interval")}>
+                Sort by watering interval: ascending
+              </button>
+            </td>
+            <td>
+              <button type="button" onClick={sortPlants.bind(null, "descending", "watering_interval")}>
+                Sort by watering interval: descending
+              </button>
+            </td>
+            <td>
+              <button type="button" onClick={sortPlants.bind(null, "ascending", "next_watering")}>
+                Sort by next watering: ascending
+              </button>
+            </td>
+            <td>
+              <button type="button" onClick={sortPlants.bind(null, "descending", "next_watering")}>
+                Sort by next watering: descending
+              </button>
+            </td>
           </tr>
           <tr className={classes.row}>
             <th className={classes.box}>Id</th>
