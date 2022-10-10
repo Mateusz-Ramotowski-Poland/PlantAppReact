@@ -1,3 +1,5 @@
+import dayjs from "dayjs";
+
 enum WateringStatuses {
   alarm = "wateringAlarm",
   warning = "wateringWarning",
@@ -5,9 +7,8 @@ enum WateringStatuses {
 }
 
 export const getWateringStatus = (nextWatering: string) => {
-  console.log("getWateringStatus runed");
-  const nowMiliSeconds = new Date();
-  const nextWateringMiliseconds = new Date(nextWatering);
+  const nowMiliSeconds = dayjs();
+  const nextWateringMiliseconds = dayjs(nextWatering);
   const difference = Number(nextWateringMiliseconds) - Number(nowMiliSeconds);
   if (difference < 24 * 60 * 60 * 1000) {
     return WateringStatuses.alarm;

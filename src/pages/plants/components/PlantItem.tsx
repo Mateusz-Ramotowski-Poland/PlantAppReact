@@ -1,3 +1,4 @@
+import dayjs from "dayjs";
 import { RenderPlant } from "../../../interfaces";
 import { useAppDispatch } from "../../../store/hooks";
 import { waterPlant } from "../store/plantsSlice";
@@ -26,13 +27,9 @@ export const PlantItem = (props: Props) => {
     dispatch(waterPlant(id));
   }
 
-  function formatData(str: string) {
-    return str.slice(0, 10) + " " + str.slice(11, 19);
-  }
-
-  const createdAt = created_at ? formatData(created_at) : created_at;
-  const nextWatering = next_watering ? formatData(next_watering) : next_watering;
-  const lastWatering = last_watering ? formatData(last_watering) : last_watering;
+  const createdAt = created_at ? dayjs(created_at).format("YYYY-MM-DD") : created_at;
+  const nextWatering = next_watering ? dayjs(next_watering).format("YYYY-MM-DD HH:mm") : next_watering;
+  const lastWatering = last_watering ? dayjs(last_watering).format("YYYY-MM-DD HH:mm") : last_watering;
 
   return (
     <>
