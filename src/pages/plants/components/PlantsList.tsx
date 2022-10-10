@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Plant, PlantsState } from "../../../interafces";
+import { RenderPlant, PlantsState } from "../../../interfaces";
 import { useAppSelector } from "../../../store/hooks";
 import { useGetPlants } from "../hooks/useGetPlants";
 import { ModalWindowDelete } from "../layout/ModalWindowDelete";
@@ -9,10 +9,6 @@ import classes from "./PlantsList.module.css";
 
 interface State {
   plants: PlantsState;
-}
-
-function formatData(str: string) {
-  return str.slice(0, 10) + " " + str.slice(11, 19);
 }
 
 export const PlantsList = () => {
@@ -57,28 +53,9 @@ export const PlantsList = () => {
       </section>
     );
   }
-  const plantsList = plants.map((plant: Plant) => {
-    const createdAt = formatData(plant.created_at);
-    const NextWatering = formatData(plant.next_watering);
-    const LastWatering = formatData(plant.next_watering);
 
-    return (
-      <PlantItem
-        key={plant.id}
-        id={plant.id}
-        created_at={createdAt}
-        name={plant.name}
-        species={plant.species}
-        watering_interval={plant.watering_interval}
-        last_watering={LastWatering}
-        next_watering={NextWatering}
-        watering_count={plant.watering_count}
-        sun_exposure={plant.sun_exposure}
-        temperature={plant.temperature}
-        openModalDelete={openModalDelete}
-        openModalUpdate={openModalUpdate}
-      ></PlantItem>
-    );
+  const plantsList = plants.map((plant: RenderPlant, index) => {
+    return <PlantItem key={plant.id} openModalDelete={openModalDelete} openModalUpdate={openModalUpdate} plant={plant}></PlantItem>;
   });
 
   return (
@@ -100,18 +77,8 @@ export const PlantsList = () => {
         </thead>
         <tbody>{plantsList}</tbody>
       </table>
-      <ModalWindowDelete
-        closeModalDelete={closeModalDelete}
-        deleteModalIsOpen={deleteModalIsOpen}
-        id={PlantId}
-        name={PlantName}
-      />
-      <ModalWindowUpdate
-        closeModalUpdate={closeModalUpdate}
-        updateModalIsOpen={updateModalIsOpen}
-        id={PlantId}
-        name={PlantName}
-      />
+      <ModalWindowDelete closeModalDelete={closeModalDelete} deleteModalIsOpen={deleteModalIsOpen} id={PlantId} name={PlantName} />
+      <ModalWindowUpdate closeModalUpdate={closeModalUpdate} updateModalIsOpen={updateModalIsOpen} id={PlantId} name={PlantName} />
     </>
   );
 };

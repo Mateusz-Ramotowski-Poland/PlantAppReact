@@ -5,7 +5,7 @@ import { MainNavigation } from "./layout/MainNavigation";
 import { ToastContainer } from "react-toastify";
 import { paths } from "./api";
 import { useAppDispatch } from "../../store/hooks";
-import { PlantAllInfo } from "../../interafces";
+import { RenderPlant } from "../../interfaces";
 import { plantsActions } from "./store/plantsSlice";
 import { Autocomplete } from "./components/Autocomplete";
 
@@ -33,7 +33,7 @@ export const AddPlantFormPage = () => {
     };
 
     api
-      .post<PlantAllInfo>(paths.addPlant, body)
+      .post<RenderPlant>(paths.addPlant, body)
       .then((plant) => {
         showMessage("Added new plant", "info");
         dispatch(plantsActions.add({ plant }));

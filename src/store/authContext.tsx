@@ -1,4 +1,4 @@
-import { AuthToken } from "../interafces";
+import { AuthToken } from "../interfaces";
 import { useNavigate } from "react-router-dom";
 import { api } from "../shared";
 

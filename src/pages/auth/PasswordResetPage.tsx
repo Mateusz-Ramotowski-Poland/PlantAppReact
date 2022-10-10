@@ -2,7 +2,7 @@ import { useParams } from "react-router-dom";
 import { useRef, useState } from "react";
 import classes from "../assets/FormCard.module.css";
 import { confirmOnlyNumbersValidation, confirmValueValidation, api, checkFormValidity } from "../../shared";
-import { FormErrorState } from "../../interafces";
+import { FormErrorState } from "../../interfaces";
 import { ToastContainer } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { showErrorMessages } from "../../shared/utils/showErrorMessages";

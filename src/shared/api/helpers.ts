@@ -1,4 +1,4 @@
-import { AuthToken } from "../../interafces";
+import { AuthToken } from "../../interfaces";
 import { AUTH_TOKEN, CONTENT_TYPE, CONTENT_TYPE_KEY } from "./constants";
 import { is401HTTPResponse, isAuthToken } from "./guards";
 import { FetchConfig, RequestConfig } from "./interfaces";

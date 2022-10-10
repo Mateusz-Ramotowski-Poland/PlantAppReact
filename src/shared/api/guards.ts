@@ -1,4 +1,4 @@
-import { ApiError, AuthToken } from "../../interafces";
+import { ApiError, AuthToken } from "../../interfaces";
 
 export function isApiError(err: any): err is ApiError {
   return (err as ApiError).errMessages !== undefined;

@@ -26,3 +26,13 @@
   background-color: #50be71;
   border: 1px solid #50be71;
 }
+
+.wateringAlarm {
+  color: red;
+}
+.wateringWarning {
+  color: orange;
+}
+.wateringOk {
+  color: blue;
+}
