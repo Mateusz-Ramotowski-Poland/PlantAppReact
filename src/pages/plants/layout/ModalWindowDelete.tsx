@@ -4,10 +4,12 @@ import { deletePlant } from "../store/plantsSlice";
 import classes from "./ModalWindowDelete.module.css";
 
 interface Props {
-  id: string;
+  deleteModal: {
+    plantId: string;
+    isOpen: boolean;
+    plantName: string;
+  };
   closeModalDelete: () => void;
-  deleteModalIsOpen: boolean;
-  name: string;
 }
 
 const customStyles = {
@@ -25,19 +27,14 @@ export const ModalWindowDelete = (props: Props) => {
   const dispatch = useAppDispatch();
 
   async function deleteHandler() {
-    await dispatch(deletePlant(props.id));
+    await dispatch(deletePlant(props.deleteModal.plantId));
     props.closeModalDelete();
   }
 
   return (
-    <Modal
-      isOpen={props.deleteModalIsOpen}
-      onRequestClose={props.closeModalDelete}
-      style={customStyles}
-      contentLabel="delete plant modal"
-    >
+    <Modal isOpen={props.deleteModal.isOpen} onRequestClose={props.closeModalDelete} style={customStyles} contentLabel="delete plant modal">
       <form className={classes.form}>
-        <p>Are you sure to delete plant with name={props.name}?</p>
+        <p>Are you sure to delete plant with name={props.deleteModal.plantName}?</p>
         <button type="button" onClick={deleteHandler}>
           Delete plant
         </button>
