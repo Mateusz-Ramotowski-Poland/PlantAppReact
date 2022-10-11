@@ -1,5 +1,4 @@
 export const getWateringStatus = (nextWatering: string): string => {
-  console.log("getWateringStatus runed");
   const nowMiliSeconds = Date.now();
   const nextWateringMiliseconds = Date.parse(new Date(nextWatering).toString());
   const difference = nextWateringMiliseconds - nowMiliSeconds;

@@ -1,31 +1,49 @@
-import { useState } from "react";
-import { Plant, PlantAllInfo } from "../../../interfaces";
-
+import { useEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom";
+import { PlantsState, RenderPlant } from "../../../interfaces";
+import { useAppDispatch, useAppSelector } from "../../../store/hooks";
+import { useGetPlants } from "../hooks/useGetPlants";
 import { ModalWindowDelete } from "../layout/ModalWindowDelete";
 import { ModalWindowUpdate } from "../layout/ModalWindowUpdate";
-
+import { plantsActions } from "../store/plantsSlice";
+import { SortBy, SortOrder } from "./enums/enums";
+import { sortPlantArray } from "./helpers";
 import { PlantItem } from "./PlantItem";
 import classes from "./PlantsList.module.css";
 
+interface State {
+  plants: PlantsState;
+}
+
 interface Props {
-  plants: PlantAllInfo[];
+  plants: RenderPlant[];
   wateringStatuses: string[];
-  setWateringCounter: React.Dispatch<React.SetStateAction<number>>;
 }
 
 export const PlantsList = (props: Props) => {
+  const dispatch = useAppDispatch();
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  let sortBy: SortBy, sortOrder: SortOrder;
+  const urlSortBy = searchParams.get("sortBy");
+  if (Object.values(SortBy).includes(urlSortBy as SortBy)) {
+    sortBy = urlSortBy as SortBy;
+  } else {
+    sortBy = SortBy.name;
+  }
+  const urlSortOrder = searchParams.get("sortOrder");
+  if (Object.values(SortOrder).includes(urlSortOrder as SortOrder)) {
+    sortOrder = urlSortOrder as SortOrder;
+  } else {
+    sortOrder = SortOrder.ascending;
+  }
+
+  console.log(sortOrder, sortBy);
+
   const [deleteModalIsOpen, setDeleteModalIsOpen] = useState(false);
   const [updateModalIsOpen, setUpdateModalIsOpen] = useState(false);
   const [PlantId, setPlantId] = useState("");
   const [PlantName, setPlantName] = useState("");
-
-  if (!props.plants || props.plants.length === 0) {
-    return (
-      <section>
-        <p>The user don't have any plants</p>
-      </section>
-    );
-  }
 
   function openModalDelete(id: string, name: string) {
     setDeleteModalIsOpen(true);
@@ -47,17 +65,31 @@ export const PlantsList = (props: Props) => {
     setUpdateModalIsOpen(false);
   }
 
-  const plantsList = props.plants.map((plant: Plant, index) => {
+  let { getPlants } = useGetPlants();
+  const plants = useAppSelector((state: State) => state.plants.plants);
+
+  useEffect(() => {
+    if (plants.length === 0) {
+      getPlants();
+    }
+  }, []);
+
+  if (!plants || plants.length === 0) {
     return (
-      <PlantItem
-        key={plant.id}
-        openModalDelete={openModalDelete}
-        openModalUpdate={openModalUpdate}
-        plant={{ ...plant, wateringStatus: props.wateringStatuses[index] }}
-        setWateringCounter={props.setWateringCounter}
-      ></PlantItem>
+      <section>
+        <p>The user don't have any plants</p>
+      </section>
     );
+  }
+
+  const plantsList = plants.map((plant: RenderPlant) => {
+    return <PlantItem key={plant.id} openModalDelete={openModalDelete} openModalUpdate={openModalUpdate} plant={plant}></PlantItem>;
   });
+
+  function sortPlants(sortOrder: SortOrder, byPropertyName: SortBy) {
+    const sortedArray = sortPlantArray(plants, sortOrder, byPropertyName);
+    dispatch(plantsActions.insertMany({ plants: sortedArray }));
+  }
 
   return (
     <>
@@ -66,11 +98,17 @@ export const PlantsList = (props: Props) => {
           <tr className={classes.row}>
             <th className={classes.box}>Id</th>
             <th className={classes.box}>Created at</th>
-            <th className={classes.box}>Name</th>
+            <th className={classes.box} onClick={sortPlants.bind(null, sortOrder, SortBy.name)}>
+              Name⇅
+            </th>
             <th className={classes.box}>species</th>
-            <th className={classes.box}>Watering interval</th>
+            <th className={classes.box} onClick={sortPlants.bind(null, sortOrder, SortBy.watering_interval)}>
+              Watering interval⇅
+            </th>
             <th className={classes.box}>Last watering</th>
-            <th className={classes.box}>Next watering</th>
+            <th className={classes.box} onClick={sortPlants.bind(null, sortOrder, SortBy.next_watering)}>
+              Next watering⇅
+            </th>
             <th className={classes.box}>Watering count</th>
             <th className={classes.box}>Sun exposure</th>
             <th className={classes.box}>Temperature</th>
@@ -83,3 +121,5 @@ export const PlantsList = (props: Props) => {
     </>
   );
 };
+
+// ⇈ ⇊

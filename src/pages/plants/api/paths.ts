@@ -1,10 +1,10 @@
-import { Plant } from "../../../interfaces";
+import { RenderPlant } from "../../../interfaces";
 
 export const paths = {
   addPlant: "/plants/",
-  amendPlant: (plantId: Plant["id"]) => `/plants/${plantId}/`,
+  amendPlant: (plantId: RenderPlant["id"]) => `/plants/${plantId}/`,
   getPlants: "/plants/",
   getSpecies: `/plants/species/`,
-  giveWaterToPlant: (plantId: Plant["id"]) => `/plants/${plantId}/water/`,
-  removePlant: (plantId: Plant["id"]) => `/plants/${plantId}/`,
+  giveWaterToPlant: (plantId: RenderPlant["id"]) => `/plants/${plantId}/water/`,
+  removePlant: (plantId: RenderPlant["id"]) => `/plants/${plantId}/`,
 };

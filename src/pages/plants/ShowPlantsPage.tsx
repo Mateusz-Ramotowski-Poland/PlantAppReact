@@ -34,7 +34,7 @@ export const ShowPlantsPage = () => {
     setIsShowSortOptions((prev) => !prev);
   }
 
-  function sortPlants(sortOrder: "descending" | "ascending", byPropertyName: "name" | "watering_interval" | "next_watering") {
+  /*   function sortPlants(sortOrder: "descending" | "ascending", byPropertyName: "name" | "watering_interval" | "next_watering") {
     const sortedArray = sortPlantArray(plants, sortOrder, byPropertyName);
     dispatch(plantsActions.insertMany({ plants: sortedArray }));
   }
@@ -60,7 +60,7 @@ export const ShowPlantsPage = () => {
         Sort by next watering: descending
       </button>
     </>
-  );
+  ); */
 
   return (
     <>
@@ -70,9 +70,9 @@ export const ShowPlantsPage = () => {
         <button type="button" onClick={buttonClickHandler}>
           Sort By
         </button>
-        {isShowSortOptions && sortingOptions}
+        {/* {isShowSortOptions && sortingOptions} */}
       </h1>
-      <PlantsList plants={plants} wateringStatuses={wateringStatuses} setWateringCounter={setWateringCounter} />
+      <PlantsList plants={plants} wateringStatuses={wateringStatuses} />
     </>
   );
 };

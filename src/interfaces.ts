@@ -13,7 +13,16 @@ export interface AuthToken {
   refresh: string;
 }
 
-export interface Plant {
+export interface ApiError {
+  errMessages: Record<string, string[]>;
+  defaultMessage: string;
+}
+
+export interface PlantsState {
+  plants: RenderPlant[];
+}
+
+export interface ApiRenderPlant {
   id: string;
   created_at: string;
   name: string;
@@ -24,19 +33,13 @@ export interface Plant {
   watering_count: string;
   sun_exposure: number;
   temperature: number;
-  wateringStatus?: string;
 }
 
-export interface ApiError {
-  errMessages: Record<string, string[]>;
-  defaultMessage: string;
+export interface RenderPlant extends ApiRenderPlant {
+  wateringStatus: string;
 }
 
-export interface PlantsState {
-  plants: PlantAllInfo[];
-}
-
-export interface PlantAllInfo extends Plant {
+export interface ApiPlant extends ApiRenderPlant {
   url: string;
   author: string;
   water: string;
