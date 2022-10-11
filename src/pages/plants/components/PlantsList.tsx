@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useEffect, useState } from "react";
 import { RenderPlant } from "../../../interfaces";
 import { useAppSelector } from "../../../store/hooks";
+import { useAppSearchParams } from "../hooks";
 import { useGetPlants } from "../hooks/useGetPlants";
 import { ModalWindowDelete } from "../layout/ModalWindowDelete";
 import { ModalWindowUpdate } from "../layout/ModalWindowUpdate";
 import { Arrow } from "./Arrow";
-import { SortBy, SortOrder } from "./enums/enums";
+import { SortBy } from "./enums/enums";
 import { sortPlantArray } from "./helpers";
 import { PlantItem } from "./PlantItem";
 import classes from "./PlantsList.module.css";
@@ -14,15 +14,8 @@ import classes from "./PlantsList.module.css";
 interface Props {}
 
 export const PlantsList = (props: Props) => {
-  const [searchParams, setSearchParams] = useSearchParams();
-  let sortBy: SortBy, sortOrder: SortOrder;
-  Object.values(SortBy).includes(searchParams.get("sortBy") as SortBy)
-    ? (sortBy = searchParams.get("sortBy") as SortBy)
-    : (sortBy = SortBy.name);
-
-  Object.values(SortOrder).includes(searchParams.get("sortOrder") as SortOrder)
-    ? (sortOrder = searchParams.get("sortOrder") as SortOrder)
-    : (sortOrder = SortOrder.ascending);
+  const { changeSearchParams, getSearchParams } = useAppSearchParams();
+  const { sortBy, sortOrder } = getSearchParams();
   const [deleteModalIsOpen, setDeleteModalIsOpen] = useState(false);
   const [updateModalIsOpen, setUpdateModalIsOpen] = useState(false);
   const [PlantId, setPlantId] = useState("");
@@ -69,23 +62,6 @@ export const PlantsList = (props: Props) => {
   const plantsList = sortedPlants.map((plant: RenderPlant) => {
     return <PlantItem key={plant.id} openModalDelete={openModalDelete} openModalUpdate={openModalUpdate} plant={plant}></PlantItem>;
   });
-
-  function changeSearchParams(sortBy: SortBy, event: React.MouseEvent) {
-    const textContent = (event.target as HTMLTableElement).textContent as string;
-    const arrowSign = textContent[0];
-    let sortOrder;
-    if (arrowSign === "⇈") {
-      sortOrder = SortOrder.descending;
-    } else {
-      sortOrder = SortOrder.ascending;
-    }
-    setSearchParams({
-      sortBy: sortBy,
-      sortOrder: sortOrder,
-    });
-
-    console.log(sortBy, sortOrder);
-  }
 
   return (
     <>
