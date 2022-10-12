@@ -1,3 +1,3 @@
 export * from "./useGetPlants";
-export * from "./useAppSearchParams";
+export * from "./useChangeGetSearchParams";
 export * from "./useModals";

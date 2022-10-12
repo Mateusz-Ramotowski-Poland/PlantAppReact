@@ -38,17 +38,17 @@ export const PlantsList = (props: Props) => {
           <tr className={classes.row}>
             <th className={classes.box}>Id</th>
             <th className={classes.box}>Created at</th>
-            <th className={classes.box} onClick={changeSearchParams.bind(null, SortBy.name)}>
+            <th className={classes.box} onClick={changeSearchParams.bind(null, SortBy.name, sortOrder)}>
               <Arrow sortBy={sortBy} sortOrder={sortOrder} header={SortBy.name} />
               Name
             </th>
             <th className={classes.box}>species</th>
-            <th className={classes.box} onClick={changeSearchParams.bind(null, SortBy.watering_interval)}>
+            <th className={classes.box} onClick={changeSearchParams.bind(null, SortBy.watering_interval, sortOrder)}>
               <Arrow sortBy={sortBy} sortOrder={sortOrder} header={SortBy.watering_interval} />
               Watering interval
             </th>
             <th className={classes.box}>Last watering</th>
-            <th className={classes.box} onClick={changeSearchParams.bind(null, SortBy.next_watering)}>
+            <th className={classes.box} onClick={changeSearchParams.bind(null, SortBy.next_watering, sortOrder)}>
               <Arrow sortBy={sortBy} sortOrder={sortOrder} header={SortBy.next_watering} />
               Next watering
             </th>

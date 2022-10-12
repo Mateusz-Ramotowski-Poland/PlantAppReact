@@ -4,11 +4,8 @@ import { SortBy, SortOrder } from "../components/enums/enums";
 export function useChangeGetSearchParams() {
   const [searchParams, setSearchParams] = useSearchParams();
 
-  function changeSearchParams(sortBy: SortBy, event: React.MouseEvent) {
-    const textContent = (event.target as HTMLTableElement).textContent as string;
-    const arrowSign = textContent[0];
-    let sortOrder;
-    if (arrowSign === "⇈") {
+  function changeSearchParams(sortBy: SortBy, sortOrder: SortOrder, event: React.MouseEvent) {
+    if (sortOrder === SortOrder.ascending) {
       sortOrder = SortOrder.descending;
     } else {
       sortOrder = SortOrder.ascending;
