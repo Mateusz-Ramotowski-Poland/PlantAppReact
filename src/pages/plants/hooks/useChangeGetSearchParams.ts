@@ -4,7 +4,7 @@ import { SortBy, SortOrder } from "../components/enums/enums";
 export function useChangeGetSearchParams() {
   const [searchParams, setSearchParams] = useSearchParams();
 
-  function changeSearchParams(sortBy: SortBy, sortOrder: SortOrder, event: React.MouseEvent) {
+  function changeSearchParams(sortBy: SortBy, sortOrder: SortOrder | null, event: React.MouseEvent) {
     if (sortOrder === SortOrder.ascending) {
       sortOrder = SortOrder.descending;
     } else {
@@ -17,14 +17,14 @@ export function useChangeGetSearchParams() {
   }
 
   function getSearchParams() {
-    let sortBy: SortBy, sortOrder: SortOrder;
+    let sortBy: SortBy | null, sortOrder: SortOrder | null;
     Object.values(SortBy).includes(searchParams.get("sortBy") as SortBy)
       ? (sortBy = searchParams.get("sortBy") as SortBy)
-      : (sortBy = SortBy.none);
+      : (sortBy = null);
 
     Object.values(SortOrder).includes(searchParams.get("sortOrder") as SortOrder)
       ? (sortOrder = searchParams.get("sortOrder") as SortOrder)
-      : (sortOrder = SortOrder.none);
+      : (sortOrder = null);
 
     return { sortBy, sortOrder };
   }

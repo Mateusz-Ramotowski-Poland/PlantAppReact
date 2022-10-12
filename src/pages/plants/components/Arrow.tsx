@@ -1,8 +1,8 @@
 import { SortBy, SortOrder } from "./enums/enums";
 
 interface Props {
-  sortBy: SortBy;
-  sortOrder: SortOrder;
+  sortBy: SortBy | null;
+  sortOrder: SortOrder | null;
   header: SortBy;
 }
 
