@@ -24,8 +24,8 @@ export const MainNavigation = () => {
           <Link to={"/logged/addPlantForm"}>
             <button type="button">add plant</button>
           </Link>
-          <Link to={"/logged/updatePlantForm"}>
-            <button type="button">update plant</button>
+          <Link to={"/logged/statistics"}>
+            <button type="button">statistics</button>
           </Link>
           <Link to={"/logged/showPlants"}>
             <button type="button">show plants</button>

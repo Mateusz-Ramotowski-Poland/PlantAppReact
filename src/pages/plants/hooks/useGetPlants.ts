@@ -26,7 +26,7 @@ export function useGetPlants() {
               return { ...plant, wateringStatus: getWateringStatus(plant.next_watering) };
             });
             dispatch(plantsActions.insertMany({ plants: plants }));
-            navigate("/logged/showPlants");
+            navigate("/logged/statistics");
           })
           .catch((err) => {
             setIsFetchDataError(true);

@@ -7,7 +7,7 @@ import { getAllUserPlants } from "../api/getAllUserPlants";
 import { rootStore } from "../../../store/rootStore";
 import { AuthContextProvider } from "../../../store/authContext";
 import { PlantsList } from "./PlantsList";
-import { ShowPlantsPage } from "../ShowPlantsPage";
+import { StatisticsPage } from "../StatisticsPage";
 
 jest.mock("../../../shared/api", () => {
   return {
@@ -21,7 +21,7 @@ jest.mock("../api/getAllUserPlants", () => {
   };
 });
 
-/* describe("delete plant tests", () => {
+describe("delete plant tests", () => {
   let remove: jest.SpyInstance;
   const userExample = { id: "53" };
   const plantsExample = {
@@ -55,9 +55,7 @@ jest.mock("../api/getAllUserPlants", () => {
       <Provider store={rootStore}>
         <BrowserRouter>
           <AuthContextProvider>
-            <ShowPlantsPage>
-              <PlantsList />
-            </ShowPlantsPage>
+            <PlantsList />
           </AuthContextProvider>
         </BrowserRouter>
       </Provider>
@@ -79,4 +77,4 @@ jest.mock("../api/getAllUserPlants", () => {
     userEvent.click(deletePLantButton);
     expect(await screen.findByText("The user don't have any plants")).toBeInTheDocument();
   });
-}); */
+});
