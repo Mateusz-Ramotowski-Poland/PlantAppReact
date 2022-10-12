@@ -1,10 +1,14 @@
+import { PlantListTiles } from "./components/PlantListTiles";
 import { MainNavigation } from "./layout/MainNavigation";
 
-export const ShowPlantsPage: React.FC = () => {
+interface Props {}
+
+export const ShowPlantsPage: React.FC = (props: Props) => {
   return (
     <>
       <MainNavigation />
-      <h2>ShowPlantsPage</h2>
+      <h1>Your plants</h1>
+      <PlantListTiles />
     </>
   );
 };

@@ -1,41 +1,26 @@
-import dayjs from "dayjs";
-import { RenderPlant } from "../../../interfaces";
 import { useAppDispatch } from "../../../store/hooks";
+import { PlantItemProps } from "../interfaces/interfaces";
 import { waterPlant } from "../store/plantsSlice";
+import { formatPlantDates } from "./helpers";
 import classes from "./PlantItem.module.css";
 
-interface Props {
-  plant: RenderPlant;
-  openModalDelete: (id: string, data: object) => void;
-  openModalUpdate: (id: string, data: object) => void;
-}
-
-export const PlantItem = (props: Props) => {
+export const PlantItem = (props: PlantItemProps) => {
   // prettier-ignore
   const {id, created_at, name, species, watering_interval, last_watering, next_watering, watering_count, sun_exposure, temperature, wateringStatus,} = props.plant;
   const dispatch = useAppDispatch();
 
-  function clickDeleteHandler() {
-    props.openModalDelete(id, { plantName: name });
-  }
+  const clickDeleteHandler = () => props.openModalDelete(id, { plantName: name });
+  const clickUpdateHandler = () => props.openModalUpdate(id, { plantName: name });
+  const clickWateredHandler = () => dispatch(waterPlant(id));
 
-  function clickUpdateHandler() {
-    props.openModalUpdate(id, { plantName: name });
-  }
-
-  function clickWateredHandler() {
-    dispatch(waterPlant(id));
-  }
-
-  const createdAt = created_at ? dayjs(created_at).format("YYYY-MM-DD") : created_at;
-  const nextWatering = next_watering ? dayjs(next_watering).format("YYYY-MM-DD HH:mm") : next_watering;
-  const lastWatering = last_watering ? dayjs(last_watering).format("YYYY-MM-DD HH:mm") : last_watering;
+  // prettier-ignore
+  const { created, nextWatering, lastWatering } = formatPlantDates({created: created_at, lastWatering: last_watering, nextWatering: next_watering });
 
   return (
     <>
       <tr className={classes.row}>
         <td className={classes.box}>{id}</td>
-        <td className={classes.box}>{createdAt}</td>
+        <td className={classes.box}>{created}</td>
         <td className={classes.box}>{name}</td>
         <td className={classes.box}>{species}</td>
         <td className={classes.box}>{watering_interval}</td>
