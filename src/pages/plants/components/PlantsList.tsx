@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { RenderPlant } from "../../../interfaces";
 import { useAppSelector } from "../../../store/hooks";
-import { useGetPlants, useModals, useAppSearchParams } from "../hooks";
+import { useGetPlants, useModals, useChangeGetSearchParams } from "../hooks";
 import { ModalWindowDelete } from "../layout/ModalWindowDelete";
 import { ModalWindowUpdate } from "../layout/ModalWindowUpdate";
 import { Arrow } from "./Arrow";
@@ -13,9 +13,9 @@ import classes from "./PlantsList.module.css";
 interface Props {}
 
 export const PlantsList = (props: Props) => {
-  const { closeModal: closeDeleteModal, openModal: openDeleteModal, Modal: deleteModal } = useModals();
-  const { closeModal: closeUpdateModal, openModal: openUpdateModal, Modal: updateModal } = useModals();
-  const { changeSearchParams, getSearchParams } = useAppSearchParams();
+  const { closeModal: closeDeleteModal, openModal: openDeleteModal, modal: deleteModal } = useModals();
+  const { closeModal: closeUpdateModal, openModal: openUpdateModal, modal: updateModal } = useModals();
+  const { changeSearchParams, getSearchParams } = useChangeGetSearchParams();
   const { sortBy, sortOrder } = getSearchParams();
   let { getPlants } = useGetPlants();
   const plants = useAppSelector((state) => state.plants.plants);

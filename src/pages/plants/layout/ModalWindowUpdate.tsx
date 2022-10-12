@@ -7,7 +7,7 @@ import { updatePlant } from "../store/plantsSlice";
 interface Props {
   updateModal: {
     plantId: string;
-    plantName: string;
+    plantName?: string;
     isOpen: boolean;
   };
   closeModalUpdate: () => void;
@@ -93,7 +93,7 @@ export const ModalWindowUpdate = (props: Props) => {
           </div>
 
           <div className={classes.actions}>
-            <button type="submit">Update plant with name={props.updateModal.plantName}</button>
+            <button type="submit">Update plant {props.updateModal.plantName ? `with name=${props.updateModal.plantName}` : ""}</button>
             <button type="button" onClick={props.closeModalUpdate}>
               Cancel
             </button>

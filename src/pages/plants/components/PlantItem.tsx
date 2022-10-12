@@ -6,8 +6,8 @@ import classes from "./PlantItem.module.css";
 
 interface Props {
   plant: RenderPlant;
-  openModalDelete: (id: string, name: string) => void;
-  openModalUpdate: (id: string, name: string) => void;
+  openModalDelete: (id: string, data: object) => void;
+  openModalUpdate: (id: string, data: object) => void;
 }
 
 export const PlantItem = (props: Props) => {
@@ -16,11 +16,11 @@ export const PlantItem = (props: Props) => {
   const dispatch = useAppDispatch();
 
   function clickDeleteHandler() {
-    props.openModalDelete(id, name);
+    props.openModalDelete(id, { plantName: name });
   }
 
   function clickUpdateHandler() {
-    props.openModalUpdate(id, name);
+    props.openModalUpdate(id, { plantName: name });
   }
 
   function clickWateredHandler() {

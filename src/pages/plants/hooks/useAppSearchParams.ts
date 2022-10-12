@@ -1,7 +1,7 @@
 import { useSearchParams } from "react-router-dom";
 import { SortBy, SortOrder } from "../components/enums/enums";
 
-export function useAppSearchParams() {
+export function useChangeGetSearchParams() {
   const [searchParams, setSearchParams] = useSearchParams();
 
   function changeSearchParams(sortBy: SortBy, event: React.MouseEvent) {

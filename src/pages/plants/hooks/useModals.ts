@@ -1,29 +1,32 @@
 import { useState } from "react";
 
-export function useModals() {
+interface ModalConfig<ModalData extends object> {
+  data?: ModalData;
+}
+
+export function useModals<ModalData extends object>(config?: ModalConfig<ModalData>) {
   const initialState = {
     isOpen: false,
     plantId: "",
-    plantName: "",
+    ...(config?.data ?? config?.data),
   };
 
-  const [Modal, setModal] = useState(initialState);
+  const [modal, setModal] = useState(initialState);
 
-  function openModal(id: string, name: string) {
+  function openModal(id: string, data?: ModalData) {
     setModal({
+      ...initialState,
       isOpen: true,
       plantId: id,
-      plantName: name,
+      ...data,
     });
   }
 
   function closeModal() {
     setModal({
-      isOpen: false,
-      plantId: "",
-      plantName: "",
+      ...initialState,
     });
   }
 
-  return { closeModal, openModal, Modal };
+  return { closeModal, openModal, modal };
 }

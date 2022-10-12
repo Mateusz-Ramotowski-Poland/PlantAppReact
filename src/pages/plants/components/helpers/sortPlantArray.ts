@@ -2,7 +2,7 @@ import { RenderPlant } from "../../../../interfaces";
 import { SortBy, SortOrder } from "../enums/enums";
 
 export function sortPlantArray(array: RenderPlant[], sortOrder: SortOrder, byPropertyName: SortBy) {
-  if (byPropertyName === SortBy.none) return array;
+  if (byPropertyName === SortBy.none || sortOrder === SortOrder.none) return array;
 
   const deepCopyOfArray: RenderPlant[] = JSON.parse(JSON.stringify(array)) ?? [];
   return deepCopyOfArray.sort(function (a, b) {

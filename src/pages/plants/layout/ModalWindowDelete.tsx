@@ -7,7 +7,7 @@ interface Props {
   deleteModal: {
     plantId: string;
     isOpen: boolean;
-    plantName: string;
+    plantName?: string;
   };
   closeModalDelete: () => void;
 }
@@ -34,7 +34,7 @@ export const ModalWindowDelete = (props: Props) => {
   return (
     <Modal isOpen={props.deleteModal.isOpen} onRequestClose={props.closeModalDelete} style={customStyles} contentLabel="delete plant modal">
       <form className={classes.form}>
-        <p>Are you sure to delete plant with name={props.deleteModal.plantName}?</p>
+        <p>Are you sure to delete plant{props.deleteModal.plantName ? `with name=${props.deleteModal.plantName}` : ""}?</p>
         <button type="button" onClick={deleteHandler}>
           Delete plant
         </button>
