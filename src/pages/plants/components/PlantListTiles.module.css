@@ -1,0 +1,12 @@
+.title {
+  text-align: center;
+}
+
+.container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(28rem, max-content));
+  width: 95%;
+  justify-content: center;
+  margin: 0 auto;
+  color: white;
+}

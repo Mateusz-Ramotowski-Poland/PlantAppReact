@@ -23,17 +23,17 @@ export const PlantItemTile = (props: PlantItemProps) => {
         </p>
       </div>
       <div className={classes.main}>
-        <div>
-          <p>{created}</p>
-          <p>{nextWatering}</p>
-          <p>{lastWatering}</p>
-          <p>{watering_interval}</p>
+        <div className={classes.leftMain}>
+          <p>Created: {created}</p>
+          <p>Next watering: {nextWatering}</p>
+          <p>Last watering: {lastWatering}</p>
+          <p>Watering interval: {watering_interval}</p>
         </div>
-        <div>
-          <p>{id}</p>
-          <p>{watering_count}</p>
-          <p>{sun_exposure}</p>
-          <p>{temperature}</p>
+        <div className={classes.rightMain}>
+          <p>Id: {id}</p>
+          <p>Watering count: {watering_count}</p>
+          <p>Sun exposure: {sun_exposure}</p>
+          <p>Temperature: {temperature}</p>
         </div>
       </div>
       <div className={classes.buttons}>

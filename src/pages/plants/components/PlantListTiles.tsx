@@ -2,7 +2,10 @@ import { useEffect } from "react";
 import { RenderPlant } from "../../../interfaces";
 import { useAppSelector } from "../../../store/hooks";
 import { useGetPlants, useModals } from "../hooks";
+import { ModalWindowDelete } from "../layout/ModalWindowDelete";
+import { ModalWindowUpdate } from "../layout/ModalWindowUpdate";
 import { PlantItemTile } from "./PlantItemTile";
+import classes from "./PlantListTiles.module.css";
 
 interface Props {}
 
@@ -22,5 +25,12 @@ export const PlantListTiles = (props: Props) => {
     return <PlantItemTile key={plant.id} openModalDelete={openDeleteModal} openModalUpdate={openUpdateModal} plant={plant}></PlantItemTile>;
   });
 
-  return <>{plantsList}</>;
+  return (
+    <>
+      <h1 className={classes.title}>Your plants</h1>
+      <div className={classes.container}>{plantsList}</div>
+      <ModalWindowDelete closeModalDelete={closeDeleteModal} deleteModal={deleteModal} />
+      <ModalWindowUpdate closeModalUpdate={closeUpdateModal} updateModal={updateModal} />
+    </>
+  );
 };
