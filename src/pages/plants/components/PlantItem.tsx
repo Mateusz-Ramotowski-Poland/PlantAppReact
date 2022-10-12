@@ -1,34 +1,42 @@
+import { RenderPlant } from "../../../interfaces";
 import { useAppDispatch } from "../../../store/hooks";
-import { PlantItemProps } from "../interfaces/interfaces";
+import { UpdateDeleteWindow } from "../interfaces/interfaces";
 import { waterPlant } from "../store/plantsSlice";
 import { formatPlantDates } from "./helpers";
 import classes from "./PlantItem.module.css";
 
-export const PlantItem = (props: PlantItemProps) => {
-  // prettier-ignore
-  const {id, created_at, name, species, watering_interval, last_watering, next_watering, watering_count, sun_exposure, temperature, wateringStatus,} = props.plant;
+interface Props {
+  plant: RenderPlant;
+  openModalDelete: (data: UpdateDeleteWindow) => void;
+  openModalUpdate: (data: UpdateDeleteWindow) => void;
+}
+
+export const PlantItem = (props: Props) => {
+  const { plant } = props;
   const dispatch = useAppDispatch();
+  const { created, nextWatering, lastWatering } = formatPlantDates({
+    created: plant.created_at,
+    lastWatering: plant.last_watering,
+    nextWatering: plant.next_watering,
+  });
 
-  const clickDeleteHandler = () => props.openModalDelete(id, { plantName: name });
-  const clickUpdateHandler = () => props.openModalUpdate(id, { plantName: name });
-  const clickWateredHandler = () => dispatch(waterPlant(id));
-
-  // prettier-ignore
-  const { created, nextWatering, lastWatering } = formatPlantDates({created: created_at, lastWatering: last_watering, nextWatering: next_watering });
+  const clickDeleteHandler = () => props.openModalDelete({ id: plant.id, name: plant.name });
+  const clickUpdateHandler = () => props.openModalUpdate({ id: plant.id, name: plant.name });
+  const clickWateredHandler = () => dispatch(waterPlant(plant.id));
 
   return (
     <>
       <tr className={classes.row}>
-        <td className={classes.box}>{id}</td>
+        <td className={classes.box}>{plant.id}</td>
         <td className={classes.box}>{created}</td>
-        <td className={classes.box}>{name}</td>
-        <td className={classes.box}>{species}</td>
-        <td className={classes.box}>{watering_interval}</td>
+        <td className={classes.box}>{plant.name}</td>
+        <td className={classes.box}>{plant.species}</td>
+        <td className={classes.box}>{plant.watering_interval}</td>
         <td className={classes.box}>{lastWatering}</td>
-        <td className={`${classes.box} ${classes[wateringStatus as string]}`}>{nextWatering}</td>
-        <td className={classes.box}>{watering_count}</td>
-        <td className={classes.box}>{sun_exposure}</td>
-        <td className={classes.box}>{temperature}</td>
+        <td className={`${classes.box} ${classes[plant.wateringStatus as string]}`}>{nextWatering}</td>
+        <td className={classes.box}>{plant.watering_count}</td>
+        <td className={classes.box}>{plant.sun_exposure}</td>
+        <td className={classes.box}>{plant.temperature}</td>
         <td className={classes.box}>
           <button type="button" className={classes.button} onClick={clickDeleteHandler}>
             Delete

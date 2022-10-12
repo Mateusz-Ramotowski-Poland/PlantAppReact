@@ -1,25 +1,34 @@
+import { RenderPlant } from "../../../interfaces";
 import { useAppDispatch } from "../../../store/hooks";
-import { PlantItemProps } from "../interfaces/interfaces";
+import { UpdateDeleteWindow } from "../interfaces/interfaces";
 import { waterPlant } from "../store/plantsSlice";
 import { formatPlantDates } from "./helpers";
 import classes from "./PlantItemTile.module.css";
 
-export const PlantItemTile = (props: PlantItemProps) => {
-  const dispatch = useAppDispatch();
-  // prettier-ignore
-  const {id, created_at, name, species, watering_interval, last_watering, next_watering, watering_count, sun_exposure, temperature, wateringStatus,} = props.plant;
-  // prettier-ignore
-  const { created, nextWatering, lastWatering } = formatPlantDates({created: created_at, lastWatering: last_watering, nextWatering: next_watering });
+interface Props {
+  plant: RenderPlant;
+  openModalDelete: (data?: UpdateDeleteWindow) => void;
+  openModalUpdate: (data?: UpdateDeleteWindow) => void;
+}
 
-  const clickDeleteHandler = () => props.openModalDelete(id, { plantName: name });
-  const clickUpdateHandler = () => props.openModalUpdate(id, { plantName: name });
-  const clickWateredHandler = () => dispatch(waterPlant(id));
+export const PlantItemTile = (props: Props) => {
+  const dispatch = useAppDispatch();
+  const { plant } = props;
+  const { created, nextWatering, lastWatering } = formatPlantDates({
+    created: plant.created_at,
+    lastWatering: plant.last_watering,
+    nextWatering: plant.next_watering,
+  });
+
+  const clickDeleteHandler = () => props.openModalDelete({ id: plant.id, name: plant.name });
+  const clickUpdateHandler = () => props.openModalUpdate({ id: plant.id, name: plant.name });
+  const clickWateredHandler = () => dispatch(waterPlant(plant.id));
 
   return (
     <div className={classes.container}>
       <div className={classes.header}>
         <p>
-          {species} - {name}
+          {plant.species} - {plant.name}
         </p>
       </div>
       <div className={classes.main}>
@@ -27,13 +36,13 @@ export const PlantItemTile = (props: PlantItemProps) => {
           <p>Created: {created}</p>
           <p>Next watering: {nextWatering}</p>
           <p>Last watering: {lastWatering}</p>
-          <p>Watering interval: {watering_interval}</p>
+          <p>Watering interval: {plant.watering_interval}</p>
         </div>
         <div className={classes.rightMain}>
-          <p>Id: {id}</p>
-          <p>Watering count: {watering_count}</p>
-          <p>Sun exposure: {sun_exposure}</p>
-          <p>Temperature: {temperature}</p>
+          <p>Id: {plant.id}</p>
+          <p>Watering count: {plant.watering_count}</p>
+          <p>Sun exposure: {plant.sun_exposure}</p>
+          <p>Temperature: {plant.temperature}</p>
         </div>
       </div>
       <div className={classes.buttons}>

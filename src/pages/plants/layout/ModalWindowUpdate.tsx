@@ -3,11 +3,11 @@ import classes from "../../assets/FormCard.module.css";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { useAppDispatch } from "../../../store/hooks";
 import { updatePlant } from "../store/plantsSlice";
+import { UpdateDeleteWindow } from "../interfaces/interfaces";
 
 interface Props {
   updateModal: {
-    plantId: string;
-    plantName?: string;
+    data: UpdateDeleteWindow;
     isOpen: boolean;
   };
   closeModalUpdate: () => void;
@@ -41,7 +41,7 @@ export const ModalWindowUpdate = (props: Props) => {
   } = useForm<PlantUpdate>();
 
   const submitHandler: SubmitHandler<PlantUpdate> = async (body) => {
-    await dispatch(updatePlant(props.updateModal.plantId, body));
+    await dispatch(updatePlant(props.updateModal.data.id, body));
     props.closeModalUpdate();
   };
 
@@ -93,7 +93,7 @@ export const ModalWindowUpdate = (props: Props) => {
           </div>
 
           <div className={classes.actions}>
-            <button type="submit">Update plant {props.updateModal.plantName ? `with name=${props.updateModal.plantName}` : ""}</button>
+            <button type="submit">Update plant {props.updateModal.data.name ? `with name=${props.updateModal.data.name}` : ""}</button>
             <button type="button" onClick={props.closeModalUpdate}>
               Cancel
             </button>

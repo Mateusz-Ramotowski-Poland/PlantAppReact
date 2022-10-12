@@ -1,23 +1,21 @@
 import { useState } from "react";
 
 interface ModalConfig<ModalData extends object> {
-  data?: ModalData;
+  data: ModalData;
 }
 
-export function useModals<ModalData extends object>(config?: ModalConfig<ModalData>) {
+export function useModals<ModalData extends object>(config: ModalConfig<ModalData>) {
   const initialState = {
     isOpen: false,
-    plantId: "",
-    ...(config?.data ?? config?.data),
+    ...config,
   };
 
   const [modal, setModal] = useState(initialState);
 
-  function openModal(id: string, data?: ModalData) {
+  function openModal(data?: ModalData) {
     setModal({
       ...initialState,
       isOpen: true,
-      plantId: id,
       ...data,
     });
   }

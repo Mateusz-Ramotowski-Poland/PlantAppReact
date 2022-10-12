@@ -6,8 +6,8 @@ export interface PaginatedList<ListItem> {
   next: string;
   prev: string;
 }
-export interface PlantItemProps {
-  plant: RenderPlant;
-  openModalDelete: (id: string, data: object) => void;
-  openModalUpdate: (id: string, data: object) => void;
+
+export interface UpdateDeleteWindow {
+  id: string;
+  name?: string;
 }

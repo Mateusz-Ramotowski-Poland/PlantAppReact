@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { RenderPlant } from "../../../interfaces";
 import { useAppSelector } from "../../../store/hooks";
 import { useGetPlants, useModals, useChangeGetSearchParams } from "../hooks";
+import { UpdateDeleteWindow } from "../interfaces/interfaces";
 import { ModalWindowDelete } from "../layout/ModalWindowDelete";
 import { ModalWindowUpdate } from "../layout/ModalWindowUpdate";
 import { Arrow } from "./Arrow";
@@ -13,12 +14,22 @@ import classes from "./PlantsList.module.css";
 interface Props {}
 
 export const PlantsList = (props: Props) => {
-  const { closeModal: closeDeleteModal, openModal: openDeleteModal, modal: deleteModal } = useModals();
-  const { closeModal: closeUpdateModal, openModal: openUpdateModal, modal: updateModal } = useModals();
+  const {
+    closeModal: closeDeleteModal,
+    openModal: openDeleteModal,
+    modal: deleteModal,
+  } = useModals<UpdateDeleteWindow>({ data: { id: "", name: "" } });
+  const {
+    closeModal: closeUpdateModal,
+    openModal: openUpdateModal,
+    modal: updateModal,
+  } = useModals<UpdateDeleteWindow>({ data: { id: "", name: "" } });
   const { changeSearchParams, getSearchParams } = useChangeGetSearchParams();
   const { sortBy, sortOrder } = getSearchParams();
   let { getPlants } = useGetPlants();
   const plants = useAppSelector((state) => state.plants.plants);
+
+  console.log(deleteModal, updateModal);
 
   useEffect(() => {
     if (plants.length === 0) getPlants();
