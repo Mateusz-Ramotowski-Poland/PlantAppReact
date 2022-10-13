@@ -10,14 +10,39 @@ interface Response {
   ws: string;
 }
 
+interface Report {
+  data: {
+    created_at: string;
+    id: string;
+    data: {
+      totals: {
+        species: object;
+        waterings: string;
+      };
+      averages: {
+        sun_exposure: string;
+        watering_interval: string;
+        temperature: string;
+      };
+      records: {
+        most_watered_plant: string;
+      };
+    };
+  };
+}
+
 export const ReportsPage = () => {
-  const [report, setReport] = useState<any>();
+  const [report, setReport] = useState<Report>();
+  const [error, setError] = useState<JSX.Element>();
 
   function getReportHandler() {
     return api.get<Response>(paths.getWebsocketUrl).then((data) => {
       const socket = new WebSocket(data.ws);
       socket.addEventListener("open", (event) => console.log("Connection opened", event));
-      socket.addEventListener("error", (event) => console.log("Error", event));
+      socket.addEventListener("error", (event) => {
+        console.log("Error", event);
+        setError(<p>Error occured while getting new report</p>);
+      });
       socket.addEventListener("close", (event) => console.log("Closed connection", event));
       socket.addEventListener("message", (event) => {
         setReport(JSON.parse(event.data));
@@ -35,6 +60,7 @@ export const ReportsPage = () => {
           Get new report
         </button>
       </div>
+      {error ?? error}
     </>
   );
 
@@ -46,7 +72,7 @@ export const ReportsPage = () => {
   for (const property in apiSpecies) {
     species.push(
       <p key={property}>
-        {property}: {apiSpecies[property]}
+        {property}: {apiSpecies[property as keyof typeof apiSpecies]}
       </p>
     );
   }
