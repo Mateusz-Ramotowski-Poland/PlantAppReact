@@ -5,7 +5,7 @@ export const paths = {
   amendPlant: (plantId: RenderPlant["id"]) => `/plants/${plantId}/`,
   getPlants: "/plants/",
   getSpecies: `/plants/species/`,
-  getWebsocketNewReport: "/plants/reports/new",
+  getWebsocketUrl: "/plants/reports/new",
   getPlantsReports: "/plants/reports/",
   giveWaterToPlant: (plantId: RenderPlant["id"]) => `/plants/${plantId}/water/`,
   removePlant: (plantId: RenderPlant["id"]) => `/plants/${plantId}/`,
