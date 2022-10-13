@@ -1,8 +1,8 @@
 import dayjs from "dayjs";
-import { useState } from "react";
 import { ToastContainer } from "react-toastify";
-import { api, showMessage } from "../../../shared";
+import { api } from "../../../shared";
 import { paths } from "../api";
+import { useWebsocket } from "../hooks";
 import { MainNavigation } from "../layout/MainNavigation";
 import classes from "./ReportsPage.module.css";
 
@@ -11,50 +11,16 @@ interface Response {
   ws: string;
 }
 
-interface Report {
-  data: {
-    created_at: string;
-    id: string;
-    data: {
-      totals: {
-        species: object;
-        waterings: string;
-      };
-      averages: {
-        sun_exposure: string;
-        watering_interval: string;
-        temperature: string;
-      };
-      records: {
-        most_watered_plant: string;
-      };
-    };
-  };
-}
-
 export const ReportsPage = () => {
-  const [report, setReport] = useState<Report>();
+  const { report, openWebSocketHandler, closeWebSocketHandler, errorWebSocketHandler, mesageWebSocketHandler } = useWebsocket();
 
   function getReportHandler() {
     return api.get<Response>(paths.getWebsocketUrl).then((data) => {
       const socket = new WebSocket(data.ws);
-      socket.addEventListener("open", (event) => {
-        console.log("Connection opened", event);
-      });
-      socket.addEventListener("error", (event) => {
-        console.log("Error", event);
-        showMessage("Error - can't get new report", "error");
-      });
-      socket.addEventListener("close", (event) => {
-        console.log("Closed connection", event);
-        if (event.code === 1011) {
-          showMessage("Server error - can't get new report", "error");
-        }
-      });
-      socket.addEventListener("message", (event) => {
-        setReport(JSON.parse(event.data));
-        socket.close();
-      });
+      socket.addEventListener("open", openWebSocketHandler);
+      socket.addEventListener("error", errorWebSocketHandler);
+      socket.addEventListener("close", closeWebSocketHandler);
+      socket.addEventListener("message", mesageWebSocketHandler.bind(null, socket));
     });
   }
 
