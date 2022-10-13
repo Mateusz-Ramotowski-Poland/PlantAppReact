@@ -1,0 +1,46 @@
+.button {
+  cursor: pointer;
+  font: inherit;
+  color: white;
+  background-color: #619c73;
+  border: 1px solid #619c73;
+  border-radius: 4px;
+  padding: 0.5rem 2.5rem;
+  margin-bottom: 20px;
+}
+
+.button:hover {
+  background-color: #32834b;
+  border-color: #32834b;
+}
+
+.header {
+  text-align: center;
+}
+
+.report {
+  margin: 3rem auto;
+  width: 95%;
+  max-width: 25rem;
+  border-radius: 6px;
+  background-color: #045c01;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+  padding: 1rem;
+  text-align: left;
+  color: white;
+}
+
+.report h1 {
+  text-align: center;
+  color: white;
+  font-size: 30px;
+  margin: 0 0 25px 0;
+}
+
+.report h2 {
+  margin: 30px 0 0 0;
+}
+
+.report p {
+  margin: 5px;
+}

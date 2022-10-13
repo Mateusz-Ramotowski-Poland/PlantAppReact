@@ -30,6 +30,9 @@ export const MainNavigation = () => {
           <Link to={"/logged/showPlants"}>
             <button type="button">show plants</button>
           </Link>
+          <Link to={"/logged/reports"}>
+            <button type="button">Reports</button>
+          </Link>
         </ul>
       </nav>
     </header>

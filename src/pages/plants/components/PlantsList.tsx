@@ -29,8 +29,6 @@ export const PlantsList = (props: Props) => {
   let { getPlants } = useGetPlants();
   const plants = useAppSelector((state) => state.plants.plants);
 
-  console.log(deleteModal, updateModal);
-
   useEffect(() => {
     if (plants.length === 0) getPlants();
   }, []);

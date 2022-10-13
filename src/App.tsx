@@ -12,6 +12,7 @@ import { ActivateAccountPage } from "./pages/auth/ActivateAccountPage";
 import { AddPlantFormPage } from "./pages/plants/AddPlantFormPage";
 import { StatisticsPage } from "./pages/plants/StatisticsPage";
 import { ShowPlantsPage } from "./pages/plants/ShowPlantsPage";
+import { ReportsPage } from "./pages/plants/components/ReportsPage";
 
 function App() {
   const authCtx = useContext(AuthContext);
@@ -27,6 +28,7 @@ function App() {
       {authCtx.isLoggedIn && <Route path="/logged/addPlantForm" element={<AddPlantFormPage />} />}
       {authCtx.isLoggedIn && <Route path="/logged/statistics" element={<StatisticsPage />} />}
       {authCtx.isLoggedIn && <Route path="/logged/showPlants" element={<ShowPlantsPage />} />}
+      {authCtx.isLoggedIn && <Route path="/logged/reports" element={<ReportsPage />} />}
       <Route path="*" element={<NotFoundPage />} />
     </Routes>
   );
