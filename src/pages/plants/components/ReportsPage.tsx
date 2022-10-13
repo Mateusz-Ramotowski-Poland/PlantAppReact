@@ -1,6 +1,6 @@
 import dayjs from "dayjs";
 import { ToastContainer } from "react-toastify";
-import { api } from "../../../shared";
+import { api, showMessage } from "../../../shared";
 import { paths } from "../api";
 import { useWebsocket } from "../hooks";
 import { MainNavigation } from "../layout/MainNavigation";
@@ -39,7 +39,6 @@ export const ReportsPage = () => {
 
   if (!report) return header;
 
-  const created = dayjs(report.data.created_at).format("YYYY-MM-DD HH:mm");
   const apiSpecies = report.data.data.totals.species;
   const species = Object.entries(apiSpecies).map((el) => {
     return (
@@ -48,12 +47,17 @@ export const ReportsPage = () => {
       </p>
     );
   });
+  try {
+    report.data.created_at = dayjs(report.data.created_at).format("YYYY-MM-DD HH:mm");
+  } catch (error) {
+    showMessage("Error: new report creation data cannot be shown in required format", "error");
+  }
 
   const reportTemplate = (
     <section className={classes.report}>
       <h1>New report</h1>
       <p>Id: {report.data.id}</p>
-      <p>Created at: {created}</p>
+      <p>Created at: {report.data.created_at}</p>
 
       <h2>Averages</h2>
       <p>Sun exposure: {report.data.data.averages.sun_exposure}</p>
