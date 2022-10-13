@@ -1,61 +1,45 @@
-import { useEffect, useState } from "react";
-import { RenderPlant, PlantsState } from "../../../interfaces";
+import { useEffect } from "react";
+import { RenderPlant } from "../../../interfaces";
 import { useAppSelector } from "../../../store/hooks";
-import { useGetPlants } from "../hooks/useGetPlants";
+import { useGetPlants, useModals, useChangeGetSearchParams } from "../hooks";
+import { UpdateDeleteWindow } from "../interfaces/interfaces";
 import { ModalWindowDelete } from "../layout/ModalWindowDelete";
 import { ModalWindowUpdate } from "../layout/ModalWindowUpdate";
+import { Arrow } from "./Arrow";
+import { SortBy } from "./enums/enums";
+import { sortPlantArray } from "./helpers";
 import { PlantItem } from "./PlantItem";
 import classes from "./PlantsList.module.css";
 
-interface State {
-  plants: PlantsState;
-}
+interface Props {}
 
-export const PlantsList = () => {
-  const [deleteModalIsOpen, setDeleteModalIsOpen] = useState(false);
-  const [updateModalIsOpen, setUpdateModalIsOpen] = useState(false);
-  const [PlantId, setPlantId] = useState("");
-  const [PlantName, setPlantName] = useState("");
-
-  function openModalDelete(id: string, name: string) {
-    setDeleteModalIsOpen(true);
-    setPlantId(id);
-    setPlantName(name);
-  }
-
-  function closeModalDelete() {
-    setDeleteModalIsOpen(false);
-  }
-
-  function openModalUpdate(id: string, name: string) {
-    setUpdateModalIsOpen(true);
-    setPlantId(id);
-    setPlantName(name);
-  }
-
-  function closeModalUpdate() {
-    setUpdateModalIsOpen(false);
-  }
-
+export const PlantsList = (props: Props) => {
+  const {
+    closeModal: closeDeleteModal,
+    openModal: openDeleteModal,
+    modal: deleteModal,
+  } = useModals<UpdateDeleteWindow>({ data: { id: "", name: "" } });
+  const {
+    closeModal: closeUpdateModal,
+    openModal: openUpdateModal,
+    modal: updateModal,
+  } = useModals<UpdateDeleteWindow>({ data: { id: "", name: "" } });
+  const { changeSearchParams, getSearchParams } = useChangeGetSearchParams();
+  const { sortBy, sortOrder } = getSearchParams();
   let { getPlants } = useGetPlants();
-  const plants = useAppSelector((state: State) => state.plants.plants);
+  const plants = useAppSelector((state) => state.plants.plants);
+
+  console.log(deleteModal, updateModal);
 
   useEffect(() => {
-    if (plants.length === 0) {
-      getPlants();
-    }
+    if (plants.length === 0) getPlants();
   }, []);
 
-  if (!plants || plants.length === 0) {
-    return (
-      <section>
-        <p>The user don't have any plants</p>
-      </section>
-    );
-  }
+  if (!plants || plants.length === 0) return <p>The user don't have any plants</p>;
 
-  const plantsList = plants.map((plant: RenderPlant, index) => {
-    return <PlantItem key={plant.id} openModalDelete={openModalDelete} openModalUpdate={openModalUpdate} plant={plant}></PlantItem>;
+  const sortedPlants = sortPlantArray(plants, sortOrder, sortBy);
+  const plantsList = sortedPlants.map((plant: RenderPlant) => {
+    return <PlantItem key={plant.id} openModalDelete={openDeleteModal} openModalUpdate={openUpdateModal} plant={plant}></PlantItem>;
   });
 
   return (
@@ -65,11 +49,20 @@ export const PlantsList = () => {
           <tr className={classes.row}>
             <th className={classes.box}>Id</th>
             <th className={classes.box}>Created at</th>
-            <th className={classes.box}>Name</th>
+            <th className={classes.box} onClick={changeSearchParams.bind(null, SortBy.name, sortOrder)}>
+              <Arrow sortBy={sortBy} sortOrder={sortOrder} header={SortBy.name} />
+              Name
+            </th>
             <th className={classes.box}>species</th>
-            <th className={classes.box}>Watering interval</th>
+            <th className={classes.box} onClick={changeSearchParams.bind(null, SortBy.watering_interval, sortOrder)}>
+              <Arrow sortBy={sortBy} sortOrder={sortOrder} header={SortBy.watering_interval} />
+              Watering interval
+            </th>
             <th className={classes.box}>Last watering</th>
-            <th className={classes.box}>Next watering</th>
+            <th className={classes.box} onClick={changeSearchParams.bind(null, SortBy.next_watering, sortOrder)}>
+              <Arrow sortBy={sortBy} sortOrder={sortOrder} header={SortBy.next_watering} />
+              Next watering
+            </th>
             <th className={classes.box}>Watering count</th>
             <th className={classes.box}>Sun exposure</th>
             <th className={classes.box}>Temperature</th>
@@ -77,8 +70,8 @@ export const PlantsList = () => {
         </thead>
         <tbody>{plantsList}</tbody>
       </table>
-      <ModalWindowDelete closeModalDelete={closeModalDelete} deleteModalIsOpen={deleteModalIsOpen} id={PlantId} name={PlantName} />
-      <ModalWindowUpdate closeModalUpdate={closeModalUpdate} updateModalIsOpen={updateModalIsOpen} id={PlantId} name={PlantName} />
+      <ModalWindowDelete closeModalDelete={closeDeleteModal} deleteModal={deleteModal} />
+      <ModalWindowUpdate closeModalUpdate={closeUpdateModal} updateModal={updateModal} />
     </>
   );
 };

@@ -10,7 +10,7 @@ import { RetrievePasswordFormPage } from "./pages/auth/RetrievePasswordFormPage"
 import { PasswordResetPage } from "./pages/auth/PasswordResetPage";
 import { ActivateAccountPage } from "./pages/auth/ActivateAccountPage";
 import { AddPlantFormPage } from "./pages/plants/AddPlantFormPage";
-import { UpdatePlantFormPage } from "./pages/plants/UpdatePlantFormPage";
+import { StatisticsPage } from "./pages/plants/StatisticsPage";
 import { ShowPlantsPage } from "./pages/plants/ShowPlantsPage";
 
 function App() {
@@ -25,8 +25,8 @@ function App() {
       <Route path="activate-account/:uid/:token" element={<ActivateAccountPage />} />
       {authCtx.isLoggedIn && <Route path="/logged" element={<AfterLoginPage />} />}
       {authCtx.isLoggedIn && <Route path="/logged/addPlantForm" element={<AddPlantFormPage />} />}
+      {authCtx.isLoggedIn && <Route path="/logged/statistics" element={<StatisticsPage />} />}
       {authCtx.isLoggedIn && <Route path="/logged/showPlants" element={<ShowPlantsPage />} />}
-      {authCtx.isLoggedIn && <Route path="/logged/updatePlantForm" element={<UpdatePlantFormPage />} />}
       <Route path="*" element={<NotFoundPage />} />
     </Routes>
   );

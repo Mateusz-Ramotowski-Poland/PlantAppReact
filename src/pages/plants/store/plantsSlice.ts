@@ -5,7 +5,7 @@ import { AppDispatch } from "../../../store/rootStore";
 import { amendPlant } from "../api/amendPlant";
 import { giveWaterToPlant } from "../api/giveWaterToPlant";
 import { removePlant } from "../api/removePlant";
-import { getWateringStatus } from "../utils";
+import { getWateringStatus } from "../components/helpers";
 
 const initialState: PlantsState = {
   plants: [],

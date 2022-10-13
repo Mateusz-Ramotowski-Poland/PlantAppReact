@@ -1,0 +1,48 @@
+.container {
+  background-color: #045c01;
+  display: grid;
+  grid-template-rows: repeat(3, max-content);
+  margin: 20px;
+  border-radius: 20px;
+  padding: 10px;
+}
+
+.header {
+  grid-row: 1/2;
+  text-align: center;
+}
+
+.main {
+  grid-row: 2/3;
+  display: grid;
+  column-gap: 20px;
+  grid-template-columns: repeat(2, max-content);
+}
+
+.buttons {
+  grid-row: 3/4;
+  text-align: center;
+}
+
+.leftMain {
+  grid-column: 1/2;
+}
+
+.rightMain {
+  grid-column: 2/3;
+}
+
+.button {
+  cursor: pointer;
+  font: inherit;
+  color: white;
+  background-color: #15f157;
+  border: 1px solid #15f157;
+  border-radius: 4px;
+  padding: 0.3rem 0.3rem;
+  margin: 3px;
+}
+.button:hover {
+  background-color: #50be71;
+  border: 1px solid #50be71;
+}

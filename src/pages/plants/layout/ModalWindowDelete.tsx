@@ -1,13 +1,16 @@
 import Modal from "react-modal";
 import { useAppDispatch } from "../../../store/hooks";
+import { UpdateDeleteWindow } from "../interfaces/interfaces";
 import { deletePlant } from "../store/plantsSlice";
 import classes from "./ModalWindowDelete.module.css";
 
 interface Props {
-  id: string;
+  deleteModal: {
+    data: UpdateDeleteWindow;
+    isOpen: boolean;
+  };
+
   closeModalDelete: () => void;
-  deleteModalIsOpen: boolean;
-  name: string;
 }
 
 const customStyles = {
@@ -25,19 +28,14 @@ export const ModalWindowDelete = (props: Props) => {
   const dispatch = useAppDispatch();
 
   async function deleteHandler() {
-    await dispatch(deletePlant(props.id));
+    await dispatch(deletePlant(props.deleteModal.data.id));
     props.closeModalDelete();
   }
 
   return (
-    <Modal
-      isOpen={props.deleteModalIsOpen}
-      onRequestClose={props.closeModalDelete}
-      style={customStyles}
-      contentLabel="delete plant modal"
-    >
+    <Modal isOpen={props.deleteModal.isOpen} onRequestClose={props.closeModalDelete} style={customStyles} contentLabel="delete plant modal">
       <form className={classes.form}>
-        <p>Are you sure to delete plant with name={props.name}?</p>
+        <p>Are you sure to delete plant{props.deleteModal.data.name ? `with name=${props.deleteModal.data.name}` : ""}?</p>
         <button type="button" onClick={deleteHandler}>
           Delete plant
         </button>

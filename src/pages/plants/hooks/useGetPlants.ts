@@ -5,7 +5,7 @@ import { AuthContext } from "../../../store/authContext";
 import { useAppDispatch } from "../../../store/hooks";
 import { getAllUserPlants } from "../api";
 import { plantsActions } from "../store/plantsSlice";
-import { getWateringStatus } from "../utils";
+import { getWateringStatus } from "../components/helpers";
 
 export function useGetPlants() {
   const [isFetchDataError, setIsFetchDataError] = useState(false);
@@ -26,7 +26,7 @@ export function useGetPlants() {
               return { ...plant, wateringStatus: getWateringStatus(plant.next_watering) };
             });
             dispatch(plantsActions.insertMany({ plants: plants }));
-            navigate("/logged/showPlants");
+            navigate("/logged/statistics");
           })
           .catch((err) => {
             setIsFetchDataError(true);

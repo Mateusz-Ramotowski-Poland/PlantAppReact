@@ -7,6 +7,7 @@ import { getAllUserPlants } from "../api/getAllUserPlants";
 import { rootStore } from "../../../store/rootStore";
 import { AuthContextProvider } from "../../../store/authContext";
 import { PlantsList } from "./PlantsList";
+import { StatisticsPage } from "../StatisticsPage";
 
 jest.mock("../../../shared/api", () => {
   return {
