@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { showMessage } from "../../../shared";
+import { api, showMessage } from "../../../shared";
+import { paths } from "../api";
 
 interface Report {
   data: {
@@ -26,7 +27,12 @@ interface EventData {
   data: string;
 }
 
-export function useWebsocket() {
+interface Response {
+  task_id: string;
+  ws: string;
+}
+
+export function useReport() {
   const [report, setReport] = useState<Report>();
 
   function isEventData(data: any) {
@@ -54,11 +60,17 @@ export function useWebsocket() {
       showMessage("Error - can't get new report", "error");
     }
     socket.close();
-    socket.removeEventListener("open", openWebSocketHandler);
-    socket.removeEventListener("error", errorWebSocketHandler);
-    socket.removeEventListener("close", closeWebSocketHandler);
-    socket.removeEventListener("message", mesageWebSocketHandler.bind(null, socket));
   };
 
-  return { report, openWebSocketHandler, closeWebSocketHandler, errorWebSocketHandler, mesageWebSocketHandler };
+  function getReportHandler() {
+    return api.get<Response>(paths.getWebsocketUrl).then((data) => {
+      const socket = new WebSocket(data.ws);
+      socket.addEventListener("open", openWebSocketHandler);
+      socket.addEventListener("error", errorWebSocketHandler);
+      socket.addEventListener("close", closeWebSocketHandler);
+      socket.addEventListener("message", mesageWebSocketHandler.bind(null, socket));
+    });
+  }
+
+  return { report, getReportHandler };
 }

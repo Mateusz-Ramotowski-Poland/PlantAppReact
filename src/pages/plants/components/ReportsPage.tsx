@@ -1,28 +1,12 @@
 import dayjs from "dayjs";
 import { ToastContainer } from "react-toastify";
-import { api, showMessage } from "../../../shared";
-import { paths } from "../api";
-import { useWebsocket } from "../hooks";
+import { showMessage } from "../../../shared";
+import { useReport } from "../hooks";
 import { MainNavigation } from "../layout/MainNavigation";
 import classes from "./ReportsPage.module.css";
 
-interface Response {
-  task_id: string;
-  ws: string;
-}
-
 export const ReportsPage = () => {
-  const { report, openWebSocketHandler, closeWebSocketHandler, errorWebSocketHandler, mesageWebSocketHandler } = useWebsocket();
-
-  function getReportHandler() {
-    return api.get<Response>(paths.getWebsocketUrl).then((data) => {
-      const socket = new WebSocket(data.ws);
-      socket.addEventListener("open", openWebSocketHandler);
-      socket.addEventListener("error", errorWebSocketHandler);
-      socket.addEventListener("close", closeWebSocketHandler);
-      socket.addEventListener("message", mesageWebSocketHandler.bind(null, socket));
-    });
-  }
+  const { report, getReportHandler } = useReport();
 
   const header = (
     <>

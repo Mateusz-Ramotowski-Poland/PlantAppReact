@@ -1,4 +1,4 @@
 export * from "./useGetPlants";
 export * from "./useChangeGetSearchParams";
 export * from "./useModals";
-export * from "./useWebsocket";
+export * from "./useReport";
