@@ -1,6 +1,7 @@
 import dayjs from "dayjs";
 import { useState } from "react";
-import { api } from "../../../shared";
+import { ToastContainer } from "react-toastify";
+import { api, showMessage } from "../../../shared";
 import { paths } from "../api";
 import { MainNavigation } from "../layout/MainNavigation";
 import classes from "./ReportsPage.module.css";
@@ -33,17 +34,23 @@ interface Report {
 
 export const ReportsPage = () => {
   const [report, setReport] = useState<Report>();
-  const [error, setError] = useState<JSX.Element>();
 
   function getReportHandler() {
     return api.get<Response>(paths.getWebsocketUrl).then((data) => {
       const socket = new WebSocket(data.ws);
-      socket.addEventListener("open", (event) => console.log("Connection opened", event));
+      socket.addEventListener("open", (event) => {
+        console.log("Connection opened", event);
+      });
       socket.addEventListener("error", (event) => {
         console.log("Error", event);
-        setError(<p>Error occured while getting new report</p>);
+        showMessage("Error - can't get new report", "error");
       });
-      socket.addEventListener("close", (event) => console.log("Closed connection", event));
+      socket.addEventListener("close", (event) => {
+        console.log("Closed connection", event);
+        if (event.code === 1011) {
+          showMessage("Server error - can't get new report", "error");
+        }
+      });
       socket.addEventListener("message", (event) => {
         setReport(JSON.parse(event.data));
         socket.close();
@@ -60,7 +67,7 @@ export const ReportsPage = () => {
           Get new report
         </button>
       </div>
-      {error ?? error}
+      <ToastContainer />
     </>
   );
 
