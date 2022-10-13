@@ -75,14 +75,13 @@ export const ReportsPage = () => {
 
   const created = dayjs(report.data.created_at).format("YYYY-MM-DD HH:mm");
   const apiSpecies = report.data.data.totals.species;
-  const species = [];
-  for (const property in apiSpecies) {
-    species.push(
-      <p key={property}>
-        {property}: {apiSpecies[property as keyof typeof apiSpecies]}
+  const species = Object.entries(apiSpecies).map((el) => {
+    return (
+      <p key={el[0]}>
+        {el[0]}: {el[1]}
       </p>
     );
-  }
+  });
 
   const reportTemplate = (
     <section className={classes.report}>
